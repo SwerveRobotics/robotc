@@ -49,10 +49,10 @@ void CheckJoy1ModeChange(int jyc, TJoystick& joystick)
 
 typedef enum
     {
-    HAND_ALL_CLOSED,
-    HAND_ALL_OPEN,
-    HAND_BACK_CLOSED,
-    }HAND_POS;
+    HAND_DIR_NONE,
+    HAND_DIR_OPEN,
+    HAND_DIR_CLOSE,
+    }HAND_DIR;
 
 typedef enum
     {
@@ -61,18 +61,19 @@ typedef enum
     ARM_DIR_DOWN,
     } ARM_DIR;
 
-void MoveHand(SERVO& svo, HAND_POS pos)
+void MoveHand(HAND_DIR dir)
 	{
-	switch(pos)
+	switch(dir)
 		{
-    case HAND_ALL_CLOSED:
-        MoveServo(svo, svoAllClosed, true);
+    case HAND_DIR_NONE:
         break;
-    case HAND_ALL_OPEN:
-        MoveServo(svo, svoAllOpen, true);
+    case HAND_DIR_OPEN:
+        MoveServo(svoRight, svoOpenRight, true);
+        MoveServo(svoLeft, svoOpenLeft, true);
         break;
-    case HAND_BACK_CLOSED:
-        MoveServo(svo, svoBackClosed, true);
+    case HAND_DIR_CLOSE:
+        MoveServo(svoRight, svoClosedRight, true);
+        MoveServo(svoLeft, svoClosedLeft, true);
         break;
 		}
 	}
@@ -96,6 +97,9 @@ void UpDownArm(MOTOR& mtr, ARM_DIR dir, int speed)
     ReleaseBlackboard();
 	}
 
+ENCOD encStart;
+ENCOD encCur;
+
 //------------------------------------------------------------------------------
 // Logic common to both joysticks
 //------------------------------------------------------------------------------
@@ -109,33 +113,14 @@ BOOL DoArmControl(int jyc)
     {
     BOOL fSuccess = true;
 
-    HAND_POS handPos = HAND_ALL_OPEN;
+    HAND_DIR handDir = HAND_DIR_NONE;
     ARM_DIR armDir = ARM_DIR_NONE;
+    int joyPos = joyRightY(jyc);
+    int svoPos;
 
     if(0)
         {
         }
-    //Buttons to control hand
-    else if(joyBtn(jyc, JOYBTN_X))
-	    {
-	    handPos = HAND_ALL_CLOSED;
-	    }
-	else if(joyBtn(jyc, JOYBTN_Y))
-		{
-		handPos = HAND_ALL_OPEN;
-		}
-    else if(joyBtn(jyc, JOYBTN_B))
-	    {
-	    handPos = HAND_BACK_CLOSED;
-	    }
-	/*else if(joyBtn(jyc, JOYBTN_RIGHTTRIGGER_UPPER))
-	    {
-	    handPos = handPos + 1;
-	    }
-	else if(joyBtn(jyc, JOYBTN_RIGHTTRIGGER_LOWER))
-		{
-		handPos = handPos - 1;
-		}*/
     //Buttons to control arm/lift
 	else if(joyHat(jyc, JOYHAT_UP))
 		{
@@ -145,6 +130,27 @@ BOOL DoArmControl(int jyc)
 	    {
 	    armDir = ARM_DIR_DOWN;
 	    }
+	//buttons to control hand
+	else if(joyBtn(jyc, JOYBTN_1))
+	    {
+	    handDir=HAND_DIR_OPEN;
+	    }
+	else if (joyBtn(jyc, JOYBTN_3))
+	    {
+	    handDir= HAND_DIR_CLOSE;
+	    }
+
+//make joystick values into servo values
+    // if(joyPos > 126)
+        // {
+        // svoPos = 270;
+        // handDir = HAND_DIR_MOVE;
+        // }
+    // else if(joyPos < 127 && joyPos > -150 )
+        // {
+        // svoPos = joyPos+ 150;
+        // handDir = HAND_DIR_MOVE;
+        // }
 
     //----------------------------------------------------------
     // Cleanup
@@ -155,16 +161,15 @@ BOOL DoArmControl(int jyc)
 
     int speed = 100;
 
-    //Make speed negative while arm is going down
-    if (ARM_DIR == ARM_DIR_DOWN)
+    if(armDir==ARM_DIR_UP)
         {
         speed = -speed;
         }
 
     //Move arm
-    //UpDownArm(motorArm, armDir, speed);
+    UpDownArm(motorArm, armDir, speed);
     //Move hand servo
-    MoveHand(svoHand, handPos);
+    MoveHand(handDir);
 
     return fSuccess;
     }
@@ -172,9 +177,10 @@ BOOL DoArmControl(int jyc)
 //------------------------------------------------------------------------------
 // Logic for the main drive joystick
 //------------------------------------------------------------------------------
+//BOOL buttonPressed = false;
 void DoManualTankDrivingControl(int joy, TJoystick& joystick)
 	{
-	int map[] =
+	int mapTank[] =
         {
          0,  1,  1,  1,  2,  2,  2,  2,  3,  3,
          3,  3,  4,  4,  4,  5,  5,  5,  6,  6,
@@ -213,8 +219,8 @@ void DoManualTankDrivingControl(int joy, TJoystick& joystick)
     ctlRight = Rounded((float)ctlRight * scaleRight, int);
     // if (ctlPower != 0 || ctlSteering != 0) {  TRACE(("power=%d steering=%d", ctlPower, ctlSteering));
 
-    ctlLeft    =    ctlLeft >= 0 ? map[ctlLeft]    : -map[-ctlLeft];
-    ctlRight = ctlRight >= 0 ? map[ctlRight] : -map[-ctlRight];
+    ctlLeft    =    ctlLeft >= 0 ? mapTank[ctlLeft]    : -mapTank[-ctlLeft];
+    ctlRight = ctlRight >= 0 ? mapTank[ctlRight] : -mapTank[-ctlRight];
 
     /*if (true) // set to false to disable
         {
@@ -234,6 +240,19 @@ void DoManualTankDrivingControl(int joy, TJoystick& joystick)
 	    if (-ctlSteering - 100 >  ctlPower)          ctlPower = -ctlSteering - 100;
 	    if ( ctlPower          > -ctlSteering + 100) ctlPower = -ctlSteering + 100;
 	    }*/
+
+	// fine speed control
+    /*if(joyBtnOnce(joy, JOYBTN_RIGHTTRIGGER_LOWER))
+    {
+        ctlLeft = ctlLeft >> 2;
+        ctlRight = ctlRight >> 2;
+        buttonPressed = true;
+        TRACE(("button"));
+    }
+    else if(joyBtnOnce(joy, JOYBTN_LEFTTRIGGER_LOWER) && buttonPressed == true)
+    {
+        buttonPressed = false;
+    }*/
 
     // Update the motor power. The SetMotorPower internals will
     // clamp the power provided to +-100.

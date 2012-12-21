@@ -7,6 +7,7 @@
 #include "config\RobotConfig.h"
 #include "..\lib\MainPostlude.h"
 #include "TeleOp6220.h"
+//#include "C:\ftc\drivers\2.3\drivers\HTIRS2-driver.h"
 
 void DoAutonomous()
 	{
@@ -14,35 +15,105 @@ void DoAutonomous()
     TRACE(("**** begin autonomous ****"));
     DisplayMessage("<- autonomous ->");
 
+    //drive away from wall
+    LockBlackboard();
+	SetMotorPower(motorLeft, 50);
+	SetMotorPower(motorRight, 50);
+	SendMotorPowers();
+	ReleaseBlackboard();
+	wait1Msec(500);
+	LockBlackboard();
+	SetMotorPower(motorLeft, 0);
+	SetMotorPower(motorRight, 0);
+	SendMotorPowers();
+	ReleaseBlackboard();
+
+    //move arm up so IR sensor is level with transmitter
+    LockBlackboard();
+    SetMotorPower(motorArm, -100);
+    SendMotorPowers();
+    ReleaseBlackboard();
+    wait1Msec(4000);
+    LockBlackboard();
+    SetMotorPower(motorArm, 0);
+    SendMotorPowers();
+    ReleaseBlackboard();
+
+    //wiggle robot back and forth until it faces the IR signal
     StartReadingIRSensor(irsensor);
-    int signalTarget;
+    /*int dir = 0;
+    int acs1, acs2, acs3, acs4, acs5 = 0;
+    int maxSig = 0;
+    int val = 0;
+    //tHTIRS2DSPMode mode = DSP_1200;
+
+    while(true)
+    {
+        //dirAC = HTIRS2readACDir(irsensor);
+        dir = irsensor.dirAC[
+        maxSig = (acs1 > acs2) ? acs1 : acs2;
+        maxSig = (maxSig > acs3) ? maxSig : acs3;
+        maxSig = (maxSig > acs4) ? maxSig : acs4;
+        maxSig = (maxSig > acs5) ? maxSig : acs5;
+
+        val = dir - 5;
+
+        motor[motorLeft] = 50 + 30 * val;
+        motor[motorRight] = 50 - 30 * val;
+
+        wait10Msec(2);
+    }*/
+ /*   int maxSig = 0;
+    while(true)
+        {
+        maxSig = (irsensor.signalAC[0] > irsensor.signalAC[1]) ? irsensor.signalAC[0] : irsensor.signalAC[1];
+        maxSig = (maxSig > irsensor.signalAC[2]) ? maxSig : irsensor.signalAC[2];
+        maxSig = (maxSig > irsensor.signalAC[3]) ? maxSig : irsensor.signalAC[3];
+        maxSig = (maxSig > irsensor.signalAC[4]) ? maxSig : irsensor.signalAC[4];
+
+        int val = irsensor.dirAC - 5;
+        LockBlackboard();
+	    SetMotorPower(motorLeft, 50 + 30 *val);
+	    SetMotorPower(motorRight, 50 - 30 *val);
+	    SendMotorPowers();
+	    ReleaseBlackboard();
+	    wait10Msec(2);
+	    TRACE(("val %d", val));
+	    TRACE(("maxSig %d", maxSig));
+        }*/
+ /*   int signalTarget = 240;
     while(irsensor.signalAC[2] < signalTarget)
 	    {
+	    TRACE(("%d", irsensor.signalAC[2]));
 	    if(irsensor.dirAC < 5)
 	        {
 	        LockBlackboard();
-	        SetMotorPower(motorLeft, 100);
-	        SetMotorPower(motorRight, -100);
+	        SetMotorPower(motorLeft, 50);
+	        SetMotorPower(motorRight, -50);
 	        SendMotorPowers();
 	        ReleaseBlackboard();
 	        }
-	    else if(irsensor.dirAC > 5)
+	    else if(irsensor.dirAC > 6)
 	        {
 	        LockBlackboard();
-	        SetMotorPower(motorLeft, 100);
-	        SetMotorPower(motorRight, -100);
+	        SetMotorPower(motorLeft, 50);
+	        SetMotorPower(motorRight, -50);
 	        SendMotorPowers();
 	        ReleaseBlackboard();
 	        }
-	    else if(irsensor.dirAC == 5)
+	    else
 	        {
 	        LockBlackboard();
-	        SetMotorPower(motorLeft, 100);
-	        SetMotorPower(motorRight, 100);
+	        SetMotorPower(motorLeft, 50);
+	        SetMotorPower(motorRight, 50);
 	        SendMotorPowers();
 	        ReleaseBlackboard();
 	        }
-	    }
+	    wait1Msec(20);
+	    }*/
+	//put rings on
+	//MoveServo(svoHand, 250);
+	//DriveForwards(5);
 	}
 
 #if 0
@@ -185,6 +256,7 @@ void DoTeleOp()
 
 task main()
     {
+    //programFlavor = PROGRAM_FLAVOR_AUTONOMOUS;
     if (InitializeMain(true, true))
         {
         // Configure our telemetry
@@ -194,6 +266,9 @@ task main()
         // Put feedback on the screen during initialization
         /*fDisplaySonic = true;
         fDisplayEopdFront = true;*/
+
+        //Read arm motor encoder
+        ReadEncoder(OUT encStart, motorArm);
 
         // Wait until the FCS tells us to go
         waitForStart();
