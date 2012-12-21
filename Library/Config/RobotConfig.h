@@ -18,7 +18,7 @@
 // preprocessor varaible errors on each of the #elif lines below
 
 #ifndef ROBOT_NAME
-#define ROBOT_NAME  ROBOT_NAME_SENSOR_MUX_TEST
+#define ROBOT_NAME  ROBOT_NAME_BOB
 #endif
 
 //--------------------------------------------------------------------------
@@ -37,6 +37,7 @@
 #define ROBOT_NAME_SENSOR_MUX_TEST              11
 #define ROBOT_NAME_SPACEELEVATOR                12
 #define ROBOT_NAME_SPACEELEVATORDISPENSER       13
+#define ROBOT_NAME_BOB                          99
 
 
 //--------------------------------------------------------------------------
@@ -107,6 +108,9 @@
 
 #elif ROBOT_NAME==ROBOT_NAME_SPACEELEVATORDISPENSER
     #include "RobotConfigSpaceElevatorDispenser.h"
+
+#elif ROBOT_NAME==ROBOT_NAME_BOB
+    #include "RobotConfigBob.h"
 
 #else
 
