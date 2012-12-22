@@ -15,7 +15,7 @@
 
 #include "JoystickDriver.c"
 
-int deadZone = 15;
+int deadZone = 5;
 
 void OpenHand()
 {
@@ -40,24 +40,49 @@ task main ()
 
     while(true) // infinite loop
     {
+        //writeDebugStreamLine("%d", (joystick.joy1_y1 >> 4));
         getJoystickSettings(joystick);
 
-        if(abs(joystick.joy1_y1) > deadZone) // if the left joystick value isn't in the deadzone ...
+        // slow mode
+        if(joy1Btn(7) == 1) // if the lower left trigger is pressed on controller 1 ...
         {
-            motor[motorLeft]  = joystick.joy1_y1; // set the left motor power to the left joystick value on controller 1
-        }
-        else
-        {
-            motor[motorLeft] = 0; // if the left joystick value is in the deadzone set the left motor power to 0
-        }
+            if(abs(joystick.joy1_y1) > deadZone) // and the left joystick value on controller 1 isn't in the deadzone ...
+            {
+                motor[motorLeft]  = (joystick.joy1_y1) / 4; // set the left motor power to the left joystick value on controller 1 divided by 3
+            }
+            else
+            {
+                motor[motorLeft] = 0; // if the left joystick value is in the deadzone set the left motor power to 0
+            }
 
-        if(abs(joystick.joy1_y2) > deadZone) // if the right joystick value isn't in the deadzone ...
-        {
-            motor[motorRight] = joystick.joy1_y2; // set the right motor power to the right joystick value on controller 1
+            if(abs(joystick.joy1_y2) > deadZone) // and the right joystick value on controller 1 isn't in the deadzone ...
+            {
+                motor[motorRight] = (joystick.joy1_y2) / 4; // set the right motor power to the right joystick value on controller 1 divided by 3
+            }
+            else
+            {
+                motor[motorRight] = 0; // if the left joystick value is in the deadzone set the right motor power to 0
+            }
         }
-        else
+        else // regular mode
         {
-            motor[motorRight] = 0; // if the left joystick value is in the deadzone set the right motor power to 0
+            if(abs(joystick.joy1_y1) > deadZone) // if the left joystick value isn't in the deadzone ...
+	        {
+	            motor[motorLeft]  = joystick.joy1_y1; // set the left motor power to the left joystick value on controller 1
+	        }
+	        else
+	        {
+	            motor[motorLeft] = 0; // if the left joystick value is in the deadzone set the left motor power to 0
+	        }
+
+	        if(abs(joystick.joy1_y2) > deadZone) // if the right joystick value isn't in the deadzone ...
+	        {
+	            motor[motorRight] = joystick.joy1_y2; // set the right motor power to the right joystick value on controller 1
+	        }
+	        else
+	        {
+	            motor[motorRight] = 0; // if the left joystick value is in the deadzone set the right motor power to 0
+	        }
         }
 
         if(joy2Btn(1) == 1) // if button 1 on controller 2 is pressed
