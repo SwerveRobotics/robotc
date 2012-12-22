@@ -186,17 +186,32 @@ void DoMastControl(int jyc)
 		  TRACE(("hi"));
 		}
 
+		int jycRightY = joyRightY(jyc);
+		//int scale = (int)(100.0 / 128.0);
+		//jycRightY = Rounded(jycRightY * scale, int);
+		jycRightY = Rounded(jycRightY / 4, int);
+		LockBlackboard();
+		SetMotorPower(motorArm, jycRightY);
+		SendMotorPowers();
+		ReleaseBlackboard();
+
 		if (joyBtn(jyc, JOYBTN_LEFTTRIGGER_LOWER))
 		{
+		  LockBlackboard();
 		  SendOneMotorPower(motorRamp, 75);
+		  ReleaseBlackboard();
 		}
 		else if (joyBtn(jyc, JOYBTN_RIGHTTRIGGER_LOWER))
 		{
+		  LockBlackboard();
 		  SendOneMotorPower(motorRamp, -75);
+		  ReleaseBlackboard();
 		}
 		else
 	  {
+	    LockBlackboard();
 	    SendOneMotorPower(motorRamp, 0);
+	    ReleaseBlackboard();
 	  }
 
 	  /*if (joyHat(jyc, JOYHAT_RIGHT))

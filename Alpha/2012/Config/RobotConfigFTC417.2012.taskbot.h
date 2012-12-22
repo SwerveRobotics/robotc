@@ -43,7 +43,7 @@ void InitializeMotors(IN OUT STICKYFAILURE& fOverallSuccess)
     InitializeMotor(fOverallSuccess, motorLeft,     motorControllerLeft,  1, "left",  MOTORPROP_REFLECTED | MOTORPROP_ENCODER | MOTORPROP_NOSTALLCHECK);
     InitializeMotor(fOverallSuccess, motorRight,    motorControllerRight, 1, "right", MOTORPROP_ENCODER | MOTORPROP_NOSTALLCHECK);
     InitializeMotor(fOverallSuccess, motorRamp,     motorControllerRight, 2, "Ramp",  MOTORPROP_NONE);
-    InitializeMotor(fOverallSuccess, motorArm,      motorControllerLeft,  2, "Arm",   MOTORPROP_NONE);
+    InitializeMotor(fOverallSuccess, motorArm,      motorControllerLeft,  2, "Arm",   MOTORPROP_ENCODER | MOTORPROP_NOSTALLCHECK);
     }
 
 #define HAS_ENCODER_BASED_TURNING_TABLE 1
@@ -113,10 +113,10 @@ void InitializeServos(IN OUT STICKYFAILURE& fOverallSuccess)
     {
       InitializeServoController(fOverallSuccess, servoController, I2CLINK_2, 1);
       //InitializeServo(fOverallSuccess, svoLatch,     "Latch", servoController,1,  servoControllerDummy,0,  SVOKIND_STANDARD, true);
-      InitializeServo(fOverallSuccess, svoPuller,     "Puller", servoController,1, servoControllerDummy,0, SVOKIND_STANDARD, true);
-      InitializeServo(fOverallSuccess, svoWrist,      "Wrist",  servoController,2, servoControllerDummy,0, SVOKIND_STANDARD, true);
-      InitializeServo(fOverallSuccess, svoPuller2,     "Puller2", servoController,3, servoControllerDummy,0, SVOKIND_STANDARD, true);
-      InitializeServo(fOverallSuccess, svoWrist2,      "Wrist2",  servoController,4, servoControllerDummy,0, SVOKIND_STANDARD, true);
+      //InitializeServo(fOverallSuccess, svoPuller,     "Puller", servoController,1, servoControllerDummy,0, SVOKIND_STANDARD, true);
+      InitializeServo(fOverallSuccess, svoWrist,      "Wrist",  servoController,1, servoControllerDummy,0, SVOKIND_STANDARD, true);
+      //InitializeServo(fOverallSuccess, svoPuller2,     "Puller2", servoController,3, servoControllerDummy,0, SVOKIND_STANDARD, true);
+      InitializeServo(fOverallSuccess, svoWrist2,      "Wrist2",  servoController,2, servoControllerDummy,0, SVOKIND_STANDARD, true);
 
 
     }
