@@ -1,10 +1,13 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     irsensor,       sensorI2CCustom)
-#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, PIDControl, encoder)
+#pragma config(Motor,  motorA,          ,              tmotorNormal, openLoop)
+#pragma config(Motor,  motorB,          ,              tmotorNormal, openLoop)
+#pragma config(Motor,  motorC,          ,              tmotorNormal, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorNone, openLoop)
-#pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     motorArm,      tmotorNormal, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     motorArm,      tmotorNormal, openLoop, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    servoLeft,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    servoRight,           tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -48,7 +51,8 @@ task main ()
         {
             if(abs(joystick.joy1_y1) > deadZone) // and the left joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorLeft]  = (joystick.joy1_y1) / 4; // set the left motor power to the left joystick value on controller 1 divided by 3
+                motor[motorLeft]  = ((joystick.joy1_y1) / 4); // set the left motor power to the left joystick value on controller 1 divided by 3
+                writeDebugStreamLine("left %d", nMotorEncoder[motorLeft]);
             }
             else
             {
@@ -57,7 +61,8 @@ task main ()
 
             if(abs(joystick.joy1_y2) > deadZone) // and the right joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorRight] = (joystick.joy1_y2) / 4; // set the right motor power to the right joystick value on controller 1 divided by 3
+                motor[motorRight] = ((joystick.joy1_y2) / 4); // set the right motor power to the right joystick value on controller 1 divided by 3
+                writeDebugStreamLine("right %d", nMotorEncoder[motorRight]);
             }
             else
             {
