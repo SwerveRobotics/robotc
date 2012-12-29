@@ -3,9 +3,9 @@
 //
 #define ROBOT_NAME  ROBOT_NAME_BOB
 
-#include "..\lib\MainPrelude.h"
+#include "C:\swerverobotics\Library\MainPrelude.h"
 #include "config\RobotConfig.h"
-#include "..\lib\MainPostlude.h"
+#include "C:\swerverobotics\Library\MainPostlude.h"
 #include "TeleOp6220.h"
 //#include "C:\ftc\drivers\2.3\drivers\HTIRS2-driver.h"
 

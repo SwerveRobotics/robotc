@@ -2,12 +2,12 @@
 // RobotBob.h
 //
 //-------------------------------------------------------------------------------------------------------
-// Motor and servo controllers
+// Motor controllers
 //-------------------------------------------------------------------------------------------------------
 
 #define motorController     rgmotorctlr[0]
 #define motorController2    rgmotorctlr[1]
-#define motorControllerArm  rgmotorctlr[2]
+//#define motorControllerArm  rgmotorctlr[2]
 
 #define motorRight          rgmotor[0]
 #define motorLeft           rgmotor[1]
@@ -23,9 +23,9 @@ void InitializeMotors(IN OUT STICKYFAILURE& fOverallSuccess)
     //InitializeMotorController(fOverallSuccess, motorControllerArm, I2CLINK_1, 3);
 
     // Our two motors are motors #1 and #2 respectively on our motor controller
-    InitializeMotor(fOverallSuccess, motorLeft,  motorController,  1, "left",  MOTORPROP_NONE      | MOTORPROP_ENCODER);
+    InitializeMotor(fOverallSuccess, motorLeft,  motorController,  1, "left",  MOTORPROP_NONE      | MOTORPROP_ENCODER | MOTORPROP_NOSTALLCHECK);
     InitializeMotor(fOverallSuccess, motorRight, motorController2, 1, "right", MOTORPROP_REFLECTED);
-    //InitializeMotor(fOverallSuccess, motorArm, motorControllerArm, 1, "arm", MOTORPROP_NONE      | MOTORPROP_ENCODER);
+    InitializeMotor(fOverallSuccess, motorArm, motorController2, 2, "arm", MOTORPROP_NONE);
     }
 
 //-------------------------------------------------------------------------------------------------------
@@ -36,28 +36,34 @@ IRSENSOR irsensor;
 
 void InitializeSensors(IN OUT STICKYFAILURE& fOverallSuccess)
     {
-    //InitializeIRSensor(fOverallSuccess, "IR Sensor", irsensor, SensorOnMux(2,1), IRSENSOR_MODE_AC);
+    //InitializeIRSensor(fOverallSuccess, "IR Sensor", irsensor, SensorOnMux(2,4), IRSENSOR_MODE_AC);
     }
 
 void ReadSensors(READ_SENSORS_CONTEXT& context)
 	{
-    // ReadIRSensor(irsensor, context);
+     ReadIRSensor(irsensor, context);
 	}
 
 void TriggerSensors(TRIGGER_SENSORS_CONTEXT& context)
 	{
-    // TriggerIRSensor(irsensor, context);
+     TriggerIRSensor(irsensor, context);
 	}
 
 //-------------------------------------------------------------------------------------------------------
 // Servos
 //-------------------------------------------------------------------------------------------------------
 
-#define svoAllClosed            0
-#define svoAllOpen              60
-#define svoBackClosed           120
+/*#define svoAllClosed            0
+#define svoAllOpen              150
+#define svoBackClosed           120*/
 
-#define svoHand                 rgsvo[0]
+#define svoOpenRight            50
+#define svoOpenLeft             200
+#define svoClosedRight          160
+#define svoClosedLeft           100
+
+#define svoRight                rgsvo[0]
+#define svoLeft                 rgsvo[1]
 
 #define servoController         rgsvoctlr[0]
 
@@ -65,5 +71,6 @@ void InitializeServos(IN OUT STICKYFAILURE& fOverallSuccess)
     {
     InitializeServoController(fOverallSuccess, servoController, I2CLINK_1, 3);
 
-    InitializeServo(fOverallSuccess, svoHand, "hand", servoController, 1, servoControllerDummy, 0, SVOKIND_STANDARD, true);
+    InitializeServo(fOverallSuccess, svoRight, "right hand", servoController, 2, servoControllerDummy, 0, SVOKIND_STANDARD, true);
+    InitializeServo(fOverallSuccess, svoLeft, "left hand", servoController, 1, servoControllerDummy, 0, SVOKIND_STANDARD, true);
     }
