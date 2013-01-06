@@ -1,8 +1,8 @@
 #pragma config(Hubs,  S1, HTServo,  HTMotor,  HTMotor,  none)
 #pragma config(Sensor, S3,     Seeker,         sensorHiTechnicIRSeeker1200)
-#pragma config(Motor,  mtr_S1_C2_1,     Left,          tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     Right,         tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     ForkLift,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     Left,          tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     Right,         tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     ForkLift,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorG,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C1_1,    servo1,               tServoNone)
 #pragma config(Servo,  srvo_S1_C1_2,    servo2,               tServoNone)
@@ -26,12 +26,17 @@ task main ()
   //drive away from the wall
   nMotorEncoder[Left]=0;
   nMotorEncoder[Right]=0;
+  nMotorEncoder[ForkLift]=0;
   wait1Msec(100);
 
   while (nMotorEncoder[Right] > -2700)
   {
   	motor[Left] = motorPower;
   	motor[Right] = motorPower;
+  }
+  while (nMotorEncoder[ForkLift] < 1440)
+  {
+  	motor[ForkLift] = motorPower;
   }
 
 	motor[Left]=0;  //stop
@@ -59,7 +64,7 @@ task main ()
 
   if(locBeacon > 5) //turn to right post
   {
-	  while (nMotorEncoder[Right] > -1440)
+	  while (nMotorEncoder[Right] > -130)
 	  {
 	  	motor[Left] = motorPower;
 	  	motor[Right] = -motorPower;
@@ -67,7 +72,7 @@ task main ()
   }
   else if(locBeacon < 5)  //turn to left post
   {
-	  while (nMotorEncoder[Right] < 1440)
+	  while (nMotorEncoder[Right] < 130)
 	  {
 	  	motor[Left] = -motorPower;
 	  	motor[Right] = motorPower;
@@ -83,7 +88,7 @@ task main ()
   nMotorEncoder[Right]=0;
   wait1Msec(100);
 
-  while(nMotorEncoder[Left] > -2160)
+  while(nMotorEncoder[Left] > -1203)
   {
   	motor[Left] = motorPower;
   	motor[Right] = motorPower;
@@ -108,17 +113,35 @@ task main ()
 		}
 		else if(SensorValue[Seeker] > 5)	//If the right side of the sensor detects the beacon...
 		{
+			nMotorEncoder[Left]=0;
+	 		nMotorEncoder[Right]=0;
+		  wait1Msec(100);
 			//...turn right.
 			//lastValue = SensorValue[Seeker];
 			motor[Left] = motorPower;
 			motor[Right] = -motorPower;
+
+			while(nMotorEncoder[Right] > -40)
+			{
+				motor[Left] = motorPower;
+				motor[Right] = motorPower;
+			}
 		}
 		else if(SensorValue[Seeker] < 5)	//If the left side of the sensor detects the beacon (or doesn't see it)...
 		{
+		  nMotorEncoder[Left]=0;
+	 	  nMotorEncoder[Right]=0;
+		  wait1Msec(100);
 			//...turn left.
 			//lastValue = SensorValue[Seeker];
 			motor[Left] = -motorPower;
 			motor[Right] = motorPower;
+
+			while(nMotorEncoder[Left] < 40)
+			{
+				motor[Left] = motorPower;
+				motor[Right] = motorPower;
+			}
 		}
 		else{
 			// do nothing
