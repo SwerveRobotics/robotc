@@ -1,10 +1,10 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     irsensor,       sensorI2CCustom)
-#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, PIDControl, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorNormal, openLoop)
-#pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_2,     motorArm,      tmotorNormal, PIDControl)
+#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     motorE,        tmotorNone, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     motorArm,      tmotorNormal, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    servoLeft,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    servoRight,           tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -53,8 +53,8 @@ task main ()
 
         if ( val == 0 )
         {
-            motor[motorLeft] = 5;
-            motor[motorRight] = 5;
+            motor[motorLeft] = 40;
+            motor[motorRight] = 40;
         }
         else
         {
