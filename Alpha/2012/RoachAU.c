@@ -16,7 +16,7 @@
 #include "JoystickDriver.c"
 task main ()
 {
-  waitForStart();
+  //waitForStart();
   ClearTimer(T1);
 
   if(SensorValue(InfraredSensor1) == 2)
