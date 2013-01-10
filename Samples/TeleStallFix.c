@@ -141,7 +141,6 @@ task main()
 		  }
   	}
 
-/*
 		if(joystick.joy2_TopHat ==0)
   	{
   	  motor[ForkLift] = StallCode(ForkLift, -70);
@@ -167,6 +166,5 @@ task main()
   	{
   		moveToPeg(3);
   	}
-*/
 	}
 }
