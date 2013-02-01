@@ -170,15 +170,16 @@ task main ()
 	        }
         }
 
-        if(joy2Btn(1) == 1) // if button 1 on controller 2 is pressed
+        if(joy2Btn(8) == 1) // if lower right trigger on controller 2 is pressed
         {
             OpenHand();
         }
-        else if(joy2Btn(3) == 1) // if button 3 on controller 2 is pressed
+        else if(joy2Btn(6) == 1) // if upper right trigger on controller 2 is pressed
         {
             CloseHand();
         }
 
+        // use dpad on second controller to control arm
         if(joystick.joy2_TopHat == 0) // if up on the dpad on controller 2 is pressed
         {
             motor[motorArm] = 100;//StallCode(motorArm, 100);
@@ -187,12 +188,28 @@ task main ()
         {
             motor[motorArm] = -100;//StallCode(motorArm, -100);
         }
-        else
+        /*else
         {
             motor[motorArm] = 0;//StallCode(motorArm, 0); // set to 0 if nothing is pressed.
+        }*/
+
+        // use left joystick on second controller to control arm
+        else if(joystick.joy2_y1 > 50) // if left joystick is up
+        {
+            motor[motorArm] = 100; // arm goes up
+        }
+        else if(joystick.joy2_y1 < -50) // if left joystick is down
+        {
+            motor[motorArm] = -100; // arm goes down
+        }
+        else // left joystick is in the middle
+        {
+            motor[motorArm] = 0; // arm doesn't move
         }
 
-        servo[servoWristLeft] = ((joystick.joy2_y1 + 128) * (180.0/255.0)) - 90;
-        servo[servoWristRight] = ((127 - joystick.joy2_y1) * (180.0/255.0)) + 90;
+        // use right joystick on second controller to control wrist
+        servo[servoWristLeft] = ((joystick.joy2_y2 + 128) * (180.0/255.0)) - 90;
+        servo[servoWristRight] = ((127 - joystick.joy2_y2) * (180.0/255.0)) + 90;
+        //writeDebugStreamLine("%d", joystick.joy2_y2);
     }
 }
