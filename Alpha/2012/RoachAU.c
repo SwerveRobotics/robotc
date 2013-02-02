@@ -1,6 +1,4 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  none,     none)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S3,     InfraredSensor1, sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     Right,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     Left,          tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     motorC,        tmotorTetrix, openLoop)
@@ -13,15 +11,6 @@ task main ()
   waitForStart();
   ClearTimer(T1);
 
-  if(SensorValue(InfraredSensor1) == 2)
-    {
-       PlayTone(523, 100);
-    }
-    else
-    {
-      PlayTone(440, 100);
-    }
-
   //Move forward away from the square E, 1 and stop at square C, 1
   while(time1[T1] < 2000)
   {
@@ -31,7 +20,7 @@ task main ()
 //Turn right
   ClearTimer(T1);
 
-  while(time1[T1] < 1200)
+  while(time1[T1] < 1400)
   {
     motor[Right] = -60;
     motor[Left] = -60;
