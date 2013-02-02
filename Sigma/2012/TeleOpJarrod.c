@@ -97,6 +97,8 @@ task main ()
     waitForStart(); // wait until FCS lets us go
     ClearTimer(T1);
     InitializeStallCode();
+    servo[servoWristLeft] = 0;
+    servo[servoWristRight] = 180;
 
     while(true) // infinite loop
     {
