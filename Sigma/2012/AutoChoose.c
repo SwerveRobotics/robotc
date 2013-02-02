@@ -26,21 +26,71 @@ task main ()
     nMotorEncoder[motorArm] = 0;
     servo[servoWristLeft] = 0;
     servo[servoWristRight] = 180;
+    servo[servoLeft] = 100;
+    servo[servoRight] = 160;
 
     //create variables to store sensor outputs and set it to AC 1200Hz
     int dirAC = 1;
-    int acs1, acs2, acs3, acs4, acs5 = 0;
-    int maxSig = 0;
-    int val = 0;
     tHTIRS2DSPMode mode = DSP_1200;
 
-    //while(dirAC != 0) //End the loop when the sensor can't read a value. Testing shows that this happens when the sensor is below the peg in front of the IR column.
-    //{
     dirAC = HTIRS2readACDir(irsensor);
     writeDebugStreamLine("dir=%d", dirAC);
-    //}
+
     if(dirAC == 5)
     {
+        while(nMotorEncoder[motorLeft] < (1440 * 58.5 /(4 * PI)))
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = 50;
+        }
+
+        nMotorEncoder[motorLeft] = 0;
+
+        while(nMotorEncoder[motorLeft] < (1440 * 0.6))
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = -50;
+        }
+
+        nMotorEncoder[motorLeft] = 0;
+
+        while(nMotorEncoder[motorLeft] < (1440 * 5 /(4 * PI)))
+        {
+            motor[motorLeft] = 75;
+            motor[motorRight] = 75;
+        }
+return;
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+
+        while(nMotorEncoder[motorArm] < (1440 * 0.9))
+        {
+            motor[motorArm] = 100;
+        }
+
+        motor[motorArm] = 0;
+
+        servo[servoWristLeft] = 75;
+        servo[servoWristRight] = 105;
+        wait1Msec(500);
+
+        while(nMotorEncoder[motorArm] > 0)
+        {
+            motor[motorArm] = -100;
+        }
+        motor[motorArm] = 0;
+
+        servo[servoLeft] = 200;
+        servo[servoRight] = 50;
+        wait1Msec(250);
+
+        while(nMotorEncoder[motorLeft] > (1440 * 20 /(4 * PI)))
+        {
+            motor[motorLeft] = -50;
+            motor[motorRight] = -50;
+        }
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
     }
     else if(dirAC == 6)
     {
@@ -77,18 +127,28 @@ task main ()
         motor[motorArm] = 0;
 
         servo[servoWristLeft] = 75;
-        servo[servoWristRight] = ((127 - 106) * (180.0/255.0)) + 90;
+        servo[servoWristRight] = 105;
+        wait1Msec(500);
+
+        while(nMotorEncoder[motorArm] > 0)
+        {
+            motor[motorArm] = -100;
+        }
+        motor[motorArm] = 0;
+
+        servo[servoLeft] = 200;
+        servo[servoRight] = 50;
+        wait1Msec(250);
+
+        while(nMotorEncoder[motorLeft] > (1440 * 20 /(4 * PI)))
+        {
+            motor[motorLeft] = -50;
+            motor[motorRight] = -50;
+        }
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
     }
     else if(dirAC == 7)
     {
     }
-
-    // which peg?
-    // some sort of if statement using ir sensor
-    // left peg
-    // dead reckon
-    // center peg
-    // dead reckon
-    // right peg
-    // dead reckon
 }
