@@ -9,9 +9,9 @@
 //All comments to most of this code is in TeleOpJarrod.c
 #include "JoystickDriver.c"
 int deadZone = 15;
-long Peg1 = 2196;
-long Peg2 = 5203;
-long Peg3 = 8584;
+long Peg1 = 2196;//peg 1 encoder value
+long Peg2 = 5203;//peg 2 encoder value
+long Peg3 = 8584;//peg 3 encoder value
 long Zero = 0;
 long goPosition;
 
@@ -63,11 +63,122 @@ int StallCode(int motorSentTo, int wantedPower)
 	return wantedPower;
 }
 
+task Joystick2()
+{
+	while(true)
+	{
+		getJoystickSettings(joystick);
+		//D-pad fork-lift control
+		if(joystick.joy2_TopHat ==0)
+		{
+			motor[ForkLift] = StallCode(ForkLift, 75);
+			//motor[ForkLift] = 100;
+		}
+		else if(joystick.joy2_TopHat ==4)
+		{
+			motor[ForkLift] = StallCode(ForkLift, -75);
+			//motor[ForkLift] = -100;
+		}
+		else
+		{
+			motor[ForkLift] = StallCode(ForkLift, 0);
+			//motor[ForkLift] = 0;
+		}
+		//going to peg 1
+		if(joystick.joy2_Buttons == 2)
+		{
+			goPosition = (Peg1 - nMotorEncoder[ForkLift]);
+			if (goPosition > 0) // go up
+			{
+				while(nMotorEncoder[ForkLift] < Peg1) // to position
+				{
+					motor[ForkLift] = 75;  // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+			else if (goPosition < 0) // go down
+			{
+				while(nMotorEncoder[ForkLift] > Peg1) // to position
+				{
+					motor[ForkLift] = -75; // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+		}
+		//going to peg 2
+		else if(joystick.joy2_Buttons == 1)
+		{
+			goPosition = (Peg2 - nMotorEncoder[ForkLift]);
+			if (goPosition > 0) // go up
+			{
+				while(nMotorEncoder[ForkLift] < Peg2) // to position
+				{
+					motor[ForkLift] = 75;  // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+			else if (goPosition < 0) // go down
+			{
+				while(nMotorEncoder[ForkLift] > Peg2) // to position
+				{
+					motor[ForkLift] = -75; // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+		}
+		//going to peg 3
+		else if(joystick.joy2_Buttons == 4)
+		{
+			goPosition = (Peg3 - nMotorEncoder[ForkLift]);
+			if (goPosition > 0) // go up
+			{
+				while(nMotorEncoder[ForkLift] < Peg3) // to position
+				{
+					motor[ForkLift] = 75;  // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+			else if (goPosition < 0) // go down
+			{
+				while(nMotorEncoder[ForkLift] > Peg3) // to position
+				{
+					motor[ForkLift] = -75; // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+		}
+
+		else if(joystick.joy2_Buttons == 3)
+		{
+			goPosition = (Zero - nMotorEncoder[ForkLift]);
+			if (goPosition > 0) // go up
+			{
+				while(nMotorEncoder[ForkLift] > Zero) // to position
+				{
+					motor[ForkLift] = -75;  // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+			else if (goPosition < 0) // go down
+			{
+				while(nMotorEncoder[ForkLift] < Zero) // to position
+				{
+					motor[ForkLift] = 75; // speed
+				}
+				motor[ForkLift] = 0; // stop
+			}
+		}
+	}
+}
+
+
 task main()
 {
 	waitForStart();
+	StartTask(Joystick2);
 	ClearTimer(T1);
 	nMotorEncoder[ForkLift] = 0;
+	//slow mode
 	while(true)
 	{
 		getJoystickSettings(joystick);
@@ -109,104 +220,6 @@ task main()
 			else
 			{
 				motor[Right] = StallCode(Right, 0);
-			}
-		}
-
-		if(joystick.joy2_TopHat ==0)
-		{
-			motor[ForkLift] = StallCode(ForkLift, 75);
-			//motor[ForkLift] = 100;
-		}
-		else if(joystick.joy2_TopHat ==4)
-		{
-			motor[ForkLift] = StallCode(ForkLift, -75);
-			//motor[ForkLift] = -100;
-		}
-		else
-		{
-			motor[ForkLift] = StallCode(ForkLift, 0);
-			//motor[ForkLift] = 0;
-		}
-
-		if(joystick.joy2_Buttons == 2)
-		{
-			goPosition = (Peg1 - nMotorEncoder[ForkLift]);
-			if (goPosition > 0) // go up
-			{
-				while(nMotorEncoder[ForkLift] < Peg1) // to position
-				{
-					motor[ForkLift] = 75;  // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-			else if (goPosition < 0) // go down
-			{
-				while(nMotorEncoder[ForkLift] > Peg1) // to position
-				{
-					motor[ForkLift] = -75; // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-		}
-		else if(joystick.joy2_Buttons == 1)
-		{
-			goPosition = (Peg2 - nMotorEncoder[ForkLift]);
-			if (goPosition > 0) // go up
-			{
-				while(nMotorEncoder[ForkLift] < Peg2) // to position
-				{
-					motor[ForkLift] = 75;  // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-			else if (goPosition < 0) // go down
-			{
-				while(nMotorEncoder[ForkLift] > Peg2) // to position
-				{
-					motor[ForkLift] = -75; // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-		}
-		else if(joystick.joy2_Buttons == 4)
-		{
-			goPosition = (Peg3 - nMotorEncoder[ForkLift]);
-			if (goPosition > 0) // go up
-			{
-				while(nMotorEncoder[ForkLift] < Peg3) // to position
-				{
-					motor[ForkLift] = 75;  // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-			else if (goPosition < 0) // go down
-			{
-				while(nMotorEncoder[ForkLift] > Peg3) // to position
-				{
-					motor[ForkLift] = -75; // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-		}
-
-		else if(joystick.joy2_Buttons == 3)
-		{
-			goPosition = (Zero - nMotorEncoder[ForkLift]);
-			if (goPosition > 0) // go up
-			{
-				while(nMotorEncoder[ForkLift] < Zero) // to position
-				{
-					motor[ForkLift] = 75;  // speed
-				}
-				motor[ForkLift] = 0; // stop
-			}
-			else if (goPosition < 0) // go down
-			{
-				while(nMotorEncoder[ForkLift] > Zero) // to position
-				{
-					motor[ForkLift] = -75; // speed
-				}
-				motor[ForkLift] = 0; // stop
 			}
 		}
 	}

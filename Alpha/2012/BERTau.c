@@ -16,25 +16,25 @@ int locBeacon;
 task main ()
 {
 	//int lastValue = 0;
-  waitForStart();
+	waitForStart();
 
-  //drive away from the wall
-  nMotorEncoder[Left]=0;
-  nMotorEncoder[Right]=0;
-  nMotorEncoder[ForkLift]=0;
-  wait1Msec(100);
+	//drive away from the wall
+	nMotorEncoder[Left]=0;
+	nMotorEncoder[Right]=0;
+	nMotorEncoder[ForkLift]=0;
+	wait1Msec(100);
 
-  while (nMotorEncoder[Left] < 2840)
-  {
-  	motor[Left] = motorPower;
-  	motor[Right] = motorPower;
-  }
+	while (nMotorEncoder[Left] < 2840)
+	{
+		motor[Left] = motorPower;
+		motor[Right] = motorPower;
+	}
 
-  motor[Left]=0;  //stop
+	motor[Left]=0;  //stop
 	motor[Right]=0;
-  wait1Msec(1000);
+	wait1Msec(1000);
 
-  //where is the beacon?
+	//where is the beacon?
 	locBeacon = SensorValue[Seeker];
 	wait1Msec(50);
 	//backup a bit
@@ -53,110 +53,106 @@ task main ()
 	wait1Msec(1000);
 
 	//turn left or right
-  nMotorEncoder[Left]=0;
-  nMotorEncoder[Right]=0;
-  wait1Msec(100);
+	nMotorEncoder[Left]=0;
+	nMotorEncoder[Right]=0;
+	wait1Msec(100);
 
-  if(locBeacon > 5) //turn to right post
-  {
-	  while (nMotorEncoder[Left] < 130)
-	  {
-	  	motor[Left] = motorPower;
-	  	motor[Right] = -motorPower;
-	  }
-  }
-  else if(locBeacon < 5)  //turn to left post
-  {
-	  while (nMotorEncoder[Left] < 130)
-	  {
-	  	motor[Left] = -motorPower;
-	  	motor[Right] = motorPower;
-	  }
-  }
-  else
-  {
-  	wait1Msec(10000);  //this is waste!!  take it out.
-	}
-
-	 //move the arm up to the bottom peg
-  nMotorEncoder[ForkLift] = 0;
-  wait1Msec(100);
-
-  while(nMotorEncoder[ForkLift] < 2196)
-  {
-  	motor[ForkLift] = motorPower;
-  }
-
-  motor[ForkLift] =0;
-  wait1Msec(1000);
-
-  // go forward to the correct post (this needs to be a bit less)
-  nMotorEncoder[Left]=0;
-  nMotorEncoder[Right]=0;
-  wait1Msec(100);
-
-  while(nMotorEncoder[Left] < 1660)
-  {
-  	motor[Left] = 50;
-  	motor[Right] = 50;
-  }
-
-  motor[Left] = 0;
-  motor[Right] = 0;
-  wait1Msec(1000);
-
-  // IR Seeker
-  /*
-  while(1 == 1)
+	if(locBeacon > 5) //turn to right post
 	{
-		if(SensorValue[Seeker] == 5)	//If the sensor is lined up with the beacon...
+		while (nMotorEncoder[Left] < 130)
 		{
-			//...drive straight.
-			//lastValue = SensorValue[Seeker];
-			motor[Left] = motorPower/2;
-			motor[Right] = motorPower/2;
-		}
-		else if(SensorValue[Seeker] == 0)	//If the sensor is lined up with the beacon...
-		{
-			//...do nothing
-			// spurrious "0"
-			motor[Left] = 0;
-			motor[Right] = 0;
-		}
-		else if(SensorValue[Seeker] > 5)	//If the right side of the sensor detects the beacon...
-		{
-			nMotorEncoder[Left]=0;
-	 		nMotorEncoder[Right]=0;
-		  wait1Msec(100);
-			//...turn right.
-			//lastValue = SensorValue[Seeker];
 			motor[Left] = motorPower;
 			motor[Right] = -motorPower;
-
-			while(nMotorEncoder[Left] < 40)
-			{
-				motor[Left] = motorPower;
-				motor[Right] = motorPower;
-			}
 		}
-		else if(SensorValue[Seeker] < 5)	//If the left side of the sensor detects the beacon (or doesn't see it)...
+	}
+	else if(locBeacon < 5)  //turn to left post
+	{
+		while (nMotorEncoder[Left] < 130)
 		{
-		  nMotorEncoder[Left]=0;
-	 	  nMotorEncoder[Right]=0;
-		  wait1Msec(100);
-			//...turn left.
-			//lastValue = SensorValue[Seeker];
 			motor[Left] = -motorPower;
 			motor[Right] = motorPower;
+		}
+	}
 
-			while(nMotorEncoder[Left] < 40)
-			{
-				motor[Left] = motorPower;
-				motor[Right] = motorPower;
-			}
-		}
-		else{
-			// do nothing
-		}
+	//move the arm up to the bottom peg
+	nMotorEncoder[ForkLift] = 0;
+	wait1Msec(100);
+
+	while(nMotorEncoder[ForkLift] < 2196)
+	{
+		motor[ForkLift] = motorPower;
+	}
+
+	motor[ForkLift] =0;
+	wait1Msec(1000);
+
+	// go forward to the correct post (this needs to be a bit less)
+	nMotorEncoder[Left]=0;
+	nMotorEncoder[Right]=0;
+	wait1Msec(100);
+
+	while(SensorValue[Seeker] == 5)
+	{
+		motor[Left] = 50;
+		motor[Right] = 50;
+	}
+
+	motor[Left] = 0;
+	motor[Right] = 0;
+	wait1Msec(1000);
+
+	// IR Seeker
+	/*
+	while(1 == 1)
+	{
+	if(SensorValue[Seeker] == 5)	//If the sensor is lined up with the beacon...
+	{
+	//...drive straight.
+	//lastValue = SensorValue[Seeker];
+	motor[Left] = motorPower/2;
+	motor[Right] = motorPower/2;
+	}
+	else if(SensorValue[Seeker] == 0)	//If the sensor is lined up with the beacon...
+	{
+	//...do nothing
+	// spurrious "0"
+	motor[Left] = 0;
+	motor[Right] = 0;
+	}
+	else if(SensorValue[Seeker] > 5)	//If the right side of the sensor detects the beacon...
+	{
+	nMotorEncoder[Left]=0;
+	nMotorEncoder[Right]=0;
+	wait1Msec(100);
+	//...turn right.
+	//lastValue = SensorValue[Seeker];
+	motor[Left] = motorPower;
+	motor[Right] = -motorPower;
+
+	while(nMotorEncoder[Left] < 40)
+	{
+	motor[Left] = motorPower;
+	motor[Right] = motorPower;
+	}
+	}
+	else if(SensorValue[Seeker] < 5)	//If the left side of the sensor detects the beacon (or doesn't see it)...
+	{
+	nMotorEncoder[Left]=0;
+	nMotorEncoder[Right]=0;
+	wait1Msec(100);
+	//...turn left.
+	//lastValue = SensorValue[Seeker];
+	motor[Left] = -motorPower;
+	motor[Right] = motorPower;
+
+	while(nMotorEncoder[Left] < 40)
+	{
+	motor[Left] = motorPower;
+	motor[Right] = motorPower;
+	}
+	}
+	else{
+	// do nothing
+	}
 	}*/
 }

@@ -8,29 +8,29 @@
 #include "JoystickDriver.c"
 task main ()
 {
-  waitForStart();
-  ClearTimer(T1);
+	waitForStart();
+	ClearTimer(T1);
 
-  //Move forward away from the square E, 1 and stop at square C, 1
-  while(time1[T1] < 2000)
-  {
-    motor[Right] = 60;
-    motor[Left] = -60;
-  }
-//Turn right
-  ClearTimer(T1);
+	//Move forward away from the square E, 1 and stop at square C, 1
+	while(time1[T1] < 2000)
+	{
+		motor[Right] = 60;
+		motor[Left] = -60;
+	}
+	//Turn right
+	ClearTimer(T1);
 
-  while(time1[T1] < 1400)
-  {
-    motor[Right] = -60;
-    motor[Left] = -60;
-  }
-  //and move forward 1 sqaure
-  ClearTimer(T1);
+	while(time1[T1] < 1600)
+	{
+		motor[Right] = -60;
+		motor[Left] = -60;
+	}
+	//and move forward 1 sqaure
+	ClearTimer(T1);
 
-  while(time1[T1] < 1000)
-  {
-    motor[Right] =  60;
-    motor[Left] = -60;
-  }
+	while(time1[T1] < 1000)
+	{
+		motor[Right] =  60;
+		motor[Left] = -60;
+	}
 }
