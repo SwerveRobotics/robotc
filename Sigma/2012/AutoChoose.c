@@ -38,7 +38,7 @@ task main ()
 
     if(dirAC == 5)
     {
-        while(nMotorEncoder[motorLeft] < (1440 * 58.5 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 59.25 /(4 * PI)))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = 50;
@@ -46,7 +46,7 @@ task main ()
 
         nMotorEncoder[motorLeft] = 0;
 
-        while(nMotorEncoder[motorLeft] < (1440 * 0.6))
+        while(nMotorEncoder[motorLeft] < (1440 * 0.45))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = -50;
@@ -59,7 +59,7 @@ task main ()
             motor[motorLeft] = 75;
             motor[motorRight] = 75;
         }
-return;
+
         motor[motorLeft] = 0;
         motor[motorRight] = 0;
 
@@ -84,7 +84,7 @@ return;
         servo[servoRight] = 50;
         wait1Msec(250);
 
-        while(nMotorEncoder[motorLeft] > (1440 * 20 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] > (1440 /(4 * PI)))
         {
             motor[motorLeft] = -50;
             motor[motorRight] = -50;
@@ -102,7 +102,7 @@ return;
 
         nMotorEncoder[motorLeft] = 0;
 
-        while(nMotorEncoder[motorLeft] < (1440 * 0.5))
+        while(nMotorEncoder[motorLeft] < (1440 * 0.53))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = -50;
@@ -150,5 +150,58 @@ return;
     }
     else if(dirAC == 7)
     {
+        while(nMotorEncoder[motorLeft] < (1440 * 1 /(4 * PI)))
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = 50;
+        }
+
+        nMotorEncoder[motorLeft] = 0;
+
+        while(nMotorEncoder[motorLeft] < (1440 * 0.72))
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = -50;
+        }
+
+        nMotorEncoder[motorLeft] = 0;
+
+        while(nMotorEncoder[motorLeft] < (1440 * 47 /(4 * PI)))
+        {
+            motor[motorLeft] = 75;
+            motor[motorRight] = 75;
+        }
+
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+
+        while(nMotorEncoder[motorArm] < (1440 * 1))
+        {
+            motor[motorArm] = 100;
+        }
+
+        motor[motorArm] = 0;
+
+        servo[servoWristLeft] = 75;
+        servo[servoWristRight] = 105;
+        wait1Msec(500);
+
+        while(nMotorEncoder[motorArm] > 100)
+        {
+            motor[motorArm] = -100;
+        }
+        motor[motorArm] = 0;
+
+        servo[servoLeft] = 200;
+        servo[servoRight] = 50;
+        wait1Msec(250);
+
+        while(nMotorEncoder[motorLeft] > (1440 * 20 /(4 * PI)))
+        {
+            motor[motorLeft] = -50;
+            motor[motorRight] = -50;
+        }
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
     }
 }
