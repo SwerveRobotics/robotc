@@ -29,16 +29,35 @@ task main ()
     servo[servoLeft] = 100;
     servo[servoRight] = 160;
 
+    float wheelDiameter = 3.804;
+
     //create variables to store sensor outputs and set it to AC 1200Hz
     int dirAC = 1;
     tHTIRS2DSPMode mode = DSP_1200;
-
+while(true)
+{
     dirAC = HTIRS2readACDir(irsensor);
     writeDebugStreamLine("dir=%d", dirAC);
+}
+return;
+    /*
+            motor[motorLeft] = 50;
+        motor[motorRight] = -50;
+        wait1Msec(1000);
+    while(dirAC!=6)
+    {
+        dirAC = HTIRS2readACDir(irsensor);
+    writeDebugStreamLine("dir=%d", dirAC);
+        motor[motorLeft] = 50;
+        motor[motorRight] = -50;
+        writeDebugStreamLine("%d", nMotorEncoder[motorLeft]);
+wait1Msec(250);
+    }
+    return;*/
 
     if(dirAC == 5)
     {
-        while(nMotorEncoder[motorLeft] < (1440 * 59.25 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 59.25 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = 50;
@@ -54,7 +73,7 @@ task main ()
 
         nMotorEncoder[motorLeft] = 0;
 
-        while(nMotorEncoder[motorLeft] < (1440 * 5 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 5 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = 75;
             motor[motorRight] = 75;
@@ -84,7 +103,7 @@ task main ()
         servo[servoRight] = 50;
         wait1Msec(250);
 
-        while(nMotorEncoder[motorLeft] > (1440 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] > (1440 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = -50;
             motor[motorRight] = -50;
@@ -94,7 +113,7 @@ task main ()
     }
     else if(dirAC == 6)
     {
-        while(nMotorEncoder[motorLeft] < (1440 * 30 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 24.5 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = 50;
@@ -102,7 +121,7 @@ task main ()
 
         nMotorEncoder[motorLeft] = 0;
 
-        while(nMotorEncoder[motorLeft] < (1440 * 0.53))
+        while(nMotorEncoder[motorLeft] < (1440 * 0.55))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = -50;
@@ -110,7 +129,7 @@ task main ()
 
         nMotorEncoder[motorLeft] = 0;
 
-        while(nMotorEncoder[motorLeft] < (1440 * 26.5 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 30 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = 75;
             motor[motorRight] = 75;
@@ -130,7 +149,7 @@ task main ()
         servo[servoWristRight] = 105;
         wait1Msec(500);
 
-        while(nMotorEncoder[motorArm] > 0)
+        while(nMotorEncoder[motorArm] > 100)
         {
             motor[motorArm] = -100;
         }
@@ -138,9 +157,11 @@ task main ()
 
         servo[servoLeft] = 200;
         servo[servoRight] = 50;
+        servo[servoWristLeft] = 0;
+        servo[servoWristRight] = 180;
         wait1Msec(250);
 
-        while(nMotorEncoder[motorLeft] > (1440 * 20 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] > (1440 * 20 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = -50;
             motor[motorRight] = -50;
@@ -150,7 +171,7 @@ task main ()
     }
     else if(dirAC == 7)
     {
-        while(nMotorEncoder[motorLeft] < (1440 * 1 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 1 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = 50;
@@ -166,7 +187,7 @@ task main ()
 
         nMotorEncoder[motorLeft] = 0;
 
-        while(nMotorEncoder[motorLeft] < (1440 * 47 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] < (1440 * 47 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = 75;
             motor[motorRight] = 75;
@@ -196,7 +217,7 @@ task main ()
         servo[servoRight] = 50;
         wait1Msec(250);
 
-        while(nMotorEncoder[motorLeft] > (1440 * 20 /(4 * PI)))
+        while(nMotorEncoder[motorLeft] > (1440 * 20 /(wheelDiameter * PI)))
         {
             motor[motorLeft] = -50;
             motor[motorRight] = -50;
