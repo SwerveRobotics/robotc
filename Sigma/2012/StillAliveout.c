@@ -1,9 +1,9 @@
 task main()
 {
-    ClearSounds();
-    nVolume=4;
     while(true)
     {
+        //ClearSounds();
+        nVolume=4;
         PlayTone(784,125);
         PlayTone(740,125);
         PlayTone(659,125);

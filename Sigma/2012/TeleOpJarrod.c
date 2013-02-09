@@ -2,7 +2,7 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     irsensor,       sensorI2CCustom)
 #pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorArm,      tmotorNormal, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     motorArm,      tmotorNormal, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorNone, openLoop)
 #pragma config(Servo,  srvo_S1_C3_1,    servoRight,           tServoStandard)
@@ -19,7 +19,7 @@ int deadZone = 5;
 
 //variables used for stall code
 long timeStalling[3]; //amount of time the motors are stalling
-int valueOfLastMove[3]; //the value of the encoders when the motor last moved
+long valueOfLastMove[3]; //the value of the encoders when the motor last moved
 long timeStoppedMoving[3]; //the time the motors stopped
 
 void InitializeStallCode()
@@ -48,11 +48,11 @@ int StallCode(int motorSentTo, int wantedPower)
 		motorIndex = 2;
 		break;
 	}
-  int cur = nMotorEncoder[motorSentTo];//current encoder value of motor
+  long cur = nMotorEncoder[motorSentTo];//current encoder value of motor
 
 if((wantedPower < -30 || wantedPower > 30)&&(cur == valueOfLastMove[motorIndex]))
 {
-	if(timeStalling[motorIndex] + 150 >= time1[T1])
+	if(timeStalling[motorIndex] + 600 >= time1[T1])
 	{
 		if(timeStoppedMoving[motorIndex] == 0)
 		{
@@ -60,6 +60,7 @@ if((wantedPower < -30 || wantedPower > 30)&&(cur == valueOfLastMove[motorIndex])
 		}
 		if(timeStoppedMoving[motorIndex] + 10 >= time1[T1])
 		{
+		    writeDebugStreamLine("stall");
 			return 0;
 		}
 		else
@@ -97,8 +98,11 @@ task main ()
     waitForStart(); // wait until FCS lets us go
     ClearTimer(T1);
     InitializeStallCode();
-    servo[servoWristLeft] = 0;
-    servo[servoWristRight] = 180;
+    nMotorEncoder[motorLeft] = 0;
+    nMotorEncoder[motorRight] = 0;
+    nMotorEncoder[motorArm] = 0;
+    //servo[servoWristLeft] = 0;
+    //servo[servoWristRight] = 180;
 
     while(true) // infinite loop
     {
@@ -184,11 +188,11 @@ task main ()
         // use dpad on second controller to control arm
         if(joystick.joy2_TopHat == 0) // if up on the dpad on controller 2 is pressed
         {
-            motor[motorArm] = 100;//StallCode(motorArm, 100);
+            motor[motorArm] = 100; //StallCode(motorArm, 100);
         }
         else if(joystick.joy2_TopHat == 4) // if down on the dpad on controller 2 is pressed
         {
-            motor[motorArm] = -100;//StallCode(motorArm, -100);
+            motor[motorArm] = -100; //StallCode(motorArm, -100);
         }
         /*else
         {
@@ -198,20 +202,22 @@ task main ()
         // use left joystick on second controller to control arm
         else if(joystick.joy2_y1 > 50) // if left joystick is up
         {
-            motor[motorArm] = 100; // arm goes up
+            motor[motorArm] = StallCode(motorArm, 100); // arm goes up
         }
         else if(joystick.joy2_y1 < -50) // if left joystick is down
         {
-            motor[motorArm] = -100; // arm goes down
+            motor[motorArm] = StallCode(motorArm, -100); // arm goes down
         }
         else // left joystick is in the middle
         {
-            motor[motorArm] = 0; // arm doesn't move
+            motor[motorArm] = StallCode(motorArm, 0); // arm doesn't move
         }
 
         // use right joystick on second controller to control wrist
-        servo[servoWristLeft] = ((joystick.joy2_y2 + 128) * (180.0/255.0)) - 90;
-        servo[servoWristRight] = ((127 - joystick.joy2_y2) * (180.0/255.0)) + 90;
+        servo[servoWristLeft] = ((joystick.joy2_y2 + 128) * (180.0/128.0));// - 90;//0 at rest
+        servo[servoWristRight] = ((128 - joystick.joy2_y2) * (180.0/128.0));// + 90;//180 at rest
         //writeDebugStreamLine("%d", joystick.joy2_y2);
+        //writeDebugStreamLine("left: %d", ServoValue[servoWristLeft]);
+        //writeDebugStreamLine("right: %d", ServoValue[servoWristRight]);
     }
 }
