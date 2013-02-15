@@ -26,7 +26,7 @@ task main()
 	motor[Right] = 0;
 	wait1Msec(10);
 
-	while(nMotorEncoder[ForkLift] < 1911)
+	while(nMotorEncoder[ForkLift] < 2201)
 	{
 		motor[ForkLift] = MotorPower;
 	}
@@ -36,7 +36,7 @@ task main()
 
 	ClearTimer(T1);
 
-	while(time1[T1] < 2000)
+	while(time1[T1] < 2300)
 	{
 		motor[Left] = 30;
 		motor[Right] = 35;
