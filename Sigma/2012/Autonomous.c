@@ -1,9 +1,9 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     irsensor,       sensorI2CCustom)
-#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorArm,      tmotorNormal, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     motorArm,      tmotorNormal, PIDControl, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_1,     motorRight,    tmotorNormal, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorNone, openLoop)
 #pragma config(Servo,  srvo_S1_C3_1,    servoRight,           tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    servoWristRight,      tServoStandard)
@@ -79,8 +79,13 @@ task main ()
     waitForStart(); //wait until FCS tells us to go
     InitializeStallCode();
 
+    servo[servoWristLeft] = 0;
+    servo[servoWristRight] = 180;
+    servo[servoLeft] = 100;
+    servo[servoRight] = 160;
+
     //move forward away from wall
-    motor[motorLeft] = StallCode(motorLeft, 50);
+   /* motor[motorLeft] = StallCode(motorLeft, 50);
     motor[motorRight] = StallCode(motorRight, 50);
     wait1Msec(200);
     motor[motorLeft] = StallCode(motorLeft, 0);
@@ -89,7 +94,7 @@ task main ()
     //lift arm so hand is at height of lowest peg. check time.
     motor[motorArm] = StallCode(motorArm, 100);
     wait1Msec(500);
-    motor[motorArm] = StallCode(motorArm, 0);
+    motor[motorArm] = StallCode(motorArm, 0);*/
 
     //create variables to store sensor outputs and set it to AC 1200Hz
     int dirAC = 1;
@@ -108,25 +113,25 @@ task main ()
         maxSig = (maxSig > acs5) ? maxSig : acs5;
         writeDebugStreamLine("dir=%d", dirAC);
         writeDebugStreamLine("sig=%d", maxSig);
-        val = dirAC - 5;
+        val = dirAC - 6;
 
         if ( val == 0 )
         {
-            motor[motorLeft] = StallCode(motorLeft, 60);
-            motor[motorRight] = StallCode(motorRight, 60);
+            motor[motorLeft] = StallCode(motorLeft, 50);
+            motor[motorRight] = StallCode(motorRight, 50);
         }
         else
         {
-            motor[motorLeft] = StallCode(motorLeft, 100 * val);
-            motor[motorRight] = StallCode(motorRight, 100 * -val);
+            motor[motorLeft] = StallCode(motorLeft, 20 * val);
+            motor[motorRight] = StallCode(motorRight, 20 * -val);
         }
-        //nxtDisplayCenteredBigTextLine(4, "
 
         servo[servoRight] = 160;
         servo[servoLeft] = 90;
 
         wait10Msec(2);
     }
+    return;
     /*//drive forwards into peg
     motor[motorLeft] = 10;
     motor[motorRight] = 10;
@@ -146,4 +151,10 @@ task main ()
     motor[motorArm] = StallCode(motorArm, -100);
     wait1Msec(500);
     motor[motorArm] = StallCOde(motorArm, 0);
+
+    motor[motorLeft] = -50;
+    motor[motorRight] = -50;
+    wait1Msec(250);
+    motor[motorLeft] = 0;
+    motor[motorRight] = 0;
 }
