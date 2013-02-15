@@ -15,7 +15,7 @@
 
 #include "JoystickDriver.c"
 
-int deadZone = 5;
+int deadZone = 10;
 
 //variables used for stall code
 long timeStalling[3]; //amount of time the motors are stalling
@@ -52,7 +52,7 @@ int StallCode(int motorSentTo, int wantedPower)
 
 if((wantedPower < -30 || wantedPower > 30)&&(cur == valueOfLastMove[motorIndex]))
 {
-	if(timeStalling[motorIndex] + 600 >= time1[T1])
+	if(timeStalling[motorIndex] + 150 >= time1[T1])
 	{
 		if(timeStoppedMoving[motorIndex] == 0)
 		{
@@ -95,14 +95,14 @@ void MoveArm(int power)
 
 task main ()
 {
+    nMotorEncoder[motorLeft] = 0; //zero encoders
+    nMotorEncoder[motorRight] = 0;
+    nMotorEncoder[motorArm] = 0;
     waitForStart(); // wait until FCS lets us go
     ClearTimer(T1);
     InitializeStallCode();
-    nMotorEncoder[motorLeft] = 0;
-    nMotorEncoder[motorRight] = 0;
-    nMotorEncoder[motorArm] = 0;
-    //servo[servoWristLeft] = 0;
-    //servo[servoWristRight] = 180;
+    servo[servoWristLeft] = 0;
+    servo[servoWristRight] = 255;
 
     while(true) // infinite loop
     {
@@ -188,11 +188,11 @@ task main ()
         // use dpad on second controller to control arm
         if(joystick.joy2_TopHat == 0) // if up on the dpad on controller 2 is pressed
         {
-            motor[motorArm] = 100; //StallCode(motorArm, 100);
+            motor[motorArm] = StallCode(motorArm, 100);
         }
         else if(joystick.joy2_TopHat == 4) // if down on the dpad on controller 2 is pressed
         {
-            motor[motorArm] = -100; //StallCode(motorArm, -100);
+            motor[motorArm] = StallCode(motorArm, -100);
         }
         /*else
         {
@@ -210,12 +210,20 @@ task main ()
         }
         else // left joystick is in the middle
         {
-            motor[motorArm] = StallCode(motorArm, 0); // arm doesn't move
+            motor[motorArm] = 0; // arm doesn't move
         }
 
+        int pos = joystick.joy2_y2;
+        if (pos < -20)
+            pos = -20;
         // use right joystick on second controller to control wrist
-        servo[servoWristLeft] = ((joystick.joy2_y2 + 128) * (180.0/128.0));// - 90;//0 at rest
-        servo[servoWristRight] = ((128 - joystick.joy2_y2) * (180.0/128.0));// + 90;//180 at rest
+        servo[servoWristLeft] = pos * (256.0 / 128);// * (180.0/128.0)) - 90;//0 at rest
+        servo[servoWristRight] = 255 - (pos * (256.0 / 128));// * (180.0/128.0)) + 90;//180 at rest
+        if(joystick.joy2_y2 < -20)
+        {
+            //servo[servoWristLeft]
+            //servo[servoWristRight]
+        }
         //writeDebugStreamLine("%d", joystick.joy2_y2);
         //writeDebugStreamLine("left: %d", ServoValue[servoWristLeft]);
         //writeDebugStreamLine("right: %d", ServoValue[servoWristRight]);
