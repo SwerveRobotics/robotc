@@ -1,3 +1,4 @@
+
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     Seeker,         sensorHiTechnicIRSeeker1200)
@@ -22,6 +23,7 @@ task main ()
 	nMotorEncoder[Left]=0;
 	nMotorEncoder[Right]=0;
 	nMotorEncoder[ForkLift]=0;
+
 	wait1Msec(100);
 
 	while (nMotorEncoder[Left] < 2840)
@@ -42,7 +44,7 @@ task main ()
 	nMotorEncoder[Right] = 0;
 	wait1Msec(100);
 
-	while(nMotorEncoder[Left] > -180)
+	while(nMotorEncoder[Left] > -1000)
 	{
 		motor[Left] = -motorPower;
 		motor[Right] = -motorPower;
@@ -59,26 +61,62 @@ task main ()
 
 	if(locBeacon > 5) //turn to right post
 	{
-		while (nMotorEncoder[Left] < 130)
+		while (nMotorEncoder[Left] < 980)
 		{
 			motor[Left] = motorPower;
 			motor[Right] = -motorPower;
 		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left]=0;
+		nMotorEncoder[Right]=0;
+		wait1Msec(100);
+
+		while(nMotorEncoder[Left] < 1440 * 15/(4 *PI))
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(1000);
 	}
 	else if(locBeacon < 5)  //turn to left post
 	{
-		while (nMotorEncoder[Left] < 130)
+		while (nMotorEncoder[Left] > -980)
 		{
 			motor[Left] = -motorPower;
 			motor[Right] = motorPower;
 		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left]=0;
+		nMotorEncoder[Right]=0;
+		wait1Msec(100);
+
+		while(nMotorEncoder[Left] < 1440 * 20/(4 *PI))
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(1000);
 	}
 
 	//move the arm up to the bottom peg
 	nMotorEncoder[ForkLift] = 0;
 	wait1Msec(100);
 
-	while(nMotorEncoder[ForkLift] < 2196)
+	while(nMotorEncoder[ForkLift] < 2146)
 	{
 		motor[ForkLift] = motorPower;
 	}
@@ -86,21 +124,157 @@ task main ()
 	motor[ForkLift] =0;
 	wait1Msec(1000);
 
-	// go forward to the correct post (this needs to be a bit less)
-	nMotorEncoder[Left]=0;
-	nMotorEncoder[Right]=0;
-	wait1Msec(100);
-
-	while(SensorValue[Seeker] == 5)
+	//moving to the left
+	if(SensorValue[Seeker] > 5)
 	{
-		motor[Left] = 50;
-		motor[Right] = 50;
+		/*while(SensorValue[Seeker] > 5)
+		{
+			motor[Left] = 0;
+			motor[Right] = -motorPower;
+		}
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);*/
+
+		nMotorEncoder[Left] = 0;
+		nMotorEncoder[Right] = 0;
+		wait1Msec(100);
+
+		while(nMotorEncoder[Left] < 1430)
+		{
+			motor[Left] = motorPower;
+			motor[Right] = -motorPower;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		ClearTimer(T1);
+		while(time1[T1] < 1000)
+		{
+			motor[Left] = motorPower;
+			motor[Right] = motorPower;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		while(nMotorEncoder[ForkLift] > 0)
+		{
+			motor[ForkLift] = -motorPower;
+		}
+
+		motor[ForkLift] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] > -190)
+		{
+			motor[Left] = -50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
 	}
+	else if(SensorValue[Seeker] < 5)		//Moving to the right
+	{
+		/*while(SensorValue[Seeker] < 5)
+		{
+			motor[Left] = -motorPower;
+			motor[Right] = 0;
+		}
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);*/
 
-	motor[Left] = 0;
-	motor[Right] = 0;
-	wait1Msec(1000);
+		nMotorEncoder[Left] = 0;
+		nMotorEncoder[Right] = 0;
+		wait1Msec(100);
 
+		while(nMotorEncoder[Left] > -1040)
+		{
+			motor[Left] = -motorPower;
+			motor[Right] = motorPower;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		ClearTimer(T1);
+		while(time1[T1] < 1080)
+		{
+			motor[Left] = motorPower;
+			motor[Right] = motorPower;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		while(nMotorEncoder[ForkLift] > 0)
+		{
+			motor[ForkLift] = -motorPower;
+		}
+
+		motor[ForkLift] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] > -190)
+		{
+			motor[Left] = -50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+	}
+	else
+	{
+		// go forward to the correct post (this needs to be a bit less)
+		nMotorEncoder[Left]=0;
+		nMotorEncoder[Right]=0;
+		wait1Msec(100);
+
+		while(nMotorEncoder[Left] < 1440 * 37/(4 *PI))
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(1000);
+
+		while(nMotorEncoder[ForkLift] > 0)
+		{
+			motor[ForkLift] = -motorPower;
+		}
+
+		motor[ForkLift] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] > -190)
+		{
+			motor[Left] = -50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+	}
 	// IR Seeker
 	/*
 	while(1 == 1)
