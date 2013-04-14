@@ -17,6 +17,7 @@
 #include "C:\ftc\drivers\2.3\drivers\HTIRS2-driver.h" //only used in autonomous
 
 int deadZone = 10;
+//int motorSentTo;
 
 //variables used for stall code
 long timeStalling[] = {0, 0, 0}; //amount of time the motors are stalling
@@ -35,15 +36,15 @@ int StallCode(int motorSentTo, int wantedPower)
         motorIndex = 1;
         break;
     case motorArm:
-    default:
         motorIndex = 2;
+    default:
         break;
     }
-    long cur = nMotorEncoder[motorSentTo];//current encoder value of motor
+    long cur = nMotorEncoder[motorSentTo]; //current encoder value of motor
 
     if((wantedPower < -30 || wantedPower > 30)&&(cur == valueOfLastMove[motorIndex]))
     {
-        if(timeStalling[motorIndex] + 150 >= time1[T1])
+        if(timeStalling[motorIndex] + 200 >= time1[T1])
         {
             if(timeStoppedMoving[motorIndex] == 0)
             {
@@ -82,11 +83,17 @@ void CloseHand()
 
 task main()
 {
-    nMotorEncoder[motorLeft] = 0; //zero encoders
-    nMotorEncoder[motorRight] = 0;
+    waitForStart(); // wait until FCS lets us go
+
+    //nMotorEncoder[motorLeft] = 0; //zero encoders
+    //nMotorEncoder[motorRight] = 0;
     nMotorEncoder[motorArm] = 0;
 
-    waitForStart(); // wait until FCS lets us go
+    if(SensorValue(touchSensor) == 1)
+    {
+        nMotorEncoder[motorArm] = 0;
+    }
+
     ClearTimer(T1);
 
     while(true) // infinite loop
@@ -120,20 +127,20 @@ task main()
         {
             if(abs(joystick.joy1_y1) > deadZone) // if the left joystick value isn't in the deadzone ...
             {
-                motor[motorLeft]  = joystick.joy1_y1; //StallCode(motorLeft, joystick.joy1_y1); // set the left motor power to the left joystick value on controller 1
+                motor[motorLeft]  = StallCode(motorLeft, joystick.joy1_y1); // set the left motor power to the left joystick value on controller 1
             }
             else
             {
-                motor[motorLeft] = 0;//StallCode(motorLeft, 0); // if the left joystick value is in the deadzone set the left motor power to 0
+                motor[motorLeft] = StallCode(motorLeft, 0); // if the left joystick value is in the deadzone set the left motor power to 0
             }
 
             if(abs(joystick.joy1_y2) > deadZone) // if the right joystick value isn't in the deadzone ...
             {
-                motor[motorRight] = joystick.joy1_y2; //StallCode(motorRight, joystick.joy1_y2); // set the right motor power to the right joystick value on controller 1
+                motor[motorRight] = StallCode(motorRight, joystick.joy1_y2); // set the right motor power to the right joystick value on controller 1
             }
             else
             {
-                motor[motorRight] = 0;//StallCode(motorRight, 0); // if the left joystick value is in the deadzone set the right motor power to 0
+                motor[motorRight] = StallCode(motorRight, 0); // if the left joystick value is in the deadzone set the right motor power to 0
             }
         }
 
@@ -153,7 +160,18 @@ task main()
         }
         else if(joystick.joy2_TopHat == 4) // if down on the dpad on controller 2 is pressed
         {
-            motor[motorArm] = StallCode(motorArm, -100);
+            if(SensorValue(touchSensor) == 1)
+            {
+                motor[motorArm] = StallCode(motorArm, 0);// if touch sensor is pressed and the arm is trying to go down, don't let the arm move
+            }
+            else if(nMotorEncoder[motorArm] < 100)
+            {
+                motor[motorArm] = StallCode(motorArm, -20);// arm goes down slowly
+            }
+            else
+            {
+                motor[motorArm] = StallCode(motorArm, -100);// arm goes down
+            }
         }
         // use joystick to control arm
         else if(joystick.joy2_y1 > 50) // if left joystick is up
@@ -162,7 +180,18 @@ task main()
         }
         else if(joystick.joy2_y1 < -50) // if left joystick is down
         {
-            motor[motorArm] = StallCode(motorArm, -100); // arm goes down
+            if(SensorValue(touchSensor) == 1)
+            {
+                motor[motorArm] = StallCode(motorArm, 0); // if touch sensor is pressed and the arm is trying to go down, don't let the arm move
+            }
+            else if(nMotorEncoder[motorArm] < 100)
+            {
+                motor[motorArm] = StallCode(motorArm, -20); // arm goes down slowly
+            }
+            else
+            {
+                motor[motorArm] = StallCode(motorArm, -100);// arm goes down
+            }
         }
         else // left joystick is in the middle
         {
@@ -170,11 +199,12 @@ task main()
         }
 
         int pos = joystick.joy2_y2;
-        if (pos < 0)
+        /* (pos < 0)
         {
             pos = 0;
-        }
+        }*/
         // use right joystick on second controller to control wrist
-        servo[servoWrist] = 255 - (pos * (256.0 / 128));
+        servo[servoWrist] = 255 - (pos * (256 / 128));
+        writeDebugStreamLine("%d", 255 - (pos * (256 / 128)));
     }
 }
