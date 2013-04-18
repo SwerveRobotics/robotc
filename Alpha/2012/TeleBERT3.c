@@ -17,8 +17,8 @@ long Peg3 = 8584;//peg 3 encoder value
 long Zero = 0;
 long goPosition;
 
-long tooLong = 150;  // millisecond threshod for time to pass
-long sigMove = 1000; // How many encoder ticks is a 'significant' movement
+long tooLong = 300;  // millisecond threshod for time to pass
+long sigMove = 200; // How many encoder ticks is a 'significant' movement
 
 //variables used for stall code need to be initialized
 bool powerHasBeenOn[] = {false, false, false}; // True after significant power has been applied
@@ -54,21 +54,22 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 		{
 			powerHasBeenOn[motorIndex] = true;
 			timeLastSigMove[motorIndex]	 = time1[T1];
-			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+			encLastSigMove[motorIndex] = abs(nMotorEncoder[motorSentTo]);
 
 			return wantedPower;
 		}
 
-	if ( ( abs(encLastSigMove[motorIndex]) - nMotorEncoder[motorSentTo]) > sigMove)  // Moved far enough to be considered significant, mark
+	if ( (abs( encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo])) > sigMove)  // Moved far enough to be considered significant, mark
 		{
 			timeLastSigMove[motorIndex]	= time1[T1];
-			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+			encLastSigMove[motorIndex] = abs(nMotorEncoder[motorSentTo]);
 
 			return wantedPower;
 		}
 
 	if ( (time1[T1] - timeLastSigMove[motorIndex]) > tooLong )  // Time since last significant move too long, stalled
 		{
+			PlayTone(724,5);
 			return 0;
 		}
 
