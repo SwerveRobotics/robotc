@@ -45,32 +45,125 @@ task main ()
 
     if(dirAC == 5)//beacon on left peg
     {
-        while(nMotorEncoder[motorLeft] < (1440 * 59.25 /(wheelDiameter * PI))) //go straight <number of encoder ticks in a rotation> * <distance> / (circumference of wheel)
+        while(nMotorEncoder[motorLeft] < (1440 * 49 /(wheelDiameter * PI))) //go straight
         {
             motor[motorLeft] = 50;
             motor[motorRight] = 50;
         }
         nMotorEncoder[motorLeft] = 0;
         //turn right
-        //stop
-        motor[motorLeft] = 0;
-        motor[motorRight] = 0;
-    }
-    else if(dirAC == 4)//beacon on center peg
-    {
-        while(nMotorEncoder[motorLeft] < (1440 * 24.5 /(wheelDiameter * PI))) //go straight
-        {
-            motor[motorLeft] = 50;
-            motor[motorRight] = 50;
-        }
-        nMotorEncoder[motorLeft] = 0;
-        //turn right
-        while(nMotorEncoder[motorLeft] < (1440 * 0.5))
+        while(nMotorEncoder[motorLeft] < (1440 * 0.73))
         {
             motor[motorLeft] = 50;
             motor[motorRight] = -50;
         }
-        //stop
+        nMotorEncoder[motorLeft] = 0;
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+        servo[servoIR] = 90;// put IR servo in a spot where dir 6 of the IR sensor is forward
+        wait10Msec(100);
+        long encTarget = 0;
+        int increment = 0;
+        while(dirAC != 6 && increment < 10)
+        {
+            dirAC = HTIRS2readACDir(IRSensor); //read value
+            writeDebugStreamLine("dir=%d", dirAC);
+
+            int val = dirAC - 6;//power adjusting number
+            increment = increment + 1;
+            writeDebugStreamLine("inc=%d", increment);
+            /*encTarget++;
+            while(nMotorEncoder[motorLeft] < encTarget)
+            {
+            motor[motorLeft] = 50;
+            motor[motorRight] = -50;
+            }*/
+
+            motor[motorLeft] = 30 * -val * 0.9 * increment;
+            motor[motorRight] = 30 * val * 0.9 * increment;
+        }
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+        wait10Msec(20);
+        while(nMotorEncoder[motorArm] < (1440 * 4)) //put arm up to peg height
+        {
+            motor[motorArm] = 100;
+        }
+
+        motor[motorArm] = 0; //stop arm
+
+        while(nMotorEncoder[motorLeft] < (1440 * 12 /(wheelDiameter * PI))) //go straight
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = 50;
+        }
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+        servo[servoWrist] = 127; //move wrist forward
+        wait1Msec(500);
+
+        servo[fingerLeft] = 200; //open hand
+        servo[fingerRight] = 50;
+        wait1Msec(250);
+
+        motor[motorLeft] = -50; //back up
+        motor[motorRight] = -50;
+        wait1Msec(100);
+    }
+    else if(dirAC == 4)//beacon on center peg
+    {
+        while(nMotorEncoder[motorLeft] < (1440 * 24 /(wheelDiameter * PI))) //go straight
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = 50;
+        }
+        nMotorEncoder[motorLeft] = 0;
+        //turn right
+        while(nMotorEncoder[motorLeft] < (1440 * 0.73))
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = -50;
+        }
+        nMotorEncoder[motorLeft] = 0;
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+        servo[servoIR] = 90;// put IR servo in a spot where dir 6 of the IR sensor is forward
+        wait10Msec(100);
+        long encTarget = 0;
+        int increment = 0;
+        while(dirAC != 6 && increment < 10)
+        {
+            dirAC = HTIRS2readACDir(IRSensor); //read value
+            writeDebugStreamLine("dir=%d", dirAC);
+
+            int val = dirAC - 6;//power adjusting number
+            increment = increment + 1;
+            writeDebugStreamLine("inc=%d", increment);
+            /*encTarget++;
+            while(nMotorEncoder[motorLeft] < encTarget)
+            {
+            motor[motorLeft] = 50;
+            motor[motorRight] = -50;
+            }*/
+
+            motor[motorLeft] = 30 * -val * 0.9 * increment;
+            motor[motorRight] = 30 * val * 0.9 * increment;
+        }
+        motor[motorLeft] = 0;
+        motor[motorRight] = 0;
+        wait10Msec(20);
+        while(nMotorEncoder[motorArm] < (1440 * 4)) //put arm up to peg height
+        {
+            motor[motorArm] = 100;
+        }
+
+        motor[motorArm] = 0; //stop arm
+
+        while(nMotorEncoder[motorLeft] < (1440 * 30 /(wheelDiameter * PI))) //go straight
+        {
+            motor[motorLeft] = 50;
+            motor[motorRight] = 50;
+        }
         motor[motorLeft] = 0;
         motor[motorRight] = 0;
     }
@@ -106,8 +199,8 @@ task main ()
             /*encTarget++;
             while(nMotorEncoder[motorLeft] < encTarget)
             {
-                motor[motorLeft] = 50;
-                motor[motorRight] = -50;
+            motor[motorLeft] = 50;
+            motor[motorRight] = -50;
             }*/
 
             motor[motorLeft] = 30 * -val * 0.9 * increment;
@@ -117,11 +210,11 @@ task main ()
         motor[motorRight] = 0;
         wait10Msec(20);
         while(nMotorEncoder[motorArm] < (1440 * 4)) //put arm up to peg height
-	    {
-	        motor[motorArm] = 100;
-	    }
+        {
+            motor[motorArm] = 100;
+        }
 
-	    motor[motorArm] = 0; //stop arm
+        motor[motorArm] = 0; //stop arm
 
         while(nMotorEncoder[motorLeft] < (1440 * 46 /(wheelDiameter * PI))) //go straight
         {
@@ -137,28 +230,28 @@ task main ()
     int increment = 0;
     while(dirAC != 0 && increment < 10) //go forwards using IR until it can't read a value
     {
-        dirAC = HTIRS2readACDir(IRSensor); //read value
-        writeDebugStreamLine("dir=%d", dirAC);
+    dirAC = HTIRS2readACDir(IRSensor); //read value
+    writeDebugStreamLine("dir=%d", dirAC);
 
-        int val = dirAC - 6;//power adjusting number
-        increment++;
+    int val = dirAC - 6;//power adjusting number
+    increment++;
 
-        if ( val == 0 )// if robot is facing beacon drive straight
-        {
-            motor[motorLeft] = 50;
-            motor[motorRight] = 50;
-        }
-        else // turn so robot is facing beacon
-        {
-            motor[motorLeft] = 30 * -val * 0.9 * increment;
-            motor[motorRight] = 30 * val * 0.9 * increment;
-        }
+    if ( val == 0 )// if robot is facing beacon drive straight
+    {
+    motor[motorLeft] = 50;
+    motor[motorRight] = 50;
+    }
+    else // turn so robot is facing beacon
+    {
+    motor[motorLeft] = 30 * -val * 0.9 * increment;
+    motor[motorRight] = 30 * val * 0.9 * increment;
+    }
 
-        //close hand
-        servo[fingerRight] = 160;
-        servo[fingerLeft] = 100;
+    //close hand
+    servo[fingerRight] = 160;
+    servo[fingerLeft] = 100;
 
-        wait10Msec(2);
+    wait10Msec(2);
     }*/
 
     servo[servoWrist] = 127; //move wrist forward
@@ -168,17 +261,16 @@ task main ()
     servo[fingerRight] = 50;
     wait1Msec(250);
 
-    while(nMotorEncoder[motorLeft] > (1440 /(wheelDiameter * PI))) //back up
+    while(nMotorEncoder[motorLeft] > (1440 * 24/(wheelDiameter * PI))) //back up
     {
         motor[motorLeft] = -50;
-	    motor[motorRight] = -50;
+        motor[motorRight] = -50;
     }
-    while(SensorValue(touchSensor) == 0) //put arm down
-	    {
-	        motor[motorArm] = -20;
-	    }
-    motor[motorArm] = 0;
-
     motor[motorLeft] = 0;//stop
     motor[motorRight] = 0;
+    while(SensorValue(touchSensor) == 0) //put arm down
+    {
+        motor[motorArm] = -100;
+    }
+    motor[motorArm] = 0;
 }
