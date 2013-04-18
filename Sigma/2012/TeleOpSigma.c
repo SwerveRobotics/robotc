@@ -2,8 +2,8 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     touchSensor,    sensorTouch)
 #pragma config(Sensor, S3,     IRSensor,       sensorI2CCustom)
-#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorRight,    tmotorNormal, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     motorRight,    tmotorNormal, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     motorArm,      tmotorNormal, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorNormal, openLoop)
 #pragma config(Servo,  srvo_S1_C3_1,    fingerLeft,           tServoStandard)
@@ -43,10 +43,11 @@ int StallCode(int motorSentTo, int wantedPower)
         break;
     }
     long cur = nMotorEncoder[(tMotor)motorSentTo]; //current encoder value of motor
+    //writeDebugStreamLine("%d", cur);
 
-    if((wantedPower < -15 || wantedPower > 15)&&(cur == valueOfLastMove[motorIndex]))
+    if((wantedPower < -15 || wantedPower > 15)&&(cur == valueOfLastMove[motorIndex]))// the code is not entering this if statement in normal driving when encoders are not zeroed at the start of task main
     {
-        if(timeStalling[motorIndex] + 150 >= time1[T1])
+        if(timeStalling[motorIndex] + 150 >= time1[T1])// the code is not entering this if statement in normal driving when encoders are zeroed at the start of task main
         {
             if(timeStoppedMoving[motorIndex] == 0)
             {
@@ -89,8 +90,8 @@ task main()
 
     ClearTimer(T1);
 
-    //nMotorEncoder[motorLeft] = 0; //zero encoders
-    //nMotorEncoder[motorRight] = 0;
+    nMotorEncoder[motorLeft] = 0; //zero encoders
+    nMotorEncoder[motorRight] = 0;
 
     nMotorEncoder[motorArm] = 0;
     nMaxRegulatedSpeed12V = 750;
@@ -109,7 +110,7 @@ task main()
         {
             if(abs(joystick.joy1_y1) > deadZone) // and the left joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorLeft]  = StallCode(motorLeft, (joystick.joy1_y1) / 3); // set the left motor power to the left joystick value on controller 1 divided by 3
+                motor[motorLeft]  = StallCode(motorLeft, (joystick.joy1_y1) / 1.5); // set the left motor power to the left joystick value on controller 1 divided by 3
                 //writeDebugStreamLine("left %d", nMotorEncoder[motorLeft]);
             }
             else
@@ -119,7 +120,7 @@ task main()
 
             if(abs(joystick.joy1_y2) > deadZone) // and the right joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorRight] = StallCode(motorRight, (joystick.joy1_y2) / 3); // set the right motor power to the right joystick value on controller 1 divided by 3
+                motor[motorRight] = StallCode(motorRight, (joystick.joy1_y2) / 1.5); // set the right motor power to the right joystick value on controller 1 divided by 3
                 //writeDebugStreamLine("right %d", nMotorEncoder[motorRight]);
             }
             else
