@@ -17,17 +17,19 @@ long Peg3 = 8584;//peg 3 encoder value
 long Zero = 0;
 long goPosition;
 
-long tooLong = 300;  // millisecond threshod for time to pass
-long sigMove = 200; // How many encoder ticks is a 'significant' movement
+long wayTooLong = 1000;  // millisecond threshold for absolute stall
+long tooLong = 150;  // millisecond threshod for partial stall
+long sigMove = 1000; // How many encoder ticks is a 'significant' movement
 
 //variables used for stall code need to be initialized
-bool powerHasBeenOn[] = {false, false, false}; // True after significant power has been applied
+int lastDirection[] = {0, 0, 0}; // Direction of last power -1 (reverse), 0 (stopped) or 1 (forward)
 long timeLastSigMove[] = {0, 0, 0}; // Time last significant move occurred
 long encLastSigMove[] = {0, 0, 0}; // Encoder reading at last significant move
 
 int StallCode(tMotor motorSentTo, int wantedPower)
 {
 	int motorIndex;  //index value for the arrays we are storing values in.
+	int direction = 0;
 	switch(motorSentTo) //which motor power is being sent to
 	{
 		case Left: // This is the name of one of the motors as referenced in the configuraiton.
@@ -43,34 +45,40 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 			break;
 	}
 
-	if (abs(wantedPower) < deadZone)  // Power below threshold, mark as no power.
-		{
-			powerHasBeenOn[motorIndex] = false;
+	if (abs(wantedPower) < deadZone)  // Power below threshold, mark as stopped.
+		direction = 0;
+  else
+  	direction = (wantedPower < 0) ? -1 : 1;
 
-			return wantedPower;
-		}
-
-	if (powerHasBeenOn[motorIndex] == false)  // Power transitioned above threshold, start monitoring power.	Allow whatever power desired this time.
+	if (direction == 0 || lastDirection[motorIndex] != direction)  // Stopped or changed direction.	Allow whatever power desired this time.
 		{
-			powerHasBeenOn[motorIndex] = true;
+    	lastDirection[motorIndex] = direction;
 			timeLastSigMove[motorIndex]	 = time1[T1];
-			encLastSigMove[motorIndex] = abs(nMotorEncoder[motorSentTo]);
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
 
 			return wantedPower;
 		}
 
-	if ( (abs( encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo])) > sigMove)  // Moved far enough to be considered significant, mark
+ 	lastDirection[motorIndex] = direction;
+
+	if ( abs(encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo]) > sigMove)  // Moved far enough to be considered significant, mark
 		{
 			timeLastSigMove[motorIndex]	= time1[T1];
-			encLastSigMove[motorIndex] = abs(nMotorEncoder[motorSentTo]);
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
 
 			return wantedPower;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > wayTooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(724,4);
+			return 0;
 		}
 
 	if ( (time1[T1] - timeLastSigMove[motorIndex]) > tooLong )  // Time since last significant move too long, stalled
 		{
-			PlayTone(724,5);
-			return 0;
+			PlayTone(365,4);
+			return wantedPower / 2;
 		}
 
 	return wantedPower;	// Haven’t moved far enough yet to be significant but haven’t timed out yet
