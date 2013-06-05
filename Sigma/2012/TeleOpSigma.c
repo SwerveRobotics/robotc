@@ -183,7 +183,7 @@ int StallCode(int motorSentTo, int wantedPower)
             {
                 writeDebugStreamLine("stall %d", motorIndex);
                 PlayTone(724, 5);
-                return 0;
+                return wantedPower;
             }
             else
             {
@@ -236,7 +236,7 @@ task main()
         {
             if(abs(joystick.joy1_y1) > deadZone) // and the left joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorLeft]  = StallCode(motorLeft, (joystick.joy1_y1) / 1.5); // set the left motor power to the left joystick value on controller 1 divided by 3
+                motor[motorLeft]  = StallCode(motorLeft, (joystick.joy1_y1) / 2); // set the left motor power to the left joystick value on controller 1 divided by 3
                 //writeDebugStreamLine("left %d", nMotorEncoder[motorLeft]);
             }
             else
@@ -246,7 +246,7 @@ task main()
 
             if(abs(joystick.joy1_y2) > deadZone) // and the right joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorRight] = StallCode(motorRight, (joystick.joy1_y2) / 1.5); // set the right motor power to the right joystick value on controller 1 divided by 3
+                motor[motorRight] = StallCode(motorRight, (joystick.joy1_y2) / 2); // set the right motor power to the right joystick value on controller 1 divided by 3
                 //writeDebugStreamLine("right %d", nMotorEncoder[motorRight]);
             }
             else
