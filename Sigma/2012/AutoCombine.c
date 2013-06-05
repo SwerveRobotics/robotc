@@ -85,7 +85,7 @@ task main ()
         motor[motorLeft] = 0;
         motor[motorRight] = 0;
         wait10Msec(20);
-        while(nMotorEncoder[motorArm] < (1440 * 4)) //put arm up to peg height
+        while(nMotorEncoder[motorArm] < (1440 * 4.1)) //put arm up to peg height
         {
             motor[motorArm] = 100;
         }
@@ -152,7 +152,7 @@ task main ()
         motor[motorLeft] = 0;
         motor[motorRight] = 0;
         wait10Msec(20);
-        while(nMotorEncoder[motorArm] < (1440 * 4)) //put arm up to peg height
+        while(nMotorEncoder[motorArm] < (1440 * 4.1)) //put arm up to peg height
         {
             motor[motorArm] = 100;
         }
@@ -209,7 +209,7 @@ task main ()
         motor[motorLeft] = 0;
         motor[motorRight] = 0;
         wait10Msec(20);
-        while(nMotorEncoder[motorArm] < (1440 * 4)) //put arm up to peg height
+        while(nMotorEncoder[motorArm] < (1440 * 4.1)) //put arm up to peg height
         {
             motor[motorArm] = 100;
         }
