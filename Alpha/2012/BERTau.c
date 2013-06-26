@@ -11,7 +11,7 @@
 #include "JoystickDriver.c"
 
 int motorPower = 70;
-int locBeacon;
+int locBeacon = 0;
 
 task main ()
 {
@@ -35,9 +35,22 @@ task main ()
 	motor[Right]=0;
 	wait1Msec(1000);
 
-	//where is the beacon?
+	//move the arm up to the bottom peg
+	nMotorEncoder[ForkLift] = 0;
+	wait1Msec(100);
+
+	while(nMotorEncoder[ForkLift] < 2146)
+	{
+		motor[ForkLift] = motorPower;
+	}
+
+	motor[ForkLift] =0;
+	wait1Msec(1000);
+
+	/*//where is the beacon?
 	locBeacon = SensorValue[Seeker];
-	wait1Msec(50);
+	writeDebugStreamLine("%d", locBeacon);
+	wait1Msec(50);*/
 	//backup a bit
 	nMotorEncoder[Left] = 0;
 	nMotorEncoder[Right] = 0;
@@ -47,6 +60,10 @@ task main ()
 	{
 		motor[Left] = -motorPower;
 		motor[Right] = -motorPower;
+		if(locBeacon == 0 && SensorValue[Seeker] != 0)
+		{
+			locBeacon = SensorValue[Seeker];
+		}
 	}
 
 	motor[Left] = 0;
@@ -60,7 +77,7 @@ task main ()
 
 	if(locBeacon > 5) //turn to right post
 	{
-		while (nMotorEncoder[Left] < 980)
+		while (nMotorEncoder[Left] < 400)
 		{
 			motor[Left] = motorPower;
 			motor[Right] = -motorPower;
@@ -74,7 +91,7 @@ task main ()
 		nMotorEncoder[Right]=0;
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] < 1440 * 15/(4 *PI))
+		while(nMotorEncoder[Left] < 1440 * 23/(4 *PI))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -86,7 +103,7 @@ task main ()
 	}
 	else if(locBeacon < 5)  //turn to left post
 	{
-		while (nMotorEncoder[Left] > -980)
+		while (nMotorEncoder[Left] > -400)
 		{
 			motor[Left] = -motorPower;
 			motor[Right] = motorPower;
@@ -100,7 +117,7 @@ task main ()
 		nMotorEncoder[Right]=0;
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] < 1440 * 20/(4 *PI))
+		while(nMotorEncoder[Left] < 1440 * 21/(4 *PI))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -111,20 +128,8 @@ task main ()
 		wait1Msec(1000);
 	}
 
-	//move the arm up to the bottom peg
-	nMotorEncoder[ForkLift] = 0;
-	wait1Msec(100);
-
-	while(nMotorEncoder[ForkLift] < 2146)
-	{
-		motor[ForkLift] = motorPower;
-	}
-
-	motor[ForkLift] =0;
-	wait1Msec(1000);
-
 	//moving to the left
-	if(SensorValue[Seeker] > 5)
+	if(locBeacon < 5)
 	{
 		/*while(SensorValue[Seeker] > 5)
 		{
@@ -139,7 +144,7 @@ task main ()
 		nMotorEncoder[Right] = 0;
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] < 1430)
+		while(nMotorEncoder[Left] < 400)
 		{
 			motor[Left] = motorPower;
 			motor[Right] = -motorPower;
@@ -181,7 +186,7 @@ task main ()
 		wait1Msec(100);
 
 	}
-	else if(SensorValue[Seeker] < 5)		//Moving to the right
+	else if(locBeacon > 5)		//Moving to the right
 	{
 		/*while(SensorValue[Seeker] < 5)
 		{
@@ -196,7 +201,7 @@ task main ()
 		nMotorEncoder[Right] = 0;
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] > -1040)
+		while(nMotorEncoder[Left] > -400)
 		{
 			motor[Left] = -motorPower;
 			motor[Right] = motorPower;
@@ -240,11 +245,15 @@ task main ()
 	else
 	{
 		// go forward to the correct post (this needs to be a bit less)
-		nMotorEncoder[Left]=0;
-		nMotorEncoder[Right]=0;
+//		nMotorEncoder[Left]=0;
+//		nMotorEncoder[Right]=0;
+		int LEncoderOffset = nMotorEncoder[Left];
+		int REncoderOffset = nMotorEncoder[Right];
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] < 1440 * 37/(4 *PI))
+		motor[Right] = 60;
+		wait1Msec(35);
+		while((nMotorEncoder[Left] - LEncoderOffset) < 1440 * 32/(4 * PI))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -264,7 +273,7 @@ task main ()
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] > -190)
+		while(nMotorEncoder[Left] > -400)
 		{
 			motor[Left] = -50;
 			motor[Right] = -50;
