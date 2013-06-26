@@ -117,7 +117,7 @@ task main ()
 		nMotorEncoder[Right]=0;
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] < 1440 * 21/(4 *PI))
+		while(nMotorEncoder[Left] < 1440 * 18/(4 *PI))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -144,7 +144,7 @@ task main ()
 		nMotorEncoder[Right] = 0;
 		wait1Msec(100);
 
-		while(nMotorEncoder[Left] < 400)
+		while(nMotorEncoder[Left] < 410)
 		{
 			motor[Left] = motorPower;
 			motor[Right] = -motorPower;
@@ -175,10 +175,58 @@ task main ()
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] > -190)
+		while(nMotorEncoder[Left] > -1400)
 		{
 			motor[Left] = -50;
 			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] > -500)
+		{
+			motor[Left] = -50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 2300)
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 830)
+		{
+			motor[Left] = 50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 6000)
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
 		}
 
 		motor[Left] = 0;
@@ -232,7 +280,7 @@ task main ()
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] > -190)
+		while(nMotorEncoder[Left] > -1400)
 		{
 			motor[Left] = -50;
 			motor[Right] = -50;
@@ -241,6 +289,55 @@ task main ()
 		motor[Left] = 0;
 		motor[Right] = 0;
 		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 500)
+		{
+			motor[Left] = 50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 2300)
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] > -830)
+		{
+			motor[Left] = -50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 6000)
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
 	}
 	else
 	{
@@ -252,7 +349,7 @@ task main ()
 		wait1Msec(100);
 
 		motor[Right] = 60;
-		wait1Msec(35);
+		wait1Msec(42);
 		while((nMotorEncoder[Left] - LEncoderOffset) < 1440 * 32/(4 * PI))
 		{
 			motor[Left] = 50;
@@ -282,6 +379,71 @@ task main ()
 		motor[Left] = 0;
 		motor[Right] = 0;
 		wait1Msec(100);
+
+		LEncoderOffset = nMotorEncoder[Left];
+		REncoderOffset = nMotorEncoder[Right];
+		wait1Msec(100);
+
+		motor[Right] = -60;
+		wait1Msec(35);
+		while((nMotorEncoder[Left] - LEncoderOffset) > -1440 * 32/(4 * PI))
+		{
+			motor[Left] = -50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 400)
+		{
+			motor[Left] = 50;
+			motor[Right] = -50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 6000)
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] > -830)
+		{
+			motor[Left] = -50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
+		nMotorEncoder[Left] = 0;
+
+		while(nMotorEncoder[Left] < 6000)
+		{
+			motor[Left] = 50;
+			motor[Right] = 50;
+		}
+
+		motor[Left] = 0;
+		motor[Right] = 0;
+		wait1Msec(100);
+
 	}
 	// IR Seeker
 	/*
