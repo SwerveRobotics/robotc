@@ -26,7 +26,7 @@ task main()
 	motor[Right] = 0;
 	wait1Msec(10);
 
-	while(nMotorEncoder[ForkLift] < 1911)
+	while(nMotorEncoder[ForkLift] < 1925)
 	{
 		motor[ForkLift] = MotorPower;
 	}
