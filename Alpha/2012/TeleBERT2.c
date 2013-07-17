@@ -183,7 +183,6 @@ task main()
 	while(true)
 	{
 		getJoystickSettings(joystick);
-		writeDebugStreamLine("%d", SensorValue[Seeker]);
 		if(joy1Btn(7) == 1)
 		{
 			if(abs(joystick.joy1_y1) > deadZone)

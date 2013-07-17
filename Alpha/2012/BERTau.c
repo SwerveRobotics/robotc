@@ -33,11 +33,11 @@ task main ()
 
 	motor[Left]=0;  //stop
 	motor[Right]=0;
-	wait1Msec(1000);
+	wait1Msec(150);
 
 	//move the arm up to the bottom peg
 	nMotorEncoder[ForkLift] = 0;
-	wait1Msec(100);
+	wait1Msec(10);
 
 	while(nMotorEncoder[ForkLift] < 2146)
 	{
@@ -45,7 +45,7 @@ task main ()
 	}
 
 	motor[ForkLift] =0;
-	wait1Msec(1000);
+	wait1Msec(50);
 
 	/*//where is the beacon?
 	locBeacon = SensorValue[Seeker];
@@ -54,7 +54,7 @@ task main ()
 	//backup a bit
 	nMotorEncoder[Left] = 0;
 	nMotorEncoder[Right] = 0;
-	wait1Msec(100);
+	wait1Msec(10);
 
 	while(nMotorEncoder[Left] > -1000)
 	{
@@ -68,12 +68,12 @@ task main ()
 
 	motor[Left] = 0;
 	motor[Right] = 0;
-	wait1Msec(1000);
+	wait1Msec(200);
 
 	//turn left or right
 	nMotorEncoder[Left]=0;
 	nMotorEncoder[Right]=0;
-	wait1Msec(100);
+	wait1Msec(10);
 
 	if(locBeacon > 5) //turn to right post
 	{
@@ -85,13 +85,13 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left]=0;
 		nMotorEncoder[Right]=0;
-		wait1Msec(100);
+		wait1Msec(10);
 
-		while(nMotorEncoder[Left] < 1440 * 23/(4 *PI))
+		while(nMotorEncoder[Left] < (1440 * 22/(4 * PI)))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -99,7 +99,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(1000);
+		wait1Msec(200);
 	}
 	else if(locBeacon < 5)  //turn to left post
 	{
@@ -111,13 +111,13 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left]=0;
 		nMotorEncoder[Right]=0;
-		wait1Msec(100);
+		wait1Msec(10);
 
-		while(nMotorEncoder[Left] < 1440 * 18/(4 *PI))
+		while(nMotorEncoder[Left] < (1440 * 16/(4 *PI)))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -125,7 +125,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(1000);
+		wait1Msec(150);
 	}
 
 	//moving to the left
@@ -142,7 +142,7 @@ task main ()
 
 		nMotorEncoder[Left] = 0;
 		nMotorEncoder[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(10);
 
 		while(nMotorEncoder[Left] < 410)
 		{
@@ -152,7 +152,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		ClearTimer(T1);
 		while(time1[T1] < 1000)
@@ -163,7 +163,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		while(nMotorEncoder[ForkLift] > 0)
 		{
@@ -171,7 +171,7 @@ task main ()
 		}
 
 		motor[ForkLift] = 0;
-		wait1Msec(100);
+		wait1Msec(50);
 
 		nMotorEncoder[Left] = 0;
 
@@ -180,10 +180,10 @@ task main ()
 			motor[Left] = -50;
 			motor[Right] = -50;
 		}
-
+/*
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
@@ -195,11 +195,11 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 2300)
+		while(nMotorEncoder[Left] < 2500)
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -207,11 +207,11 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 830)
+		while(nMotorEncoder[Left] < 860)
 		{
 			motor[Left] = 50;
 			motor[Right] = -50;
@@ -219,11 +219,12 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 6000)
+		ClearTimer(T1);
+		while((nMotorEncoder[Left] < 4500) && (time1[T1] < 3000))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -231,8 +232,9 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
+		*/ //removed at request of Alliance partner in Australia
 	}
 	else if(locBeacon > 5)		//Moving to the right
 	{
@@ -247,7 +249,7 @@ task main ()
 
 		nMotorEncoder[Left] = 0;
 		nMotorEncoder[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(50);
 
 		while(nMotorEncoder[Left] > -400)
 		{
@@ -257,8 +259,10 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
+		motor[Right] = 50;
+		wait1Msec(25);
 		ClearTimer(T1);
 		while(time1[T1] < 1080)
 		{
@@ -268,7 +272,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		while(nMotorEncoder[ForkLift] > 0)
 		{
@@ -276,19 +280,19 @@ task main ()
 		}
 
 		motor[ForkLift] = 0;
-		wait1Msec(100);
+		wait1Msec(10);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] > -1400)
+		while(nMotorEncoder[Left] > -1500)
 		{
 			motor[Left] = -50;
 			motor[Right] = -50;
 		}
-
+/*
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
@@ -300,11 +304,11 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 2300)
+		while(nMotorEncoder[Left] < 2900)
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -312,11 +316,11 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] > -830)
+		while(nMotorEncoder[Left] > -875)
 		{
 			motor[Left] = -50;
 			motor[Right] = 50;
@@ -326,9 +330,12 @@ task main ()
 		motor[Right] = 0;
 		wait1Msec(100);
 
+		motor[Right] = 85;
+		wait1Msec(80);
+
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 6000)
+		while((nMotorEncoder[Left] < 4500) && (time1[T1] < 3000))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -336,8 +343,9 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
+		*/
 	}
 	else
 	{
@@ -345,11 +353,10 @@ task main ()
 //		nMotorEncoder[Left]=0;
 //		nMotorEncoder[Right]=0;
 		int LEncoderOffset = nMotorEncoder[Left];
-		int REncoderOffset = nMotorEncoder[Right];
-		wait1Msec(100);
+		wait1Msec(10);
 
-		motor[Right] = 60;
-		wait1Msec(42);
+		motor[Right] = 75;
+		wait1Msec(60);
 		while((nMotorEncoder[Left] - LEncoderOffset) < 1440 * 32/(4 * PI))
 		{
 			motor[Left] = 50;
@@ -358,7 +365,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(1000);
+		wait1Msec(150);
 
 		while(nMotorEncoder[ForkLift] > 0)
 		{
@@ -366,7 +373,7 @@ task main ()
 		}
 
 		motor[ForkLift] = 0;
-		wait1Msec(100);
+		wait1Msec(50);
 
 		nMotorEncoder[Left] = 0;
 
@@ -375,10 +382,10 @@ task main ()
 			motor[Left] = -50;
 			motor[Right] = -50;
 		}
-
+/*
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		LEncoderOffset = nMotorEncoder[Left];
 		REncoderOffset = nMotorEncoder[Right];
@@ -394,7 +401,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
@@ -406,11 +413,11 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 6000)
+		while(nMotorEncoder[Left] < 4500)
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -418,7 +425,7 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
@@ -430,11 +437,11 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] < 6000)
+		while((nMotorEncoder[Left] < 4500) && (time1[T1] < 3000))
 		{
 			motor[Left] = 50;
 			motor[Right] = 50;
@@ -442,8 +449,9 @@ task main ()
 
 		motor[Left] = 0;
 		motor[Right] = 0;
-		wait1Msec(100);
+		wait1Msec(150);
 
+		*/ //removed at request of Alliance partner in Australia
 	}
 	// IR Seeker
 	/*
