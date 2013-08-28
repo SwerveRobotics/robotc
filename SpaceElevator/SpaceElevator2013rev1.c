@@ -1,5 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  none,     none,     none)
 #pragma config(Sensor, S2,     Upper,          sensorSONAR)
+#pragma config(Sensor, S3,     Lower,          sensorSONAR)
 #pragma config(Motor,  motorA,           ,             tmotorNXT, openLoop)
 #pragma config(Motor,  motorB,           ,             tmotorNXT, openLoop)
 #pragma config(Motor,  motorC,           ,             tmotorNXT, openLoop)
@@ -22,6 +23,7 @@
 
 
 
+
 void initializeRobot()
 {
   // Place code here to sinitialize servos to starting positions.
@@ -33,42 +35,73 @@ void initializeRobot()
 
 task main()
 {
-  initializeRobot();
+	ClearTimer(T1);
+  PlayImmediateTone(1000, 20);
+	wait1Msec(300);
+	PlayImmediateTone(2000, 25);
 
-  while(SensorValue[S2] > 40 || SensorValue[S2] < 20)
-  {
-  	wait1Msec(10);
-  }
-  PlayImmediateTone(2000, 100);
-	while(SensorValue[S2] < 40 && SensorValue[S2] > 20)
-  {
-  	PlayImmediateTone(1000, 15);
-  	wait1Msec(250);
-  }
-  wait1Msec(2000);
 
-  motor[CariageMotor] = 100; //Since this is the Space Elevator Competition, it makes sense that we would start by going up.
-  while(SensorValue[S2] > 25 && SensorValue[S2] != -1)
-  {
-  	wait1Msec(10);
+  while(time10[T1] < 27000) //we keep going until we're at the bottom with less than 30s left.
+	{
+		motor[CariageMotor] = 100; //Since this is the Space Elevator Competition, it makes sense that we would start by going up.
+
+		while((SensorValue[S2] > 35 || SensorValue[S2] < 0) )
+		{
+			wait1Msec(10);
+		}
+
+		motor[CariageMotor] = 100;
+
+		wait1Msec(3000);
+
+		motor[CariageMotor] = 80;
+
+		wait1Msec(750);
+
+		PlayImmediateTone(2000, 75);
+
+		motor[CariageMotor] = 0;
+
+		wait1Msec(1000);
+
+		PlayImmediateTone(1000, 30);
+
+		motor[CariageMotor] = -50;
+
+		wait1Msec(1000);
+
+		motor[CariageMotor] = -30;
+/*
+		while(SensorValue[S3] > 200)
+		{
+			wait1Msec(10);
+		}
+*/
+		motor[CariageMotor] = 0;
+
+		while(SensorValue[S3] > 50)
+		{
+			wait1Msec(10);
+		}
+
+		motor[CariageMotor] = -8;
+
+		wait1Msec(500);
+		PlayImmediateTone(2000, 20);
+		wait1Msec(250);
+		motor[CariageMotor] = 0;
+		PlayImmediateTone(1000, 45);
+		wait1Msec(9600);
+		PlayImmediateTone(1750, 15);
+		wait1Msec(175);
+		PlayImmediateTone(2000, 22);
+		wait1Msec(225);
 	}
-	motor[CariageMotor] = 75; //Since we don't want to start sliding down after we cut power, we want to decrease power slowly.
-	wait1Msec(150);
-	motor[CariageMotor] = 50;
-	wait1Msec(100);
-	motor[CariageMotor] = 25;
-	wait1Msec(50);
-	motor[CariageMotor] = 0;
-
-  motor[CariageMotor] = -25; //Now we go back down.
-	wait1Msec(750);
-	motor[CariageMotor] = -10; //Since we don't want to start sliding down after we cut power, we want to decrease power slowly.
-	wait1Msec(150);
-	motor[CariageMotor] = 10;
-	wait1Msec(100);
-	motor[CariageMotor] = 25;
-	wait1Msec(50);
-	motor[CariageMotor] = 0;
+	while(true)
+	{
+		wait1Msec(325);
+		PlayImmediateTone(1000, 250);
+	}
 
 	///////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////
