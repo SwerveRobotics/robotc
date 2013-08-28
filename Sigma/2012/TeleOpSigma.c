@@ -2,8 +2,8 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     touchSensor,    sensorTouch)
 #pragma config(Sensor, S3,     IRSensor,       sensorI2CCustom)
-#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, PIDControl, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorRight,    tmotorNormal, PIDControl, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorLeft,     tmotorNormal, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     motorRight,    tmotorNormal, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     motorArm,      tmotorNormal, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_2,     motorG,        tmotorNormal, openLoop)
 #pragma config(Servo,  srvo_S1_C3_1,    fingerLeft,           tServoStandard)
@@ -17,11 +17,137 @@
 #include "JoystickDriver.c"
 #include "C:\ftc\drivers\2.3\drivers\HTIRS2-driver.h" //only used in autonomous
 
-int deadZone = 10;
+int deadZone = 30;
+
+long wayTooLong = 1000;  // millisecond threshold for absolute stall
+long tooLong = 250;  // millisecond threshod for partial stall
+long sigMove = 75; // How many encoder ticks is a 'significant' movement
+
+//variables used for stall code need to be initialized
+int lastDirection[] = {0, 0, 0}; // Direction of last power -1 (reverse), 0 (stopped) or 1 (forward)
+long timeLastSigMove[] = {0, 0, 0}; // Time last significant move occurred
+long encLastSigMove[] = {0, 0, 0}; // Encoder reading at last significant move
+
+int StallCode(tMotor motorSentTo, int wantedPower)
+{
+	int motorIndex;  //index value for the arrays we are storing values in.
+	int direction = 0;
+	switch(motorSentTo) //which motor power is being sent to
+	{
+		case motorLeft: // This is the name of one of the motors as referenced in the configuraiton.
+			motorIndex = 0;
+			break;
+		case motorRight:
+			motorIndex = 1;
+			break;
+		case motorArm:
+			motorIndex = 2;
+			break;
+		default:
+			break;
+	}
+
+	if (abs(wantedPower) < deadZone)  // Power below threshold, mark as stopped.
+		direction = 0;
+  else
+  	direction = (wantedPower < 0) ? -1 : 1;
+
+	if (direction == 0 || lastDirection[motorIndex] != direction)  // Stopped or changed direction.	Allow whatever power desired this time.
+		{
+    	lastDirection[motorIndex] = direction;
+			timeLastSigMove[motorIndex]	 = time1[T1];
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+
+			return wantedPower;
+		}
+
+ 	lastDirection[motorIndex] = direction;
+
+	if ( abs(encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo]) > sigMove)  // Moved far enough to be considered significant, mark
+		{
+			timeLastSigMove[motorIndex]	= time1[T1];
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+
+			return wantedPower;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > wayTooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(650,4);
+			return 0;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > tooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(365,4);
+			return wantedPower / 2;
+		}
+
+	return wantedPower;	// Haven’t moved far enough yet to be significant but haven’t timed out yet
+}
 //int motorSentTo;
+/*long tooLong = 500;  // millisecond threshod for time to pass
+long sigMove = 300; // How many encoder ticks is a 'significant' movement
+
+//variables used for stall code need to be initialized
+bool powerHasBeenOn[] = {false, false, false}; // True after significant power has been applied
+long timeLastSigMove[] = {0, 0, 0}; // Time last significant move occurred
+long encLastSigMove[] = {0, 0, 0}; // Encoder reading at last significant move
+
+int StallCode(tMotor motorSentTo, int wantedPower)
+{
+	int motorIndex;  //index value for the arrays we are storing values in.
+	switch(motorSentTo) //which motor power is being sent to
+	{
+		case motorLeft: // This is the name of one of the motors as referenced in the configuraiton.
+			motorIndex = 0;
+			break;
+		case motorRight:
+			motorIndex = 1;
+			break;
+		case motorArm:
+			motorIndex = 2;
+			break;
+		default:
+			break;
+	}
+
+	if (abs(wantedPower) < deadZone)  // Power below threshold, mark as no power.
+		{
+			powerHasBeenOn[motorIndex] = false;
+
+			return wantedPower;
+		}
+
+	if (powerHasBeenOn[motorIndex] == false)  // Power transitioned above threshold, start monitoring power.	Allow whatever power desired this time.
+		{
+			powerHasBeenOn[motorIndex] = true;
+			timeLastSigMove[motorIndex]	 = time1[T1];
+			encLastSigMove[motorIndex] = abs(nMotorEncoder[motorSentTo]);
+
+			return wantedPower;
+		}
+
+	if ( (abs( encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo])) > sigMove)  // Moved far enough to be considered significant, mark
+		{
+			timeLastSigMove[motorIndex]	= time1[T1];
+			encLastSigMove[motorIndex] = abs(nMotorEncoder[motorSentTo]);
+
+			return wantedPower;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > tooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(724,5);
+			return 0;
+		}
+
+	return wantedPower;	// Haven’t moved far enough yet to be significant but haven’t timed out yet
+}*/
+
 
 //variables used for stall code
-long timeStalling[] = {0, 0, 0}; //amount of time the motors are stalling
+/*long timeStalling[] = {0, 0, 0}; //amount of time the motors are stalling
 long valueOfLastMove[] = {0, 0, 0}; //the value of the encoders when the motor last moved
 long timeStoppedMoving[] = {0, 0, 0}; //the time the motors stopped
 
@@ -43,10 +169,11 @@ int StallCode(int motorSentTo, int wantedPower)
         break;
     }
     long cur = nMotorEncoder[(tMotor)motorSentTo]; //current encoder value of motor
+    //writeDebugStreamLine("%d", cur);
 
-    if((wantedPower < -15 || wantedPower > 15)&&(cur == valueOfLastMove[motorIndex]))
+    if((wantedPower < -15 || wantedPower > 15)&&(cur == valueOfLastMove[motorIndex]))// the code is not entering this if statement in normal driving when encoders are not zeroed at the start of task main
     {
-        if(timeStalling[motorIndex] + 150 >= time1[T1])
+        if(timeStalling[motorIndex] + 150 >= time1[T1])// the code is not entering this if statement in normal driving when encoders are zeroed at the start of task main
         {
             if(timeStoppedMoving[motorIndex] == 0)
             {
@@ -56,7 +183,7 @@ int StallCode(int motorSentTo, int wantedPower)
             {
                 writeDebugStreamLine("stall %d", motorIndex);
                 PlayTone(724, 5);
-                return 0;
+                return wantedPower;
             }
             else
             {
@@ -69,7 +196,7 @@ int StallCode(int motorSentTo, int wantedPower)
     }
     timeStalling[motorIndex] = time1[T1];
     return wantedPower;
-}
+}*/
 
 void OpenHand()
 {
@@ -89,8 +216,8 @@ task main()
 
     ClearTimer(T1);
 
-    //nMotorEncoder[motorLeft] = 0; //zero encoders
-    //nMotorEncoder[motorRight] = 0;
+    nMotorEncoder[motorLeft] = 0; //zero encoders
+    nMotorEncoder[motorRight] = 0;
 
     nMotorEncoder[motorArm] = 0;
     nMaxRegulatedSpeed12V = 750;
@@ -109,22 +236,22 @@ task main()
         {
             if(abs(joystick.joy1_y1) > deadZone) // and the left joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorLeft]  = StallCode(motorLeft, (joystick.joy1_y1) / 3); // set the left motor power to the left joystick value on controller 1 divided by 3
+                motor[motorLeft]  = StallCode(motorLeft, (joystick.joy1_y1) / 2); // set the left motor power to the left joystick value on controller 1 divided by 3
                 //writeDebugStreamLine("left %d", nMotorEncoder[motorLeft]);
             }
             else
             {
-                motor[motorLeft] = 0; // if the left joystick value is in the deadzone set the left motor power to 0
+                motor[motorLeft] = 0;//StallCode(motorLeft, 0); // if the left joystick value is in the deadzone set the left motor power to 0
             }
 
             if(abs(joystick.joy1_y2) > deadZone) // and the right joystick value on controller 1 isn't in the deadzone ...
             {
-                motor[motorRight] = StallCode(motorRight, (joystick.joy1_y2) / 3); // set the right motor power to the right joystick value on controller 1 divided by 3
+                motor[motorRight] = StallCode(motorRight, (joystick.joy1_y2) / 2); // set the right motor power to the right joystick value on controller 1 divided by 3
                 //writeDebugStreamLine("right %d", nMotorEncoder[motorRight]);
             }
             else
             {
-                motor[motorRight] = 0; // if the left joystick value is in the deadzone set the right motor power to 0
+                motor[motorRight] = StallCode(motorRight, 0); // if the left joystick value is in the deadzone set the right motor power to 0
             }
         }
         else // regular mode
@@ -135,7 +262,7 @@ task main()
             }
             else
             {
-                motor[motorLeft] = 0; // if the left joystick value is in the deadzone set the left motor power to 0
+                motor[motorLeft] = StallCode(motorLeft, 0); // if the left joystick value is in the deadzone set the left motor power to 0
             }
 
             if(abs(joystick.joy1_y2) > deadZone) // if the right joystick value isn't in the deadzone ...
@@ -144,7 +271,7 @@ task main()
             }
             else
             {
-                motor[motorRight] = 0; // if the left joystick value is in the deadzone set the right motor power to 0
+                motor[motorRight] = StallCode(motorRight, 0); // if the left joystick value is in the deadzone set the right motor power to 0
             }
         }
 
@@ -161,7 +288,7 @@ task main()
         {
             while(nMotorEncoder[motorArm] < (1440 * 0.25))
             {
-                motor[motorArm] = 75;
+                motor[motorArm] = StallCode(motorArm, 75);
             }
         }
 
@@ -176,7 +303,7 @@ task main()
             {
                 if(SensorValue(touchSensor) == 1)
                 {
-                    motor[motorArm] = 0;// if touch sensor is pressed and the arm is trying to go down, don't let the arm move
+                    motor[motorArm] = StallCode(motorArm, 0);// if touch sensor is pressed and the arm is trying to go down, don't let the arm move
                     nMotorEncoder[motorArm] = 0;
                 }
                 else if(nMotorEncoder[motorArm] < 100)
@@ -197,7 +324,7 @@ task main()
             {
                 if(SensorValue(touchSensor) == 1)
                 {
-                    motor[motorArm] = 0; // if touch sensor is pressed and the arm is trying to go down, don't let the arm move
+                    motor[motorArm] = StallCode(motorArm, 0); // if touch sensor is pressed and the arm is trying to go down, don't let the arm move
                     nMotorEncoder[motorArm] = 0;
                 }
                 else if(nMotorEncoder[motorArm] < 100)
@@ -211,7 +338,7 @@ task main()
             }
             else // left joystick is in the middle
             {
-                motor[motorArm] = 0; // arm doesn't move
+                motor[motorArm] = StallCode(motorArm, 0); // arm doesn't move
             }
         }
         else
@@ -225,7 +352,7 @@ task main()
             {
                 if(SensorValue(touchSensor) == 1)
                 {
-                    motor[motorArm] = 0;// if touch sensor is pressed and the arm is trying to go down, don't let the arm move
+                    motor[motorArm] = StallCode(motorArm,0);// if touch sensor is pressed and the arm is trying to go down, don't let the arm move
                     nMotorEncoder[motorArm] = 0;
                 }
                 else if(nMotorEncoder[motorArm] < 100)
@@ -246,7 +373,7 @@ task main()
             {
                 if(SensorValue(touchSensor) == 1)
                 {
-                    motor[motorArm] = 0; // if touch sensor is pressed and the arm is trying to go down, don't let the arm move
+                    motor[motorArm] = StallCode(motorArm, 0); // if touch sensor is pressed and the arm is trying to go down, don't let the arm move
                     nMotorEncoder[motorArm] = 0;
                 }
                 else if(nMotorEncoder[motorArm] < 100)
@@ -260,7 +387,7 @@ task main()
             }
             else // left joystick is in the middle
             {
-                motor[motorArm] = 0; // arm doesn't move
+                motor[motorArm] = StallCode(motorArm, 0); // arm doesn't move
             }
         }
         int pos = joystick.joy2_y2;

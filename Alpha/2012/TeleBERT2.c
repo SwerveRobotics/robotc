@@ -1,5 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S3,     Seeker,         sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     Right,         tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     Left,          tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     motorC,        tmotorTetrix, openLoop)
@@ -207,7 +208,7 @@ task main()
 		{
 			if(abs(joystick.joy1_y1) > deadZone)
 			{
-				motor[Left] = StallCode(Left, (joystick.joy1_y1));
+				motor[Left] = ((StallCode(Left, (joystick.joy1_y1)) * 115) / 127) - 15;
 			}
 			else
 			{
@@ -216,7 +217,7 @@ task main()
 
 			if(abs(joystick.joy1_y2) > deadZone)
 			{
-				motor[Right] = StallCode(Right, (joystick.joy1_y2));
+				motor[Right] = ((StallCode(Right, (joystick.joy1_y2)) * 115) / 127) - 15;
 			}
 			else
 			{

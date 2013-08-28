@@ -180,7 +180,7 @@ task main ()
 			motor[Left] = -50;
 			motor[Right] = -50;
 		}
-/*
+
 		motor[Left] = 0;
 		motor[Right] = 0;
 		wait1Msec(150);
@@ -234,7 +234,6 @@ task main ()
 		motor[Right] = 0;
 		wait1Msec(150);
 
-		*/ //removed at request of Alliance partner in Australia
 	}
 	else if(locBeacon > 5)		//Moving to the right
 	{
@@ -289,7 +288,7 @@ task main ()
 			motor[Left] = -50;
 			motor[Right] = -50;
 		}
-/*
+
 		motor[Left] = 0;
 		motor[Right] = 0;
 		wait1Msec(150);
@@ -345,7 +344,6 @@ task main ()
 		motor[Right] = 0;
 		wait1Msec(150);
 
-		*/
 	}
 	else
 	{
@@ -353,6 +351,7 @@ task main ()
 //		nMotorEncoder[Left]=0;
 //		nMotorEncoder[Right]=0;
 		int LEncoderOffset = nMotorEncoder[Left];
+		int REncoderOffset = nMotorEncoder[Right];
 		wait1Msec(10);
 
 		motor[Right] = 75;
@@ -382,7 +381,7 @@ task main ()
 			motor[Left] = -50;
 			motor[Right] = -50;
 		}
-/*
+
 		motor[Left] = 0;
 		motor[Right] = 0;
 		wait1Msec(150);
@@ -451,7 +450,6 @@ task main ()
 		motor[Right] = 0;
 		wait1Msec(150);
 
-		*/ //removed at request of Alliance partner in Australia
 	}
 	// IR Seeker
 	/*

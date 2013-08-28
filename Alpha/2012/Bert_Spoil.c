@@ -20,7 +20,7 @@ task main ()
 	//Turn right
 	ClearTimer(T1);
 
-	while(time1[T1] < 1600)
+	while(time1[T1] < 900)
 	{
 		motor[Right] = -60;
 		motor[Left] = -60;
@@ -28,7 +28,7 @@ task main ()
 	//and move forward 1 sqaure
 	ClearTimer(T1);
 
-	while(time1[T1] < 1000)
+	while(time1[T1] < 1300)
 	{
 		motor[Right] =  60;
 		motor[Left] = -60;
