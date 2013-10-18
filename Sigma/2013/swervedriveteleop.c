@@ -17,13 +17,17 @@
 float slowMult = 1;
 int deadZone = 10;
 
-float dist = sqrt(joystick.joy1_y2 ^ 2 + joystick.joy1_x2 ^ 2);//distance from center of joy1
+float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);//distance from center of joy1
 
 
 void setMotorsServos()//self explainitory
 {
 
-
+motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
+		motor[motorFR] = dist * 0.75;
+		motor[motorBL] = dist * 0.75;
+		motor[motorBR] = dist * 0.75;
+		/*
 	if ((joystick.joy1_y2 > 0) || (joystick.joy1_y2 == 0 && joystick.joy1_x2 > 0))//if motor need not be reversed
 	{
 		motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
@@ -37,7 +41,7 @@ void setMotorsServos()//self explainitory
 		motor[motorFR] = dist * -0.75;
 		motor[motorBL] = dist * -0.75;
 		motor[motorBR] = dist * -0.75;
-	}
+	}*/
 
 	if ((joystick.joy1_y2 / joystick.joy1_x2) >= 0)//if slope >= 0
 	{
@@ -71,6 +75,7 @@ task main()
 	while (true)
 	{
 		getJoystickSettings(joystick);
+float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);//distance from center of joy1
 
 
 
@@ -92,8 +97,11 @@ task main()
 		}
 		else
 		{
-
-			setMotorsServos();
+motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
+		motor[motorFR] = dist * 0.75;
+		motor[motorBL] = dist * 0.75;
+		motor[motorBR] = dist * 0.75;
+			//setMotorsServos();
 
 
 		}
