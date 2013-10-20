@@ -1,11 +1,9 @@
-#pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
+#pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C4_1,     lazySuzan,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C4_2,     arm,           tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servoFL,              tServoStandard)
@@ -20,7 +18,7 @@
 float slowMult = 1.0;
 int deadZone = 10;
 
-void ArmControlFunc()
+/*void ArmControlFunc()
 {
 
 	if (abs(joystick.joy2_x1) > deadZone)
@@ -58,7 +56,7 @@ void ArmControlFunc()
 			}
 		}
 	}
-
+*/
 	task main()
 	{
 		servo[servoFL] = 0;
@@ -69,7 +67,7 @@ void ArmControlFunc()
 		while (true)
 		{
 			getJoystickSettings(joystick);
-			StartTask(armControl);
+			//StartTask(armControl);
 
 			int pos = atan(joystick.joy1_y2 / joystick.joy1_x2);
 			float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);
@@ -97,12 +95,12 @@ void ArmControlFunc()
 				motor[motorBL] = dist * 0.75;
 				motor[motorBR] = dist * 0.75;
 
-				float servoPos = pos * 1.416;
+				/*float servoPos = pos * 1.416;
 
 				servo[servoFL] = servoPos;
 				servo[servoFR] = servoPos;
 				servo[servoBL] = servoPos;
-				servo[servoBR] = servoPos;
+				servo[servoBR] = servoPos;*/
 			}
 			else
 			{
@@ -111,12 +109,12 @@ void ArmControlFunc()
 				motor[motorBL] = dist * -0.75;
 				motor[motorBR] = dist * -0.75;
 
-				float servoPos = (pos - 180) * 1.416;
+				/*float servoPos = (pos - 180) * 1.416;
 
 				servo[servoFL] = servoPos;
 				servo[servoFR] = servoPos;
 				servo[servoBL] = servoPos;
-				servo[servoBR] = servoPos;
+				servo[servoBR] = servoPos;*/
 			}
 
 
