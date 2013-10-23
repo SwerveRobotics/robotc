@@ -2,8 +2,8 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servoFL,              tServoStandard)
@@ -64,6 +64,8 @@ int deadZone = 10;
 		servo[servoBL] = 0;
 		servo[servoBR] = 0;
 
+		waitForStart();
+
 		while (true)
 		{
 			getJoystickSettings(joystick);
@@ -81,40 +83,43 @@ int deadZone = 10;
 				slowMult = 0.3;
 			}
 
-			if (dist <= deadZone)
+			float motorPower = dist * slowMult;
+
+
+			if (dist > deadZone)
+			{
+				motor[motorFL] = motorPower;
+				motor[motorFR] = motorPower;
+				motor[motorBL] = motorPower;
+				motor[motorBR] = motorPower;
+
+				float servoPos = pos * 1.416;
+
+				servo[servoFL] = servoPos;
+				servo[servoFR] = servoPos;
+				servo[servoBL] = servoPos;
+				servo[servoBR] = servoPos;
+			}
+			else if (dist < (-1 * deadZone))
+			{
+				motor[motorFL] = motorPower;
+				motor[motorFR] = motorPower;
+				motor[motorBL] = motorPower;
+				motor[motorBR] = motorPower;
+
+				float servoPos = (pos + 180) * 1.416;
+
+				servo[servoFL] = servoPos;
+				servo[servoFR] = servoPos;
+				servo[servoBL] = servoPos;
+				servo[servoBR] = servoPos;
+			}
+			else
 			{
 				motor[motorFL] = 0;
 				motor[motorFR] = 0;
 				motor[motorBL] = 0;
 				motor[motorBR] = 0;
-			}
-			else if (dist > deadZone && pos >= 0)
-			{
-				motor[motorFL] = dist * 0.75;
-				motor[motorFR] = dist * 0.75;
-				motor[motorBL] = dist * 0.75;
-				motor[motorBR] = dist * 0.75;
-
-				/*float servoPos = pos * 1.416;
-
-				servo[servoFL] = servoPos;
-				servo[servoFR] = servoPos;
-				servo[servoBL] = servoPos;
-				servo[servoBR] = servoPos;*/
-			}
-			else
-			{
-				motor[motorFL] = dist * -0.75;
-				motor[motorFR] = dist * -0.75;
-				motor[motorBL] = dist * -0.75;
-				motor[motorBR] = dist * -0.75;
-
-				/*float servoPos = (pos - 180) * 1.416;
-
-				servo[servoFL] = servoPos;
-				servo[servoFR] = servoPos;
-				servo[servoBL] = servoPos;
-				servo[servoBR] = servoPos;*/
 			}
 
 
