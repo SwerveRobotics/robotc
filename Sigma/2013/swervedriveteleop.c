@@ -17,65 +17,126 @@
 float slowMult = 1;
 int deadZone = 10;
 
-float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);//distance from center of joy1
 
 
-void setMotorsServos()//self explainitory
+void setMotorsServosALT()
 {
+	float YvelBL;
+	float XvelBL;
+	float YvelBR;
+	float XvelBR;
+	float YvelFL;
+	float XvelFL;
+	float YvelFR;
+	float XvelFR;
+	float timeRobin = 180/127;
+	float posBL;
+	float posBR;
+	float posFL;
+	float posFR;
+	float servoPosBL;
+	float servoPosBR;
+	float servoPosFL;
+	float servoPosFR;
+	int motorNegate;
 
-motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
-		motor[motorFR] = dist * 0.75;
-		motor[motorBL] = dist * 0.75;
-		motor[motorBR] = dist * 0.75;
-		/*
-	if ((joystick.joy1_y2 > 0) || (joystick.joy1_y2 == 0 && joystick.joy1_x2 > 0))//if motor need not be reversed
+	YvelBL = 127*cos( timeRobin*joystick.joy1_x1 - 135) + joystick.joy1_y2;
+	YvelBR = 127*cos( timeRobin*joystick.joy1_x1 - 45) + joystick.joy1_y2;
+	YvelFR = 127*cos( timeRobin*joystick.joy1_x1 + 45) + joystick.joy1_y2;
+	YvelFL = 127*cos( timeRobin*joystick.joy1_x1 + 135) + joystick.joy1_y2;
+
+	XvelBL = -127*sin( timeRobin*joystick.joy1_x1 - 135) + joystick.joy1_x2;
+	XvelBR = -127*sin( timeRobin*joystick.joy1_x1 - 45) + joystick.joy1_x2;
+	XvelFR = -127*sin( timeRobin*joystick.joy1_x1 + 45) + joystick.joy1_x2;
+	XvelFL = -127*sin( timeRobin*joystick.joy1_x1 + 135) + joystick.joy1_x2;
+
+	motor[motorBL] = sqrt( XvelBL*XvelBL + YvelBL*YvelBL )*0.75*slowMult*motorNegate;
+	posBL = atan( YvelBL / XvelBL );
+
+	motor[motorBR] = sqrt( XvelBR*XvelBR + YvelBR*YvelBR )*0.75*slowMult*motorNegate;
+	posBR = atan( YvelBR / XvelBR );
+
+	motor[motorFL] = sqrt( XvelFL*XvelFL + YvelFL*YvelFL )*0.75*slowMult*motorNegate;
+	posFL = atan( YvelFL / XvelFL );
+
+	motor[motorFR] = sqrt( XvelFR*XvelFR + YvelFR*YvelFR )*0.75*slowMult*motorNegate;
+	posFR = atan( YvelFR / XvelFR );
+
+
+	if (joystick.joy1_y2 >=0)
 	{
-		motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
-		motor[motorFR] = dist * 0.75;
-		motor[motorBL] = dist * 0.75;
-		motor[motorBR] = dist * 0.75;
-	}
-	else//else
-	{
-		motor[motorFL] = dist * -0.75;
-		motor[motorFR] = dist * -0.75;
-		motor[motorBL] = dist * -0.75;
-		motor[motorBR] = dist * -0.75;
-	}*/
+		if (joystick.joy1_x2 >=0)
+		{
 
-	if ((joystick.joy1_y2 / joystick.joy1_x2) >= 0)//if slope >= 0
-	{
-		int pos = atan(joystick.joy1_y2 / joystick.joy1_x2);
-		float servoPos = pos * 1.416;
 
-		servo[servoFL] = servoPos;
-		servo[servoFR] = servoPos;
-		servo[servoBL] = servoPos;
-		servo[servoBR] = servoPos;
+	/*I suggest you set the angular velocity to the input from the X axis of the left joystick and
+	the Linear velocities to the correspondig Axes of the right joystick. Also, consider looking
+	up the correct syntax for math and trig functions in Robot C. Just a thought.*/
 
-	}
-	else
-	{
-		int pos = atan(joystick.joy1_y2 / joystick.joy1_x2);//angle
-		float servoPos = (180 + pos) * 1.416;
 
-		servo[servoFL] = servoPos;
-		servo[servoFR] = servoPos;
-		servo[servoBL] = servoPos;
-		servo[servoBR] = servoPos;
 
-	}
+
 
 
 }
 
+
+/*void setMotorsServos()//self explainitory
+{
+
+/*motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
+motor[motorFR] = dist * 0.75;
+motor[motorBL] = dist * 0.75;
+motor[motorBR] = dist * 0.75;
+/*
+if ((joystick.joy1_y2 > 0) || (joystick.joy1_y2 == 0 && joystick.joy1_x2 > 0))//if motor need not be reversed
+{
+motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
+motor[motorFR] = dist * 0.75;
+motor[motorBL] = dist * 0.75;
+motor[motorBR] = dist * 0.75;
+}
+else//else
+{
+motor[motorFL] = dist * -0.75;
+motor[motorFR] = dist * -0.75;
+motor[motorBL] = dist * -0.75;
+motor[motorBR] = dist * -0.75;
+}
+
+if ((joystick.joy1_y2 / joystick.joy1_x2) >= 0)//if slope >= 0
+{
+int pos = atan(joystick.joy1_y2 / joystick.joy1_x2);
+float servoPos = pos * 1.416;
+
+servo[servoFL] = servoPos;
+servo[servoFR] = servoPos;
+servo[servoBL] = servoPos;
+servo[servoBR] = servoPos;
+
+}
+else
+{
+int pos = atan(joystick.joy1_y2 / joystick.joy1_x2);//angle
+float servoPos = (180 + pos) * 1.416;
+
+servo[servoFL] = servoPos;
+servo[servoFR] = servoPos;
+servo[servoBL] = servoPos;
+servo[servoBR] = servoPos;
+
+}
+
+
+}
+*/
 
 task main()
 {
 	while (true)
 	{
 		getJoystickSettings(joystick);
-float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);//distance from center of joy1
+		float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);//distance from center of joy1
 
 
 
@@ -97,11 +158,7 @@ float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joyst
 		}
 		else
 		{
-motor[motorFL] = dist * 0.75;//sets motor Front Right to distance (see above)
-		motor[motorFR] = dist * 0.75;
-		motor[motorBL] = dist * 0.75;
-		motor[motorBR] = dist * 0.75;
-			//setMotorsServos();
+			setMotorsServosALT();
 
 
 		}
