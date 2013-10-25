@@ -31,17 +31,17 @@ task main()
 
 		//keep robot upright and mostly stationary
 
-		if (abs(joystick.joy1_y2) > deadZone)
+		/*if (abs(joystick.joy1_y2) > deadZone)
 		{
-			motor[motorLeft] = 20;
-			motor[motorRight] = 20;
+			motor[motorLeft] = joystick.joy1_y2;
+			motor[motorRight] = joystick.joy1_y2;
 
 			if (gyroValue != gyroDeadZone)
 			{
 				motor[motorLeft] = motorAcceleration;
 				motor[motorRight] = motorAcceleration;
 			}
-		}
+		}*/
 		if (//gyroValue > 15 || gyroValue < -15 &&
 			gyroValue != gyroDeadZone)
 		{
