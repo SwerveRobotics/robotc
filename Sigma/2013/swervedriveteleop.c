@@ -54,10 +54,10 @@ task main()
 
 			float servoPos = pos * 1.416;
 
-			servo[servoFL] = servoPos
-			servo[servoFR] = servoPos
-			servo[servoBL] = servoPos
-			servo[servoBR] = servoPos
+			servo[servoFL] = servoPos;
+			servo[servoFR] = servoPos;
+			servo[servoBL] = servoPos;
+			servo[servoBR] = servoPos;
 		}
 		else
 		{
@@ -68,10 +68,10 @@ task main()
 
 			float servoPos = (pos - 180) * 1.416;
 
-			servo[servoFL] = servoPos
-			servo[servoFR] = servoPos
-			servo[servoBL] = servoPos
-			servo[servoBR] = servoPos
+			servo[servoFL] = servoPos;
+			servo[servoFR] = servoPos;
+			servo[servoBL] = servoPos;
+			servo[servoBR] = servoPos;
 		}
 
 
