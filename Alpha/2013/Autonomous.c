@@ -38,7 +38,7 @@ nMotorEncoder[LeftMotor] = 0;				//reset encoders
 nMotorEncoder[RightMotor] = 0;
 
 
-while (nMotorEncoder[LeftMotor] > -2800)			//1 rotation on motorB for a turn, hopefully hopefully a 90 degree turn, troubleshoot later
+while (nMotorEncoder[RightMotor] > 2800)			//2 rotations on motorB for a turn, hopefully hopefully a 90 degree turn, troubleshoot later
 {
 	motor[LeftMotor] = -75;
 	motor[RightMotor] = 75;
