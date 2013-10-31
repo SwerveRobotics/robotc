@@ -18,6 +18,8 @@ float slowMult = 1;
 int deadZone = 10;
 float degToServo = (255.0/192.0);
 int pos;
+float dist;
+int servoPos;
 
 task main()
 {
@@ -30,12 +32,12 @@ task main()
 	{
 		getJoystickSettings(joystick);
 
-		pos = radiansToDegrees(atan(joystick.joy1_y2 / joystick.joy1_x2));
+		pos = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2));
 		/*if(joystick.joy1_x2 == 0)
 		{
 			pos = 0;
 		}*/
-		float dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x1);
+		dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);
 
 		if (joystick.joy1_Buttons == 6)
 		{
@@ -46,7 +48,7 @@ task main()
 			slowMult = 0.3;
 		}
 
-		int motorPower = (int)(dist * slowMult);
+		int motorPower = (int)(dist * slowMult * 2);
 
 		if (dist < deadZone)
 		{
@@ -62,7 +64,7 @@ task main()
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
 
-			int servoPos = (int)((pos + 180) * degToServo);
+			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -76,7 +78,7 @@ task main()
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
 
-			int servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -90,7 +92,8 @@ task main()
 			motor[motorBL] = motorPower * -1;
 			motor[motorBR] = motorPower * -1;
 
-			int servoPos = (int)((pos + 180) * degToServo);
+			pos = 360 - pos;
+			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -104,7 +107,8 @@ task main()
 			motor[motorBL] = motorPower * -1;
 			motor[motorBR] = motorPower * -1;
 
-			int servoPos = (int)((pos) * degToServo);
+			pos = 360 - pos;
+			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
