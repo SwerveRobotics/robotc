@@ -50,6 +50,18 @@ task main()
 
 		int motorPower = (int)(dist * slowMult * 2);
 
+		/*if (abs(joystick.joy1_x1) > deadZone)
+		{
+			motor[motorFL] = joystick.joy1_x1;
+			motor[motorFR] = joystick.joy1_x1;
+			motor[motorBL] = joystick.joy1_x1;
+			motor[motorBR] = joystick.joy1_x1;
+
+			servo[servoFL] = 45 * degToServo;
+			servo[servoFR] = 135 * degToServo;
+			servo[servoBL] = 45 * degToServo;
+			servo[servoBR] = 135 * degToServo;
+		}*/
 		if (dist < deadZone)
 		{
 			motor[motorFL] = 0;
@@ -64,7 +76,7 @@ task main()
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
 
-			servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((90 - pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -78,7 +90,7 @@ task main()
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
 
-			servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((pos - 90) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -93,7 +105,7 @@ task main()
 			motor[motorBR] = motorPower * -1;
 
 			pos = 360 - pos;
-			servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((pos - 90) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -108,14 +120,13 @@ task main()
 			motor[motorBR] = motorPower * -1;
 
 			pos = 360 - pos;
-			servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((90 - pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
 			servo[servoBL] = servoPos;
 			servo[servoBR] = servoPos;
 		}
-
 	}
 
 }
