@@ -19,7 +19,7 @@ int DistanceToIr = 0;
 
 task main()
 {
-	//waitForStart();
+	waitForStart();
 	while (true)
 	{
 
