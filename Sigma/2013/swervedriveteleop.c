@@ -14,55 +14,59 @@
 
 #include "JoystickDriver.c";
 
-float slowMult = 1;
+float slowMult = 1; // slow mode multiplier
 int deadZone = 10;
-float degToServo = (255.0/192.0);
-int pos;
-float dist;
-int servoPos;
+float degToServo = (255.0/192.0); // converts degrees into servo values
+int pos; // angle in degrees based on right joystick
+float dist; // motor power based on right joystick
+int servoPos; // servo values based on pos
 
 task main()
 {
-	servo[servoFL] = 0;
-	servo[servoFR] = 0;
-	servo[servoBL] = 0;
-	servo[servoBR] = 0;
+	// set servos to default position
+	servo[servoFL] = 90 * degToServo;
+	servo[servoFR] = 90 * degToServo;
+	servo[servoBL] = 90 * degToServo;
+	servo[servoBR] = 90 * degToServo;
 
-	while (true)
+	while (true) // infinite loop
 	{
-		getJoystickSettings(joystick);
+		getJoystickSettings(joystick); // find joystick values
 
-		pos = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2));
+		pos = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2)); // get servo degrees based on right joystick x and y values
 		/*if(joystick.joy1_x2 == 0)
 		{
 			pos = 0;
 		}*/
-		dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2);
+		dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2); // use distance formula to get motor powers based on right joystick x and y values
 
-		if (joystick.joy1_Buttons == 6)
+		// slow mode
+		if (joy1Btn(6)) // right bumper
 		{
-			slowMult = 1;
+			slowMult = 0.3; // do slow mode
 		}
 		else
 		{
-			slowMult = 0.3;
+			slowMult = 1; // don't do slow mode
 		}
 
-		int motorPower = (int)(dist * slowMult * 2);
+		int motorPower = (int)(dist * slowMult); // motor power values with slow mode multiplier
 
-		if (abs(joystick.joy1_x1) > deadZone)
+		if (abs(joystick.joy1_x1) > deadZone) // turning based on left joystick
 		{
+			// motor power based on joystick
 			motor[motorFL] = joystick.joy1_x1;
 			motor[motorFR] = -1 * joystick.joy1_x1;
 			motor[motorBL] = joystick.joy1_x1;
 			motor[motorBR] = -1 * joystick.joy1_x1;
 
+			// set servo positions for rotation
 			servo[servoFL] = 45 * degToServo;
 			servo[servoFR] = 135 * degToServo;
 			servo[servoBL] = 135 * degToServo;
 			servo[servoBR] = 45 * degToServo;
 		}
-		else if (dist < deadZone)
+		else if (dist < deadZone) // don't move
 		{
 			motor[motorFL] = 0;
 			motor[motorFR] = 0;
@@ -104,7 +108,7 @@ task main()
 			motor[motorBL] = motorPower * -1;
 			motor[motorBR] = motorPower * -1;
 
-			pos = pos - 180;
+			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
@@ -119,7 +123,7 @@ task main()
 			motor[motorBL] = motorPower * -1;
 			motor[motorBR] = motorPower * -1;
 
-			pos = pos - 180;
+			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
