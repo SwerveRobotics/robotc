@@ -1,4 +1,5 @@
- #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S3,     seeker,         sensorHiTechnicMagnetic)
 #pragma config(Motor,  mtr_S1_C1_1,     Left,          tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     Right,         tmotorTetrix, openLoop, encoder)
@@ -131,6 +132,7 @@ task main()
 	StartTask(Joystick2);
 	while (true)
 	{
+
 		getJoystickSettings(joystick);
 		if (joy1Btn(7) == 1)
 		{
@@ -238,5 +240,11 @@ task main()
 		motor[shootingLeft] = shootingSpeed;
 		motor[shootingRight] = shootingSpeed;
 		}*/
+
+		int LeftMotor;
+	int RightMotor;
+
+	LeftMotor = nMotorEncoder[Left];
+	RightMotor = nMotorEncoder[Right];
 	}
 }
