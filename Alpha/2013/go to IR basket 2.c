@@ -21,45 +21,19 @@ task main()
 {
 	waitForStart();
 
-
-
 	while (SensorValue(IRseeker) >= 3)
 	{
-		motor[LeftMotor] = -50;
-		motor[RightMotor] = -50;
+		motor[LeftMotor] = -40;
+		motor[RightMotor] = -40;
 	}
 
 	DistanceToIr = nMotorEncoder[LeftMotor];
 
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
 	nMotorEncoder[LeftMotor] = 0;
 
-
-
-	DistanceToIr = DistanceToIr + nMotorEncoder[LeftMotor];
-
-	motor[LeftMotor] = 0;
-	motor[RightMotor] = 0;
-	//nMotorEncoder[LeftMotor] = 0;
-
-	//while (nMotorEncoder[LeftMotor] < 1)
-	//{
-	//	motor[LeftMotor] = 50;
-	//	motor[RightMotor] = 50;
-	//}
-
-	//while (nMotorEncoder
-
-	motor[LeftMotor] = 0;
-	motor[RightMotor] = 0;
-	//nMotorEncoder[LeftMotor] = 0;
-
-	//while (nMotorEncoder[LeftMotor] > - 50)
-	//{
-	//	motor[LeftMotor] = -50;
-	//	motor[RightMotor] = -50;
-	//}
-
-	while (nMotorEncoder[LeftMotor] < 1100) //1750
+	while (nMotorEncoder[LeftMotor] < 950)
 	{
 		motor[LeftMotor] = 50;
 		motor[RightMotor] = -50;
@@ -71,5 +45,66 @@ task main()
 	servo[Flipper] = 50;
 
 	wait1Msec(500);
+
+	while (nMotorEncoder[LeftMotor] > -650)
+	{
+		motor[LeftMotor] = -50;
+		motor[RightMotor] = 50;
+	}
+
+	servo[Flipper] = 0;
+
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
+	nMotorEncoder[LeftMotor] = 0;
+
+	DistanceToIr = DistanceToIr - 500;
+	DistanceToIr = DistanceToIr * -1;
+
+	while (nMotorEncoder[LeftMotor] > DistanceToIr)
+	{
+		motor[LeftMotor] = 50;
+		motor[RightMotor] = 50;
+	}
+
+	while (nMotorEncoder[LeftMotor] > -650)
+	{
+		motor[LeftMotor] = -50;
+		motor[RightMotor] = 50;
+	}
+
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
+	nMotorEncoder[LeftMotor] = 0;
+
+	while (nMotorEncoder[LeftMotor] < 2880)
+	{
+		motor[LeftMotor] = 50;
+		motor[RightMotor] = 50;
+	}
+
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
+	nMotorEncoder[LeftMotor] = 0;
+
+	while (nMotorEncoder[LeftMotor] > -650)
+	{
+		motor[LeftMotor] = -50;
+		motor[RightMotor] = 50;
+	}
+
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
+	nMotorEncoder[LeftMotor] = 0;
+
+	while (nMotorEncoder[LeftMotor] < 2880)
+	{
+		motor[LeftMotor] = 50;
+		motor[RightMotor] = 50;
+	}
+
+	motor[LeftMotor] = 0;
+	motor[RightMotor] = 0;
+	nMotorEncoder[LeftMotor] = 0;
 
 }
