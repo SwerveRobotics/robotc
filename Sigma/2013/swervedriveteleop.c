@@ -1,6 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorBR,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBR,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorBL,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     motorFL,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
@@ -55,10 +55,10 @@ task main()
 		if (abs(joystick.joy1_x1) > deadZone) // turning based on left joystick
 		{
 			// motor power based on joystick
-			motor[motorFL] = joystick.joy1_x1;
-			motor[motorFR] = -1 * joystick.joy1_x1;
-			motor[motorBL] = joystick.joy1_x1;
-			motor[motorBR] = -1 * joystick.joy1_x1;
+			motor[motorFL] = joystick.joy1_x1 * slowMult;
+			motor[motorFR] = -1 * joystick.joy1_x1 * slowMult;
+			motor[motorBL] = joystick.joy1_x1 * slowMult;
+			motor[motorBR] = -1 * joystick.joy1_x1 * slowMult;
 
 			// set servo positions for rotation
 			servo[servoFL] = 45 * degToServo;
