@@ -138,7 +138,7 @@ task main()
 
 		//Start of Arm Code-|-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-|-
 
-		if( abs(joystick.joy2_y2)> deadZone)
+		if(abs(joystick.joy2_y2)> deadZone)
 		{
 			if (joy1Btn(6)) // right bumper
 			{
@@ -149,7 +149,7 @@ task main()
 				slowMultArm = 1; // don't do slow mode
 			}
 
-			motor[motorArm]= joystick.joy2_y2 * 0.5 * slowMultArm;
+			motor[motorArm]= joystick.joy2_y2 * slowMultArm;
 		}
 		else
 		{
