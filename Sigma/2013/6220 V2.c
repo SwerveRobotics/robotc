@@ -18,7 +18,7 @@
 
 float slowMult = 1; // slow mode multiplier
 int deadZone = 10;
-float degToServo = (255.0/192.0); // converts degrees into servo values
+float degToServo = (255.0/190.0); // converts degrees into servo values
 int pos; // angle in degrees based on right joystick
 float dist; // motor power based on right joystick
 int servoPos; // servo values based on pos
