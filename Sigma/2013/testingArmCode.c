@@ -1,9 +1,11 @@
-#pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  none)
+#pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorBR,       tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBR,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorBL,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C3_1,     motorFL,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C4_2,     motorI,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
@@ -15,6 +17,7 @@
 #include "JoystickDriver.c";
 
 float slowMult = 1; // slow mode multiplier
+float slowMultArm = 1; //slow mode multiplier for arm
 int deadZone = 10;
 float degToServo = (255.0/192.0); // converts degrees into servo values
 int pos; // angle in degrees based on right joystick
@@ -36,7 +39,7 @@ task main()
 		pos = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2)); // get servo degrees based on right joystick x and y values
 		/*if(joystick.joy1_x2 == 0)
 		{
-			pos = 0;
+		pos = 0;
 		}*/
 		dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2); // use distance formula to get motor powers based on right joystick x and y values
 
@@ -55,10 +58,10 @@ task main()
 		if (abs(joystick.joy1_x1) > deadZone) // turning based on left joystick
 		{
 			// motor power based on joystick
-			motor[motorFL] = joystick.joy1_x1 * slowMult;
-			motor[motorFR] = -1 * joystick.joy1_x1 * slowMult;
-			motor[motorBL] = joystick.joy1_x1 * slowMult;
-			motor[motorBR] = -1 * joystick.joy1_x1 * slowMult;
+			motor[motorFL] = joystick.joy1_x1;
+			motor[motorFR] = -1 * joystick.joy1_x1;
+			motor[motorBL] = joystick.joy1_x1;
+			motor[motorBR] = -1 * joystick.joy1_x1;
 
 			// set servo positions for rotation
 			servo[servoFL] = 45 * degToServo;
@@ -130,6 +133,27 @@ task main()
 			servo[servoFR] = servoPos;
 			servo[servoBL] = servoPos;
 			servo[servoBR] = servoPos;
+		}
+
+
+		//Start of Arm Code-|-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-|-
+
+		if(abs(joystick.joy2_y2)> deadZone)
+		{
+			if (joy1Btn(6)) // right bumper
+			{
+				slowMultArm = 0.3; // do slow mode
+			}
+			else
+			{
+				slowMultArm = 1; // don't do slow mode
+			}
+
+			motor[motorArm]= joystick.joy2_y2 * slowMultArm;
+		}
+		else
+		{
+			motor[motorArm]= 0;
 		}
 	}
 
