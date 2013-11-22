@@ -15,7 +15,7 @@
 
 #include "JoystickDriver.c"
 
-int DistanceToIr = 0;
+int DistanceToIr;
 
 task main()
 {
@@ -23,13 +23,19 @@ task main()
 	while (true)
 	{
 
-	while (SensorValue[IRseeker] <= 5)
+	while (SensorValue[IRseeker] != 9)
 	{
-		motor[LeftMotor] = 50;											//forward until /ir = 3
+		motor[LeftMotor] = 50;											//forward until /ir = 7
 		motor[RightMotor] = 50;
 	}
 
-	DistanceToIr = nMotorEncoder[motorB];        //get value
+	//while (nMotorEncoder[LeftMotor] > - 100)
+	//{
+	//	motor[LeftMotor] = - 50;
+	//	motor[RightMotor] = -50;
+	//}
+
+	DistanceToIr = nMotorEncoder[LeftMotor];        //get value
 
 motor[LeftMotor] = 0;													//stop motors
 motor[RightMotor] = 0;
@@ -38,7 +44,7 @@ nMotorEncoder[LeftMotor] = 0;				//reset encoders
 nMotorEncoder[RightMotor] = 0;
 
 
-while (nMotorEncoder[LeftMotor] > -2800)			//1 rotation on motorB for a turn, hopefully hopefully a 90 degree turn, troubleshoot later
+while (nMotorEncoder[LeftMotor] > -50)			//2 rotations on motorB for a turn, hopefully hopefully a 90 degree turn, troubleshoot later
 {
 	motor[LeftMotor] = -75;
 	motor[RightMotor] = 75;
@@ -53,7 +59,7 @@ nMotorEncoder[LeftMotor] = 0;							//reset encoder
 servo[Flipper] = 50;                      //drop block into basket
 
 
-while (nMotorEncoder[LeftMotor] > 2800)
+while (nMotorEncoder[LeftMotor] < 50)
 {
 	motor[LeftMotor] = 75;									//turn back
 	motor[RightMotor] = -75;
@@ -64,7 +70,7 @@ motor[RightMotor] = 0;
 nMotorEncoder[RightMotor] = 0;
 nMotorEncoder[LeftMotor] = 0;							//reset encoder
 
-while (nMotorEncoder[LeftMotor] < -DistanceToIr)				//back up
+while (nMotorEncoder[LeftMotor] > -DistanceToIr)				//back up
 {
 	motor[LeftMotor] = -50;
 	motor[RightMotor] = -50;
