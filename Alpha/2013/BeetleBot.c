@@ -1,5 +1,5 @@
- #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S3,     seeker,         sensorHiTechnicMagnetic)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S3,     seeker,         sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     Left,          tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     Right,         tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C2_1,     launcher,      tmotorTetrix, openLoop, encoder)
@@ -24,7 +24,7 @@ void slowMode()
 	if (abs(joystick.joy1_y1) > deadZone)
 	{
 		//The left motor's value is equal to the value joystick.joy1_y1 divided by 5.
-		motor[Left] = joystick.joy1_y1 / 3;
+		motor[Left] = joystick.joy1_y1 / 3.5;
 	}
 	//if the if statement above is not entered then
 	else
@@ -35,7 +35,7 @@ void slowMode()
 
 	if (abs(joystick.joy1_y2) > deadZone)
 	{
-		motor[Right] = joystick.joy1_y2 / 3;
+		motor[Right] = joystick.joy1_y2 / 3.5;
 	}
 	else
 	{
@@ -70,7 +70,7 @@ task Joystick2()
 			}
 			else if (joy2Btn(2) == 1)
 			{
-				motor[flag] = -100 / 3;// jack was here
+				motor[flag] = -100 / 3;
 			}
 			else
 			{
@@ -106,7 +106,7 @@ task Joystick2()
 		}
 		else if(joystick.joy2_TopHat == 0)
 		{
-			servo[arm] = -127; //and here
+			servo[arm] = -127;
 		}
 
 		if (joy2Btn(7) == 1)
@@ -132,7 +132,7 @@ task main()
 	while (true)
 	{
 		getJoystickSettings(joystick);
-		if (joy1Btn(7) == 1)
+		if (joy1Btn(6) == 1)
 		{
 			slowMode();
 
@@ -171,7 +171,7 @@ task main()
 			}
 			else
 			{
-				motor[Right] = 0;//annd here
+				motor[Right] = 0;
 			}
 		}
 
