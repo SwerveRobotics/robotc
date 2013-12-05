@@ -146,14 +146,14 @@ task main()
 				slowMultArm = 1; // don't do slow mode
 			}
 
-			motor[motorArm]= joystick.joy2_y2 * slowMultArm;
+			motor[motorArm]= joystick.joy2_y1 * slowMultArm;
 		}
 		else
 		{
 			motor[motorArm]= 0;
 		}
 
-		servo[servoWrist] = joystick.joy2_y2 * (256.0 / 128); // wrist servo positions based on right joystick
+		servo[servoWrist] = joystick.joy2_y2 + 128; // wrist servo positions based on right joystick
 
 		if(joy2Btn(5)) // left bumper
 		{
