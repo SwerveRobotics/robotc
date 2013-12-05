@@ -22,7 +22,14 @@ task main()
 {
 	waitForStart();
 
-	nMotorEncoder[motorFL] = 0;
+	nMotorEncoder[motorFL] = 0; // zero front left motor encoder
+
+	// set servos to default position
+	servo[servoFL] = 90 * degToServo;
+	servo[servoFR] = 90 * degToServo;
+	servo[servoBL] = 90 * degToServo;
+	servo[servoBR] = 90 * degToServo;
+	wait1Msec(200);
 
 	while(SensorValue(sensorIR) != 4) // go forward until IR beacon
 	{
@@ -39,7 +46,7 @@ task main()
 
 	// place cube with arm
 
-	while(nMotorEncoder[motorFL] < 1440) // go forward until there's space to move onto ramp
+	while(nMotorEncoder[motorFL] < 1440) // go forward until there's space to move around the ramp
 	{
 		motor[motorFL] = 20;
 		motor[motorFR] = 20;
@@ -52,8 +59,47 @@ task main()
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
 
-	// turn servos 90 deg
+	// turn servos 90 deg left
+	servo[servoFL] = 180 * degToServo;
+	servo[servoFR] = 180 * degToServo;
+	servo[servoBL] = 180 * degToServo;
+	servo[servoBR] = 180 * degToServo;
+	wait1Msec(200);
+
+	nMotorEncoder[motorFL] = 0; // zero front left motor encoder
+
 	// go forward until there's space to get onto ramp
-	// turn servos back
+	while(nMotorEncoder[motorFL] < 1440)
+	{
+		motor[motorFL] = 20;
+		motor[motorFR] = 20;
+		motor[motorBL] = 20;
+		motor[motorBR] = 20;
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = 0;
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	// turn servos back to default
+	servo[servoFL] = 90 * degToServo;
+	servo[servoFR] = 90 * degToServo;
+	servo[servoBL] = 90 * degToServo;
+	servo[servoBR] = 90 * degToServo;
+	wait1Msec(200);
+
 	// go onto ramp
+	while(nMotorEncoder[motorFL] > 0)
+	{
+		motor[motorFL] = -20;
+		motor[motorFR] = -20;
+		motor[motorBL] = -20;
+		motor[motorBR] = -20;
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = 0;
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
 }
