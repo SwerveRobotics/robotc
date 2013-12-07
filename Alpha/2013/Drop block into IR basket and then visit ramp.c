@@ -68,12 +68,34 @@ if (nMotorEncoder[LeftMotor] > -1440)
 		motor[RightMotor2] = -30;
 	}
 }
+
 wait1Msec(100);
 
 //set distance to IR as the distance that the encoder treaveled
 distancetoIR = nMotorEncoder(LeftMotor);
 
-//reset motors and encoders
+
+	motor[LeftMotor]= 0;
+	motor[LeftMotor2] = 0;
+	motor[RightMotor] = 0;
+	motor[RightMotor2] = 0;
+	nMotorEncoder[LeftMotor] = 0;
+	nMotorEncoder[RightMotor] = 0;
+	nMotorEncoder[LeftMotor2] = 0;
+	nMotorEncoder[RightMotor2] = 0;
+	//while (nMotorEncoder[LeftMotor] < 1)
+	//{
+	//motor[LeftMotor]= 30;
+	//motor[LeftMotor2] = 30;
+	//motor[RightMotor] = 30;
+	//motor[RightMotor2] = 30;
+	//}
+
+
+	//set distance to IR as the distance that the encoder treaveled
+distancetoIR = distancetoIR + nMotorEncoder(LeftMotor);
+
+//reset motors and encoderz
 	motor[LeftMotor]= 0;
 	motor[LeftMotor2] = 0;
 	motor[RightMotor] = 0;
@@ -94,6 +116,15 @@ distancetoIR = nMotorEncoder(LeftMotor);
 	distancetoIR = distancetoIR * - 1;
 	distancetoIR = distancetoIR + 500;
 
+	//reset motors and encoderz
+	motor[LeftMotor]= 0;
+	motor[LeftMotor2] = 0;
+	motor[RightMotor] = 0;
+	motor[RightMotor2] = 0;
+	nMotorEncoder[LeftMotor] = 0;
+	nMotorEncoder[RightMotor] = 0;
+	nMotorEncoder[LeftMotor2] = 0;
+	nMotorEncoder[RightMotor2] = 0;
 	//back up the robot the same distance it came
 	while (nMotorEncoder[LeftMotor] < distancetoIR)
 	{
@@ -169,11 +200,12 @@ distancetoIR = nMotorEncoder(LeftMotor);
 	nMotorEncoder[RightMotor] = 0;
 	nMotorEncoder[LeftMotor2] = 0;
 	nMotorEncoder[RightMotor2] = 0;
-		while (nMotorEncoder[LeftMotor] < 5000)
+
+	while (nMotorEncoder[LeftMotor] < 5000)
 	{
-	motor[RightMotor] = 40;
-	motor[RightMotor2] = 40;
-	motor[LeftMotor] = 40;
-	motor[LeftMotor2] = 40;
-}
+	motor[RightMotor] = 100;
+	motor[RightMotor2] = 100;
+	motor[LeftMotor] = 100;
+	motor[LeftMotor2] = 100;
+	}
 }
