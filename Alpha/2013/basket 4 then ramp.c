@@ -32,15 +32,15 @@ waitForStart();
 	nMotorEncoder[RightMotor2] = 0;
 
 
-while (nMotorEncoder[LeftMotor] > -600)
+while (nMotorEncoder[LeftMotor] < 1150)
 {
-	motor[LeftMotor] = -40;
-	motor[LeftMotor2] = -40;
-	motor[RightMotor] = -40;
-	motor[RightMotor2] = -40;
+	motor[LeftMotor] = 40;
+	motor[LeftMotor2] = 40;
+	motor[RightMotor] = 40;
+	motor[RightMotor2] = 40;
 }
 
-//reset motors and encoders
+//reset motors and encoderz
 	motor[LeftMotor]= 0;
 	motor[LeftMotor2] = 0;
 	motor[RightMotor] = 0;
@@ -52,14 +52,14 @@ while (nMotorEncoder[LeftMotor] > -600)
 
 wait1Msec(100);
 servo[Flipper] = 224;
-wait1Msec(1000);
+wait1Msec(2000);
 
-while (nMotorEncoder[LeftMotor] > -2300)
+while (nMotorEncoder[LeftMotor] < 2700)
 {
-	motor[LeftMotor] = -40;
-	motor[LeftMotor2] = -40;
-	motor[RightMotor] = -40;
-	motor[RightMotor2] = -40;
+	motor[LeftMotor] = 40;
+	motor[LeftMotor2] = 40;
+	motor[RightMotor] = 40;
+	motor[RightMotor2] = 40;
 }
 //reset motors and encoders
 	motor[LeftMotor]= 0;
@@ -73,7 +73,7 @@ while (nMotorEncoder[LeftMotor] > -2300)
 
 	wait1Msec(10);
 
-	while (nMotorEncoder[LeftMotor] > -3000)
+	while (nMotorEncoder[LeftMotor] > -1700)
 	{
 		motor[LeftMotor] = -40;
 		motor[LeftMotor2] = -40;
@@ -92,12 +92,13 @@ while (nMotorEncoder[LeftMotor] > -2300)
 	nMotorEncoder[RightMotor] = 0;
 	nMotorEncoder[LeftMotor2] = 0;
 	nMotorEncoder[RightMotor2] = 0;
-		while (nMotorEncoder[LeftMotor] < 4000)
+
+		while (nMotorEncoder[LeftMotor] < 4300)
 	{
-		motor[LeftMotor] = 60;
-		motor[LeftMotor2] = 60;
-		motor[RightMotor] = 60;
-		motor[RightMotor2] = 60;
+		motor[LeftMotor] = 100;
+		motor[LeftMotor2] = 100;
+		motor[RightMotor] = 100;
+		motor[RightMotor2] = 100;
 	}
 		//reset motors and encoders
 	motor[LeftMotor]= 0;
