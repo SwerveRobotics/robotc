@@ -1,11 +1,11 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTServo)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     motorBL,       tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     motorArm,      tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     motorI,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     motorFR,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_1,     motorArm,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     motorFlag,     tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C4_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_3,    servoBL,              tServoStandard)
@@ -162,6 +162,19 @@ task main()
 		else
 		{
 			servo[servoRoller] = 128; // don't spin roller
+		}
+
+		if(joy2Btn(1))
+		{
+			motor[motorFlag] = 30;
+		}
+		else if(joy2Btn(3))
+		{
+			motor[motorFlag] = -30;
+		}
+		else
+		{
+			motor[motorFlag] = 0;
 		}
 	}
 }
