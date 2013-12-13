@@ -1,11 +1,11 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTServo)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     motorBL,       tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     motorArm,      tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     motorI,        tmotorTetrix, openLoop)
+#pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     motorFR,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_1,     motorArm,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     motorFlag,     tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C4_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_3,    servoBL,              tServoStandard)
@@ -22,7 +22,7 @@ task main()
 {
 	waitForStart();
 
-	nMotorEncoder[motorBL] = 0; // zero encoder
+	nMotorEncoder[motorFR] = 0; // zero encoder
 
 	// set servos to default position
 	servo[servoFL] = 90 * degToServo;
@@ -31,7 +31,20 @@ task main()
 	servo[servoBR] = 90 * degToServo;
 	wait1Msec(200);
 
-	while(nMotorEncoder[motorBL] > (-1440 * 0.25)) // back away from wall 0.5 rev
+	while(nMotorEncoder[motorFR] < (1440 * 4.5))
+	{
+		motor[motorFL] = 100;
+		motor[motorFR] = 100;
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = 0;
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	/*while(nMotorEncoder[motorFR] > (-1440 * 0.25)) // back away from wall 0.5 rev
 	{
 		motor[motorFL] = -50;
 		motor[motorFR] = -50;
@@ -51,7 +64,7 @@ task main()
 	servo[servoBR] = 135 * degToServo;
 	wait1Msec(200);
 
-	while(nMotorEncoder[motorBL] > (-1440 * 2)) // move robot to line up with ramp 1.75 rev
+	while(nMotorEncoder[motorFR] > (-1440 * 2)) // move robot to line up with ramp 1.75 rev
 	{
 		motor[motorFL] = -50;
 		motor[motorFR] = -50;
@@ -71,8 +84,8 @@ task main()
 	servo[servoBR] = 90 * degToServo;
 	wait1Msec(200);
 
-	nMotorEncoder[motorBL] = 0;
-	while(nMotorEncoder[motorBL] > (-1440 * 2)) // move robot to line up with ramp 3 rev
+	nMotorEncoder[motorFR] = 0;
+	while(nMotorEncoder[motorFR] > (-1440 * 2)) // move robot to line up with ramp 3 rev
 	{
 		motor[motorFL] = -100;
 		motor[motorFR] = -100;
@@ -83,5 +96,5 @@ task main()
 	motor[motorFL] = 0;
 	motor[motorFR] = 0;
 	motor[motorBL] = 0;
-	motor[motorBR] = 0;
+	motor[motorBR] = 0;*/
 }
