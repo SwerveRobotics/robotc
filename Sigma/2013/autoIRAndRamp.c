@@ -1,11 +1,11 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTServo)
 #pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
-#pragma config(Motor,  mtr_S1_C1_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     motorBL,       tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C3_1,     motorArm,      tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C3_2,     motorI,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     motorFR,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_1,     motorArm,      tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_2,     motorFlag,     tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C4_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C4_3,    servoBL,              tServoStandard)
@@ -22,21 +22,21 @@ task main()
 {
 	waitForStart();
 
-	nMotorEncoder[motorFL] = 0; // zero front left motor encoder
+	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
 
-	// set servos to default position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
-	wait1Msec(200);
+	// set servos to go sideways
+	servo[servoFL] = 0;
+	servo[servoFR] = 0;
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
+	wait1Msec(500);
 
-	while(SensorValue(sensorIR) != 4) // go forward until IR beacon
+	while(SensorValue(sensorIR) != 4) // go sideways until IR beacon
 	{
-		motor[motorFL] = 20;
-		motor[motorFR] = 20;
-		motor[motorBL] = 20;
-		motor[motorBR] = 20;
+		motor[motorFL] = 100;
+		motor[motorFR] = 100;
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
 	}
 	// stop motors
 	motor[motorFL] = 0;
@@ -45,13 +45,14 @@ task main()
 	motor[motorBR] = 0;
 
 	// place cube with arm
+	wait1Msec(500);
 
-	while(nMotorEncoder[motorFL] < 1440) // go forward until there's space to move around the ramp
+	while(nMotorEncoder[motorFR] < (1440 * 4)) // go sideways until there's space to move around the ramp
 	{
-		motor[motorFL] = 20;
-		motor[motorFR] = 20;
-		motor[motorBL] = 20;
-		motor[motorBR] = 20;
+		motor[motorFL] = 100;
+		motor[motorFR] = 100;
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
 	}
 	// stop motors
 	motor[motorFL] = 0;
@@ -59,43 +60,43 @@ task main()
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
 
-	// turn servos 90 deg left
-	servo[servoFL] = 180 * degToServo;
-	servo[servoFR] = 180 * degToServo;
-	servo[servoBL] = 180 * degToServo;
-	servo[servoBR] = 180 * degToServo;
-	wait1Msec(200);
-
-	nMotorEncoder[motorFL] = 0; // zero front left motor encoder
-
-	// go forward until there's space to get onto ramp
-	while(nMotorEncoder[motorFL] < 1440)
-	{
-		motor[motorFL] = 20;
-		motor[motorFR] = 20;
-		motor[motorBL] = 20;
-		motor[motorBR] = 20;
-	}
-	// stop motors
-	motor[motorFL] = 0;
-	motor[motorFR] = 0;
-	motor[motorBL] = 0;
-	motor[motorBR] = 0;
-
-	// turn servos back to default
+	// turn servos to default
 	servo[servoFL] = 90 * degToServo;
 	servo[servoFR] = 90 * degToServo;
 	servo[servoBL] = 90 * degToServo;
 	servo[servoBR] = 90 * degToServo;
 	wait1Msec(200);
 
-	// go onto ramp
-	while(nMotorEncoder[motorFL] > 0)
+	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
+
+	// go forward until there's space to get onto ramp
+	while(nMotorEncoder[motorFR] < (1440 * 3))
 	{
-		motor[motorFL] = -20;
-		motor[motorFR] = -20;
-		motor[motorBL] = -20;
-		motor[motorBR] = -20;
+		motor[motorFL] = 100;
+		motor[motorFR] = 100;
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = 0;
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	// turn servos sideways
+	servo[servoFL] = 0;
+	servo[servoFR] = 0;
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
+	wait1Msec(200);
+
+	// go onto ramp
+	while(nMotorEncoder[motorFR] > -1440)
+	{
+		motor[motorFL] = -100;
+		motor[motorFR] = -100;
+		motor[motorBL] = -100;
+		motor[motorBR] = -100;
 	}
 	// stop motors
 	motor[motorFL] = 0;

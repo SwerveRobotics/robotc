@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTServo)
-#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     motorFR,       tmotorTetrix, openLoop, reversed)
@@ -166,11 +166,11 @@ task main()
 
 		if(joy2Btn(1))
 		{
-			motor[motorFlag] = 30;
+			motor[motorFlag] = 100;
 		}
 		else if(joy2Btn(3))
 		{
-			motor[motorFlag] = -30;
+			motor[motorFlag] = -100;
 		}
 		else
 		{
