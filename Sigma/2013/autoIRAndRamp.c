@@ -88,13 +88,14 @@ task main()
 	waitForStart();
 	ClearTimer(T1);
 	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
+	nMotorEncoder[motorArm] = 0; // zero arm motor
 
 	// set servos to go sideways
 	servo[servoFL] = 0;
 	servo[servoFR] = 0;
 	servo[servoBL] = 0;
 	servo[servoBR] = 0;
-	wait1Msec(500);
+	wait1Msec(750);
 
 	while(SensorValue(sensorIR) != 4) // go sideways until IR beacon
 	{
@@ -110,11 +111,11 @@ task main()
 	motor[motorBR] = 0;
 
 	// place cube with arm
-	while(nMotorEncoder[motorArm] < 200){
+	while(nMotorEncoder[motorArm] < 500){
 		motor[motorArm] = 50;
 	}
 	nMotorEncoder[motorArm] = 0;
-	while(nMotorEncoder[motorArm] > -200){
+	while(nMotorEncoder[motorArm] > -500){
 		motor[motorArm] = -50;
 	}
 	motor[motorArm] = 0;
@@ -132,15 +133,6 @@ task main()
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
 
-	//turn servos to ramp-access position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
-	wait1Msec(200);
-
-	//move robot to ramp access position
-
 	// turn servos to default
 	servo[servoFL] = 90 * degToServo;
 	servo[servoFR] = 90 * degToServo;
@@ -151,7 +143,7 @@ task main()
 	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
 
 	// go forward until there's space to get onto ramp
-	while(nMotorEncoder[motorFR] < (1440 * 3.7))
+	while(nMotorEncoder[motorFR] < (1440 * 3.5))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);
