@@ -91,6 +91,9 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 
 task main()
 {
+	// set wrist servo to starting position
+	servo[servoWrist] = 0;
+
 	// set servos to default position
 	servo[servoFL] = 90 * degToServo;
 	servo[servoFR] = 90 * degToServo;

@@ -90,6 +90,9 @@ task main()
 	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
 	nMotorEncoder[motorArm] = 0; // zero arm motor
 
+	// set wrist servo to starting position
+	servo[servoWrist] = 0;
+
 	// set servos to go sideways
 	servo[servoFL] = 0;
 	servo[servoFR] = 0;
@@ -115,6 +118,7 @@ task main()
 		motor[motorArm] = 50;
 	}
 	nMotorEncoder[motorArm] = 0;
+	// do something with wrist servo
 	while(nMotorEncoder[motorArm] > -500){
 		motor[motorArm] = -50;
 	}
