@@ -16,18 +16,21 @@
 
 float slowMult = 1; // slow mode multiplier
 int deadZone = 10;
-float degToServo = (255.0/192.0); // converts degrees into servo values
+float degToServo = (255.0/190.0); // converts degrees into servo values
 int pos; // angle in degrees based on right joystick
 float dist; // motor power based on right joystick
 int servoPos; // servo values based on pos
 
 task main()
 {
+//	servo[servoFL] = 0;
+//	wait1Msec(500);
+
 	// set servos to default position
 	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
+//	servo[servoFR] = 90 * degToServo;
+//	servo[servoBL] = 90 * degToServo;
+//	servo[servoBR] = 90 * degToServo;
 
 	while (true) // infinite loop
 	{
@@ -56,15 +59,15 @@ task main()
 		{
 			// motor power based on joystick
 			motor[motorFL] = joystick.joy1_x1 * slowMult;
-			motor[motorFR] = -1 * joystick.joy1_x1 * slowMult;
-			motor[motorBL] = joystick.joy1_x1 * slowMult;
-			motor[motorBR] = -1 * joystick.joy1_x1 * slowMult;
+//			motor[motorFR] = -1 * joystick.joy1_x1 * slowMult;
+//			motor[motorBL] = joystick.joy1_x1 * slowMult;
+//			motor[motorBR] = -1 * joystick.joy1_x1 * slowMult;
 
 			// set servo positions for rotation
 			servo[servoFL] = 45 * degToServo;
-			servo[servoFR] = 135 * degToServo;
-			servo[servoBL] = 135 * degToServo;
-			servo[servoBR] = 45 * degToServo;
+//			servo[servoFR] = 135 * degToServo;
+//			servo[servoBL] = 135 * degToServo;
+//			servo[servoBR] = 45 * degToServo;
 		}
 		else if (dist < deadZone) // don't move
 		{
@@ -76,60 +79,60 @@ task main()
 		else if (joystick.joy1_y2 > 0 && joystick.joy1_x2 > 0) // quadrant 1
 		{
 			motor[motorFL] = motorPower;
-			motor[motorFR] = motorPower;
-			motor[motorBL] = motorPower;
-			motor[motorBR] = motorPower;
+//			motor[motorFR] = motorPower;
+//			motor[motorBL] = motorPower;
+//			motor[motorBR] = motorPower;
 
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
-			servo[servoFR] = servoPos;
-			servo[servoBL] = servoPos;
-			servo[servoBR] = servoPos;
+//			servo[servoFR] = servoPos;
+//			servo[servoBL] = servoPos;
+//			servo[servoBR] = servoPos;
 		}
 		else if (joystick.joy1_y2 > 0 && joystick.joy1_x2 < 0) // quadrant 2
 		{
 			motor[motorFL] = motorPower;
-			motor[motorFR] = motorPower;
-			motor[motorBL] = motorPower;
-			motor[motorBR] = motorPower;
+//			motor[motorFR] = motorPower;
+//			motor[motorBL] = motorPower;
+//			motor[motorBR] = motorPower;
 
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
-			servo[servoFR] = servoPos;
-			servo[servoBL] = servoPos;
-			servo[servoBR] = servoPos;
+//			servo[servoFR] = servoPos;
+//			servo[servoBL] = servoPos;
+//			servo[servoBR] = servoPos;
 		}
 		else if (joystick.joy1_y2 < 0 && joystick.joy1_x2 < 0) // quadrant 3
 		{
 			motor[motorFL] = motorPower * -1;
-			motor[motorFR] = motorPower * -1;
-			motor[motorBL] = motorPower * -1;
-			motor[motorBR] = motorPower * -1;
+//			motor[motorFR] = motorPower * -1;
+//			motor[motorBL] = motorPower * -1;
+//			motor[motorBR] = motorPower * -1;
 
 			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
-			servo[servoFR] = servoPos;
-			servo[servoBL] = servoPos;
-			servo[servoBR] = servoPos;
+//			servo[servoFR] = servoPos;
+//			servo[servoBL] = servoPos;
+//			servo[servoBR] = servoPos;
 		}
 		else if (joystick.joy1_y2 < 0 && joystick.joy1_x2 > 0) // quadrant 4
 		{
 			motor[motorFL] = motorPower * -1;
-			motor[motorFR] = motorPower * -1;
-			motor[motorBL] = motorPower * -1;
-			motor[motorBR] = motorPower * -1;
+//			motor[motorFR] = motorPower * -1;
+//			motor[motorBL] = motorPower * -1;
+//			motor[motorBR] = motorPower * -1;
 
 			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
-			servo[servoFR] = servoPos;
-			servo[servoBL] = servoPos;
-			servo[servoBR] = servoPos;
+//			servo[servoFR] = servoPos;
+//			servo[servoBL] = servoPos;
+//			servo[servoBR] = servoPos;
 		}
 	}
 
