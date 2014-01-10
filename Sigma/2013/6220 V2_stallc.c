@@ -100,7 +100,8 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 task main()
 {
 	// set wrist servo to starting position
-	servo[servoWrist] = 0;
+	servo[servoWrist] = 255;
+	int servoLast = 255; // last servo value before letting go of joystick
 
 	// set servos to default position
 	servo[servoFL] = 90 * degToServo;
@@ -233,7 +234,15 @@ task main()
 			motor[motorArm]= StallCode(motorArm, 0);
 		}
 
-		servo[servoWrist] = joystick.joy2_y2 + 128; // wrist servo positions based on right joystick
+		if(joy2Btn(8)) // right trigger
+		{
+			servo[servoWrist] = 255 - (joystick.joy2_y2 + 128); // wrist servo positions based on right joystick
+			servoLast = 255 - (joystick.joy2_y2 + 128);
+		}
+		else
+		{
+			servo[servoWrist] = servoLast; // set servo position to last servo position
+		}
 
 		if(joy2Btn(5)) // left bumper
 		{

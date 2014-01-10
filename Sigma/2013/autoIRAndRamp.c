@@ -99,7 +99,7 @@ task main()
 	nMotorEncoder[motorArm] = 0; // zero arm motor
 
 	// set wrist servo to starting position
-	servo[servoWrist] = 0;
+	servo[servoWrist] = 255;
 
 	// set servos to go sideways
 	servo[servoFL] = 0;
