@@ -1,16 +1,12 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-<<<<<<< local
-#pragma config(Sensor, S3,     seeker,         sensorHiTechnicIRSeeker1200)
-=======
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
-#pragma config(Sensor, S3,     seeker,         sensorHiTechnicMagnetic)
->>>>>>> other
+#pragma config(Sensor, S3,     seeker,         sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     Left,          tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     Right,         tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_1,     launcher,      tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C2_1,     sholder,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     flag,          tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    arm,                  tServoStandard)
-#pragma config(Servo,  srvo_S1_C3_2,    rotater,              tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C3_2,    wrist,                tServoContinuousRotation)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_4,    servo4,               tServoNone)
 #pragma config(Servo,  srvo_S1_C3_5,    servo5,               tServoNone)
@@ -22,6 +18,73 @@
 int deadZone = 15;
 //int shootingSpeed = 100;
 
+long wayTooLong = 1000;  // millisecond threshold for absolute stall
+long tooLong = 250;  // millisecond threshod for partial stall
+long sigMove = 100; // How many encoder ticks is a 'significant' movement
+
+//variables used for stall code need to be initialized
+int lastDirection[] = {0, 0, 0}; // Direction of last power -1 (reverse), 0 (stopped) or 1 (forward)
+long timeLastSigMove[] = {0, 0, 0}; // Time last significant move occurred
+long encLastSigMove[] = {0, 0, 0}; // Encoder reading at last significant move
+
+int StallCode(tMotor motorSentTo, int wantedPower)
+{
+	int motorIndex;  //index value for the arrays we are storing values in.
+	int direction = 0;
+	switch(motorSentTo) //which motor power is being sent to
+	{
+		case Left: // This is the name of one of the motors as referenced in the configuraiton.
+			motorIndex = 0;
+			break;
+		case Right:
+			motorIndex = 1;
+			break;
+		/*case flag:
+			motorIndex = 2;
+			break;*/
+		default:
+			break;
+	}
+
+	if (abs(wantedPower) < deadZone)  // Power below threshold, mark as stopped.
+		direction = 0;
+  else
+  	direction = (wantedPower < 0) ? -1 : 1;
+
+	if (direction == 0 || lastDirection[motorIndex] != direction)  // Stopped or changed direction.	Allow whatever power desired this time.
+		{
+    	lastDirection[motorIndex] = direction;
+			timeLastSigMove[motorIndex]	 = time1[T1];
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+
+			return wantedPower;
+		}
+
+ 	lastDirection[motorIndex] = direction;
+
+	if ( abs(encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo]) > sigMove)  // Moved far enough to be considered significant, mark
+		{
+			timeLastSigMove[motorIndex]	= time1[T1];
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+
+			return wantedPower;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > wayTooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(650,4);
+			return 0;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > tooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(365,4);
+			return wantedPower / 2;
+		}
+
+	return wantedPower;	// Haven’t moved far enough yet to be significant but haven’t timed out yet
+}
+
 //This is the slow mode function that allows you to use the slow mode. Slow mode is the mode that allows you to slow down the robot.
 void slowMode()
 {
@@ -29,7 +92,7 @@ void slowMode()
 	if (abs(joystick.joy1_y1) > deadZone)
 	{
 		//The left motor's value is equal to the value joystick.joy1_y1 divided by 5.
-		motor[Left] = joystick.joy1_y1 / 3.5;
+		motor[Left] = StallCode(Left,(joystick.joy1_y1 / 4));
 	}
 	//if the if statement above is not entered then
 	else
@@ -40,7 +103,7 @@ void slowMode()
 
 	if (abs(joystick.joy1_y2) > deadZone)
 	{
-		motor[Right] = joystick.joy1_y2 / 3.5;
+		motor[Right] = StallCode(Right, (joystick.joy1_y2 / 4));
 	}
 	else
 	{
@@ -67,22 +130,6 @@ task Joystick2()
 	{
 		getJoystickSettings(joystick);
 
-		while (joystick.joy2_TopHat == 4)
-		{
-			if (joy2Btn(3) == 1)
-			{
-				motor[flag] = 100 / 3;
-			}
-			else if (joy2Btn(2) == 1)
-			{
-				motor[flag] = -100 / 3;
-			}
-			else
-			{
-				motor[flag] = 0;
-			}
-		}
-
 		if (joy2Btn(3) == 1)
 		{
 			motor[flag] = 100;
@@ -96,6 +143,33 @@ task Joystick2()
 			motor[flag] = 0;
 		}
 
+		if (joystick.joy2_y1 > deadZone)
+		{
+			motor[sholder] = 80;
+		}
+		else
+		{
+			motor[sholder] = 0;
+		}
+
+		if (joystick.joy2_y1 < -deadZone)
+		{
+			motor[sholder] = -50;
+		}
+		else
+		{
+			motor[sholder] = 0;
+		}
+
+		if (abs(joystick.joy2_y2) > deadZone)
+		{
+			servo[wrist] = joystick.joy2_y2 + 128;
+		}
+		else
+		{
+			servo[wrist] = 128;
+		}
+
 		/*if (joy2Btn(6) == 1)
 		{
 		flagSpinnerSlow();
@@ -107,14 +181,14 @@ task Joystick2()
 
 		if (joystick.joy2_TopHat == 4)
 		{
-			servo[arm] = 127;
+			servo[arm] = 224;
 		}
 		else if(joystick.joy2_TopHat == 0)
 		{
-			servo[arm] = -127;
+			servo[arm] = 40;
 		}
 
-		if (joy2Btn(7) == 1)
+		/*if (joy2Btn(7) == 1)
 		{
 			motor[launcher] = 100;
 		}
@@ -126,7 +200,7 @@ task Joystick2()
 		if (joy2Btn(1) == 1)
 		{
 			servo[rotater] += 1;
-		}
+		}*/
 	}
 }
 
@@ -138,7 +212,7 @@ task main()
 	{
 
 		getJoystickSettings(joystick);
-		if (joy1Btn(6) == 1)
+		if (joy1Btn(8) == 1)
 		{
 			slowMode();
 
@@ -164,7 +238,7 @@ task main()
 		{
 			if (abs(joystick.joy1_y1) > deadZone)
 			{
-				motor[Left] = joystick.joy1_y1;
+				motor[Left] = StallCode(Left, (joystick.joy1_y1));
 			}
 			else
 			{
@@ -173,7 +247,7 @@ task main()
 
 			if (abs(joystick.joy1_y2) > deadZone)
 			{
-				motor[Right] = joystick.joy1_y2;
+				motor[Right] = StallCode(Right, (joystick.joy1_y2));
 			}
 			else
 			{
@@ -244,11 +318,5 @@ task main()
 		motor[shootingLeft] = shootingSpeed;
 		motor[shootingRight] = shootingSpeed;
 		}*/
-
-		int LeftMotor;
-	int RightMotor;
-
-	LeftMotor = nMotorEncoder[Left];
-	RightMotor = nMotorEncoder[Right];
 	}
 }
