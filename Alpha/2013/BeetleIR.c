@@ -75,7 +75,7 @@ void IRValue6()
 	{
 		motor[Left] = -50;
 		motor[Right] = -50;
-	}
+
 	motor[Left] = 0;
 	motor[Right] = 0;
 
