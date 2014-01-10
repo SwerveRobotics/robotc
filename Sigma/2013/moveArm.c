@@ -29,11 +29,11 @@ task main()
 	    {
 	        if(nNxtButtonPressed == 1) // if right arrow button is pressed
 	        {
-	            motor[motorArm] = 100; // arm up
+	            motor[motorArm] = 75; // arm up
 	        }
 	        else if(nNxtButtonPressed == 2) // if left arrow button is pressed
 	        {
-	            motor[motorArm] = -100; // arm down
+	            motor[motorArm] = -75; // arm down
 	        }
 	        else
 	        {
