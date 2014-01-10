@@ -115,14 +115,14 @@ task main()
 
 	// place cube with arm
 	while(nMotorEncoder[motorArm] < 500){
-		motor[motorArm] = 50;
+		motor[motorArm] = StallCode(motorArm, 100);
 	}
 	nMotorEncoder[motorArm] = 0;
-	// do something with wrist servo
+	// maybe do something with wrist servo.
 	while(nMotorEncoder[motorArm] > -500){
-		motor[motorArm] = -50;
+		motor[motorArm] = StallCode(motorArm, -100);
 	}
-	motor[motorArm] = 0;
+	motor[motorArm] = StallCode(motorArm, 0);
 
 	while(nMotorEncoder[motorFR] < (1440 * 4)) // go sideways until there's space to move around the ramp
 	{

@@ -238,11 +238,11 @@ task main()
 
 		if(joy2Btn(1))
 		{
-			motor[motorFlag] = 100;
+			motor[motorFlag] = 100; // turn motor right
 		}
 		else if(joy2Btn(3))
 		{
-			motor[motorFlag] = -100;
+			motor[motorFlag] = -100; // turn motor left
 		}
 		else
 		{
