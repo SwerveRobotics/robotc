@@ -14,7 +14,7 @@
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_4,    servoFL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_5,    servo5,               tServoNone)
-#pragma config(Servo,  srvo_S1_C2_6,    servoRoller,          tServoStandard)
+#pragma config(Servo,  srvo_S1_C2_6,    servoSweeper,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_1,    servoWrist,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    servo8,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_3,    servo9,               tServoNone)
@@ -246,11 +246,15 @@ task main()
 
 		if(joy2Btn(5)) // left bumper
 		{
-			servo[servoRoller] = 255; // spin roller in
+			servo[servoSweeper] = 255; // spin roller in
+		}
+		else if(joy2Btn(7))
+		{
+			servo[servoSweeper] = 0;
 		}
 		else
 		{
-			servo[servoRoller] = 128; // don't spin roller
+			servo[servoSweeper] = 128; // don't spin roller
 		}
 
 		if(joy2Btn(1))

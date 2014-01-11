@@ -14,7 +14,7 @@
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_4,    servoFL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_5,    servo5,               tServoNone)
-#pragma config(Servo,  srvo_S1_C2_6,    servoRoller,          tServoStandard)
+#pragma config(Servo,  srvo_S1_C2_6,    servoSweeper,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_1,    servoWrist,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    servo8,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_3,    servo9,               tServoNone)
@@ -122,15 +122,16 @@ task main()
 	motor[motorBR] = 0;
 
 	// place cube with arm
-	while(nMotorEncoder[motorArm] < 500){
-		motor[motorArm] = StallCode(motorArm, 100);
+	while(nMotorEncoder[motorArm] > -3000){
+		motor[motorArm] = -100;
 	}
 	nMotorEncoder[motorArm] = 0;
 	// maybe do something with wrist servo.
-	while(nMotorEncoder[motorArm] > -500){
-		motor[motorArm] = StallCode(motorArm, -100);
+	while(nMotorEncoder[motorArm] > 3000){
+		motor[motorArm] = 100;
 	}
-	motor[motorArm] = StallCode(motorArm, 0);
+	motor[motorArm] = 0;
+	wait1Msec(1500);
 
 	while(nMotorEncoder[motorFR] < (1440 * 4)) // go sideways until there's space to move around the ramp
 	{
@@ -155,7 +156,7 @@ task main()
 	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
 
 	// go forward until there's space to get onto ramp
-	while(nMotorEncoder[motorFR] < (1440 * 3.5))
+	while(nMotorEncoder[motorFR] < (1440 * 4))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);
