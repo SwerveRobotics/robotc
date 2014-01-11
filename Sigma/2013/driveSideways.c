@@ -101,10 +101,10 @@ task main()
 	servo[servoWrist] = 255;
 
 	// set servos to default position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
+	servo[servoFL] = 0;
+	servo[servoFR] = 0;
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
 	wait1Msec(200);
 
 	while(nMotorEncoder[motorFR] < (1440 * 4.5))
