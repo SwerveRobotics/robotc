@@ -93,6 +93,7 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 
 task main()
 {
+	servo[servoWrist] = 255;
 	waitForStart();
 	ClearTimer(T1);
 	nMotorEncoder[motorFR] = 0; // zero encoder
@@ -107,7 +108,7 @@ task main()
 	servo[servoBR] = 90 * degToServo;
 	wait1Msec(200);
 
-	while(nMotorEncoder[motorFR] < (1440 * 4.5))
+	while(nMotorEncoder[motorFR] < (1440 * 5))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);
@@ -119,4 +120,9 @@ task main()
 	motor[motorFR] = StallCode(motorFR, 0);
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
+
+	while(true)
+	{
+		servo[servoWrist] = 255;
+	}
 }//Nicco: sometimes in the middle ofthenight, when no one can hear me ilike to pretend im a whale and i like to splash all around in my sheets while screeming at the top ofmy longs i scream like awhale.i alsolike pretending likeina puppy or cat andrandomly start climbing onto tables and laps.dont judge me.
