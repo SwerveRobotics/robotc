@@ -32,6 +32,7 @@ float degToServo = (255.0/190.0); // converts degrees into servo values
 int pos; // angle in degrees based on right joystick
 float dist; // motor power based on right joystick
 int servoPos; // servo values based on pos
+int servoPosLast;
 
 long wayTooLong = 1000;  // millisecond threshold for absolute stall
 long tooLong = 250;  // millisecond threshod for partial stall
@@ -102,6 +103,8 @@ task main()
 	// set wrist servo to starting position
 	servo[servoWrist] = 255;
 	int servoLast = 255; // last servo value before letting go of joystick
+	servoPos = 128;
+	servoPosLast = servoPos;
 
 	// set servos to default position
 	servo[servoFL] = 90 * degToServo;
@@ -138,17 +141,17 @@ task main()
 
 		if (abs(joystick.joy1_x1) > deadZone) // turning based on left joystick
 		{
-			// motor power based on joystick
-			motor[motorFL] = joystick.joy1_x1 * slowMult;
-			motor[motorFR] = StallCode(motorFR, -1 * joystick.joy1_x1 * slowMult);
-			motor[motorBL] = joystick.joy1_x1 * slowMult;
-			motor[motorBR] = -1 * joystick.joy1_x1 * slowMult;
-
 			// set servo positions for rotation
 			servo[servoFL] = 45 * degToServo;
 			servo[servoFR] = 135 * degToServo;
 			servo[servoBL] = 135 * degToServo;
 			servo[servoBR] = 45 * degToServo;
+
+			// motor power based on joystick
+			motor[motorFL] = joystick.joy1_x1 * slowMult;
+			motor[motorFR] = StallCode(motorFR, -1 * joystick.joy1_x1 * slowMult);
+			motor[motorBL] = joystick.joy1_x1 * slowMult;
+			motor[motorBR] = -1 * joystick.joy1_x1 * slowMult;
 		}
 		else if (dist < deadZone) // don't move
 		{
@@ -159,39 +162,38 @@ task main()
 		}
 		else if (joystick.joy1_y2 > 0 && joystick.joy1_x2 > 0) // quadrant 1
 		{
-			motor[motorFL] = motorPower;
-			motor[motorFR] = StallCode(motorFR, motorPower);
-			motor[motorBL] = motorPower;
-			motor[motorBR] = motorPower;
-
 			servoPos = (int)((pos) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
 			servo[servoBL] = servoPos;
 			servo[servoBR] = servoPos;
+			wait1Msec(3*abs(servoPosLast - servoPos));
+			servoPosLast = servoPos;
+
+			motor[motorFL] = motorPower;
+			motor[motorFR] = StallCode(motorFR, motorPower);
+			motor[motorBL] = motorPower;
+			motor[motorBR] = motorPower;
 		}
 		else if (joystick.joy1_y2 > 0 && joystick.joy1_x2 < 0) // quadrant 2
 		{
+			servoPos = (int)((pos) * degToServo);
+
+			servo[servoFL] = servoPos;
+			servo[servoFR] = servoPos;
+			servo[servoBL] = servoPos;
+			servo[servoBR] = servoPos;
+			wait1Msec(3*abs(servoPosLast - servoPos));
+			servoPosLast = servoPos;
+
 			motor[motorFL] = motorPower;
 			motor[motorFR] = StallCode(motorFR, motorPower);
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
-
-			servoPos = (int)((pos) * degToServo);
-
-			servo[servoFL] = servoPos;
-			servo[servoFR] = servoPos;
-			servo[servoBL] = servoPos;
-			servo[servoBR] = servoPos;
 		}
 		else if (joystick.joy1_y2 < 0 && joystick.joy1_x2 < 0) // quadrant 3
 		{
-			motor[motorFL] = motorPower * -1;
-			motor[motorFR] = StallCode(motorFR, motorPower * -1);
-			motor[motorBL] = motorPower * -1;
-			motor[motorBR] = motorPower * -1;
-
 			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
 
@@ -199,14 +201,16 @@ task main()
 			servo[servoFR] = servoPos;
 			servo[servoBL] = servoPos;
 			servo[servoBR] = servoPos;
+			wait1Msec(3*abs(servoPosLast - servoPos));
+			servoPosLast = servoPos;
+
+			motor[motorFL] = motorPower * -1;
+			motor[motorFR] = StallCode(motorFR, motorPower * -1);
+			motor[motorBL] = motorPower * -1;
+			motor[motorBR] = motorPower * -1;
 		}
 		else if (joystick.joy1_y2 < 0 && joystick.joy1_x2 > 0) // quadrant 4
 		{
-			motor[motorFL] = motorPower * -1;
-			motor[motorFR] = StallCode(motorFR, motorPower * -1);
-			motor[motorBL] = motorPower * -1;
-			motor[motorBR] = motorPower * -1;
-
 			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
 
@@ -214,6 +218,13 @@ task main()
 			servo[servoFR] = servoPos;
 			servo[servoBL] = servoPos;
 			servo[servoBR] = servoPos;
+			wait1Msec(3*abs(servoPosLast - servoPos));
+			servoPosLast = servoPos;
+
+			motor[motorFL] = motorPower * -1;
+			motor[motorFR] = StallCode(motorFR, motorPower * -1);
+			motor[motorBL] = motorPower * -1;
+			motor[motorBR] = motorPower * -1;
 		}
 
 		if(abs(joystick.joy2_y1) > deadZone)
@@ -227,7 +238,7 @@ task main()
 				slowMultArm = 1; // don't do slow mode
 			}
 
-			motor[motorArm]= StallCode(motorArm, joystick.joy2_y1 * slowMultArm);
+			motor[motorArm]= StallCode(motorArm, -joystick.joy2_y1 * slowMultArm);
 		}
 		else
 		{
@@ -257,11 +268,11 @@ task main()
 			servo[servoSweeper] = 128; // don't spin roller
 		}
 
-		if(joy2Btn(1))
+		if(joy2Btn(1) || joy1Btn(1))//both joy's
 		{
 			motor[motorFlag] = 100; // turn motor right
 		}
-		else if(joy2Btn(3))
+		else if(joy2Btn(3) || joy1Btn(3))//both joy's
 		{
 			motor[motorFlag] = -100; // turn motor left
 		}
