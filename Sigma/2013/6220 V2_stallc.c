@@ -270,11 +270,11 @@ task main()
 
 		if(joy2Btn(1) || joy1Btn(1))//both joy's
 		{
-			motor[motorFlag] = 100; // turn motor right
+			motor[motorFlag] = -100; // turn flag raiser
 		}
 		else if(joy2Btn(3) || joy1Btn(3))//both joy's
 		{
-			motor[motorFlag] = -100; // turn motor left
+			motor[motorFlag] = 100; // turn flag raiser
 		}
 		else
 		{

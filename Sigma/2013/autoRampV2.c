@@ -94,6 +94,12 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 task main()
 {
 	servo[servoWrist] = 255;
+	// set servos to default position
+	servo[servoFL] = 90 * degToServo;
+	servo[servoFR] = 90 * degToServo;
+	servo[servoBL] = 90 * degToServo;
+	servo[servoBR] = 90 * degToServo;
+
 	waitForStart();
 	ClearTimer(T1);
 	nMotorEncoder[motorFR] = 0; // zero encoder
