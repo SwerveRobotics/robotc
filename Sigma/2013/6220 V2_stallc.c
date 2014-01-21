@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
-#pragma config(Hubs,  S3, HTServo,  none,     none,     none)
+#pragma config(Hubs,  S3, HTServo,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     ,               sensorI2CMuxController)
@@ -9,6 +9,8 @@
 #pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     motorFlag,     tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S3_C2_1,     motorLifter,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S3_C2_2,     motorK,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
@@ -280,5 +282,15 @@ task main()
 		{
 			motor[motorFlag] = 0;
 		}
+
+		// use dpad on second controller to control lifter
+    if(joystick.joy2_TopHat == 0) // if up on the dpad on controller 2 is pressed
+    {
+        motor[motorLifter] = StallCode(motorLifter, 100);
+    }
+    else if(joystick.joy2_TopHat == 4) // if down on the dpad on controller 2 is pressed
+    {
+        motor[motorLifter] = StallCode(motorLifter, -100);
+    }
 	}
 }
