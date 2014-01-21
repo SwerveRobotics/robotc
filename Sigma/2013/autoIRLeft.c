@@ -182,7 +182,7 @@ task main()
 		motor[motorBR] = -100;
 	}*/
 
-	// turn servos to default
+	// turn servos
 	servo[servoFL] = 70 * degToServo;
 	servo[servoFR] = 70 * degToServo;
 	servo[servoBL] = 70 * degToServo;
