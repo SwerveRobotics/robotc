@@ -97,7 +97,7 @@ task main()
 		nMotorEncoder[LeftMotor] = 0;
 
 		//turn towards ramp
-		while (nMotorEncoder[LeftMotor] > -600)
+		while (nMotorEncoder[LeftMotor] > -450)
 		{
 			motor[LeftMotor] =  -35;
 			motor[RightMotor] = 35;
@@ -176,7 +176,7 @@ task main()
 		nMotorEncoder[LeftMotor] = 0;
 
 		//turn towards ramp
-		while (nMotorEncoder[LeftMotor] > -700)
+		while (nMotorEncoder[LeftMotor] > -450)
 		{
 			motor[LeftMotor] =  -35;
 			motor[RightMotor] = 35;
@@ -262,7 +262,7 @@ task main()
 		nMotorEncoder[LeftMotor] = 0;
 
 		//turns towards ramp
-		while (nMotorEncoder[LeftMotor] > -700)
+		while (nMotorEncoder[LeftMotor] > -450)
 		{
 			motor[LeftMotor] =  -35;
 			motor[RightMotor] = 35;
@@ -319,12 +319,14 @@ task main()
 		motor[RightMotor] = 0;
 		servo[Flipper] = 75;
 
+		//turns toward block zone
 		while (nMotorEncoder[LeftMotor] > -600)
 		{
 			motor[LeftMotor] =  -35;
 		}
 		nMotorEncoder[LeftMotor] = 0;
 
+		//drives towards block zone
 		while (nMotorEncoder[LeftMotor] < 2800)
 		{
 			motor[LeftMotor] =  35;
@@ -335,7 +337,8 @@ task main()
 
 		nMotorEncoder[LeftMotor] = 0;
 
-		while (nMotorEncoder[LeftMotor] > -700)
+		//turns towards ramp
+		while (nMotorEncoder[LeftMotor] > -450)
 		{
 			motor[LeftMotor] =  -35;
 			motor[RightMotor] = 35;
