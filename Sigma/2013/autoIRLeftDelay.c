@@ -14,7 +14,7 @@
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_4,    servoFL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_5,    servo5,               tServoNone)
-#pragma config(Servo,  srvo_S1_C2_6,    servoRoller,          tServoStandard)
+#pragma config(Servo,  srvo_S1_C2_6,    servoSweeper,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_1,    servoWrist,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    servo8,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_3,    servo9,               tServoNone)
@@ -93,28 +93,143 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 
 task main()
 {
+	// set wrist servo to starting position
 	servo[servoWrist] = 255;
-	// set servos to default position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
+
+	// set servos
+	servo[servoFL] = 70 * degToServo;
+	servo[servoFR] = 70 * degToServo;
+	servo[servoBL] = 70 * degToServo;
+	servo[servoBR] = 70 * degToServo;
 
 	waitForStart();
 	ClearTimer(T1);
-	nMotorEncoder[motorFR] = 0; // zero encoder
+	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
+	nMotorEncoder[motorArm] = 0; // zero arm motor
 
 	// set wrist servo to starting position
 	servo[servoWrist] = 255;
 
-	// set servos to default position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
+	while(nMotorEncoder[motorFR] < (1440 * 0.25))
+	{
+		motor[motorFL] = 50;
+		motor[motorFR] = StallCode(motorFR, 50);
+		motor[motorBL] = 50;
+		motor[motorBR] = 50;
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = StallCode(motorFR, 0);
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	// set servos
+	servo[servoFL] = 135 * degToServo;
+	servo[servoFR] = 135 * degToServo;
+	servo[servoBL] = 135 * degToServo;
+	servo[servoBR] = 135 * degToServo;
+	wait1Msec(700);
+
+	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
+
+	while(nMotorEncoder[motorFR] > (-1440 * 2))
+	{
+		motor[motorFL] = -50;
+		motor[motorFR] = StallCode(motorFR, -50);
+		motor[motorBL] = -50;
+		motor[motorBR] = -50;
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = StallCode(motorFR, 0);
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
+
+	// set servos to go sideways
+	servo[servoFL] = 0;
+	servo[servoFR] = 0;
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
+	wait1Msec(750);
+
+	int encLast;
+	while(SensorValue(sensorIR) != 4) // go sideways until IR beacon
+	{
+		motor[motorFL] = 50;
+		motor[motorFR] = StallCode(motorFR, 50);
+		motor[motorBL] = 50;
+		motor[motorBR] = 50;
+		encLast = nMotorEncoder[motorFR];
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = StallCode(motorFR, 0);
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	if (nMotorEncoder[motorFR] > (1440 * 2))
+	{
+		while(nMotorEncoder[motorFR] > (encLast - 1440*0.25))
+		{
+		motor[motorFL] = -100;
+		motor[motorFR] = StallCode(motorFR, -100);
+		motor[motorBL] = -100;
+		motor[motorBR] = -100;
+		}
+		// stop motors
+		motor[motorFL] = 0;
+		motor[motorFR] = StallCode(motorFR, 0);
+		motor[motorBL] = 0;
+		motor[motorBR] = 0;
+	}
+
+	// place cube with arm
+	while(nMotorEncoder[motorArm] > -3000){
+		motor[motorArm] = -100;
+	}
+	nMotorEncoder[motorArm] = 0;
+	// maybe do something with wrist servo.
+	while(nMotorEncoder[motorArm] < 3000){
+		motor[motorArm] = 100;
+	}
+	motor[motorArm] = 0;
+	wait1Msec(1500);
+
+	//int encLast;
+	while(nMotorEncoder[motorFR] < (1440 * 4)) // go sideways until there's space to move around the ramp
+	{
+		motor[motorFL] = 100;
+		motor[motorFR] = StallCode(motorFR, 100);
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
+		//encLast = nMotorEncoder[motorFR];
+	}
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = StallCode(motorFR, 0);
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+	/*while(nMotorEncoder[motorFR] > (encLast - 1440*0.5))
+	{
+		motor[motorFL] = -100;
+		motor[motorFR] = StallCode(motorFR, -100);
+		motor[motorBL] = -100;
+		motor[motorBR] = -100;
+	}*/
+
+	// turn servos
+	servo[servoFL] = 70 * degToServo;
+	servo[servoFR] = 70 * degToServo;
+	servo[servoBL] = 70 * degToServo;
+	servo[servoBR] = 70 * degToServo;
 	wait1Msec(200);
 
-	while(nMotorEncoder[motorFR] < (1440 * 5))
+	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
+
+	// go forward until there's space to get onto ramp
+	while(nMotorEncoder[motorFR] < (1440 * 4))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);
@@ -127,8 +242,24 @@ task main()
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
 
-	while(true)
+	// turn servos sideways
+	servo[servoFL] = 0;
+	servo[servoFR] = StallCode(motorFR, 0);
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
+	wait1Msec(200);
+
+	// go onto ramp
+	while(nMotorEncoder[motorFR] > (1440 * 1))
 	{
-		servo[servoWrist] = 255;
+		motor[motorFL] = -100;
+		motor[motorFR] = StallCode(motorFR, -100);
+		motor[motorBL] = -100;
+		motor[motorBR] = -100;
 	}
-}//Nicco: sometimes in the middle ofthenight, when no one can hear me ilike to pretend im a whale and i like to splash all around in my sheets while screeming at the top ofmy longs i scream like awhale.i alsolike pretending likeina puppy or cat andrandomly start climbing onto tables and laps.dont judge me.
+	// stop motors
+	motor[motorFL] = 0;
+	motor[motorFR] = StallCode(motorFR, 0);
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+}
