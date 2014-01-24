@@ -240,7 +240,10 @@ task main()
 				slowMultArm = 1; // don't do slow mode
 			}
 
-			motor[motorArm]= StallCode(motorArm, -joystick.joy2_y1 * slowMultArm);
+			if((nMotorEncoder[motorArm] <= 0) && (nMotorEncoder[motorArm] > -6000))
+			{
+				motor[motorArm]= StallCode(motorArm, -joystick.joy2_y1 * slowMultArm);
+			}
 		}
 		else
 		{
