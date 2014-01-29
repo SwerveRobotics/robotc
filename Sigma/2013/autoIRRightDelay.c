@@ -121,10 +121,10 @@ task main()
 	int encLast;
 	while(SensorValue(sensorIR) != 4) // go sideways until IR beacon
 	{
-		motor[motorFL] = 50;
-		motor[motorFR] = StallCode(motorFR, 50);
-		motor[motorBL] = 50;
-		motor[motorBR] = 50;
+		motor[motorFL] = -50;
+		motor[motorFR] = StallCode(motorFR, -50);
+		motor[motorBL] = -50;
+		motor[motorBR] = -50;
 		encLast = nMotorEncoder[motorFR];
 	}
 	// stop motors
@@ -133,14 +133,14 @@ task main()
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
 
-	if (nMotorEncoder[motorFR] > (1440 * 2))
+	if (nMotorEncoder[motorFR] < (1440 * -2))
 	{
-		while(nMotorEncoder[motorFR] > (encLast - 1440*0.25))
+		while(nMotorEncoder[motorFR] < (encLast + 1440*0.25))
 		{
-		motor[motorFL] = -100;
-		motor[motorFR] = StallCode(motorFR, -100);
-		motor[motorBL] = -100;
-		motor[motorBR] = -100;
+		motor[motorFL] = 100;
+		motor[motorFR] = StallCode(motorFR, 100);
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
 		}
 		// stop motors
 		motor[motorFL] = 0;
@@ -162,12 +162,12 @@ task main()
 	wait1Msec(1500);
 
 	//int encLast;
-	while(nMotorEncoder[motorFR] < (1440 * 4)) // go sideways until there's space to move around the ramp
+	while(nMotorEncoder[motorFR] > (1440 * -4)) // go sideways until there's space to move around the ramp
 	{
-		motor[motorFL] = 100;
-		motor[motorFR] = StallCode(motorFR, 100);
-		motor[motorBL] = 100;
-		motor[motorBR] = 100;
+		motor[motorFL] = -100;
+		motor[motorFR] = StallCode(motorFR, -100);
+		motor[motorBL] = -100;
+		motor[motorBR] = -100;
 		//encLast = nMotorEncoder[motorFR];
 	}
 	// stop motors
@@ -184,16 +184,16 @@ task main()
 	}*/
 
 	// turn servos
-	servo[servoFL] = 70 * degToServo;
-	servo[servoFR] = 70 * degToServo;
-	servo[servoBL] = 70 * degToServo;
-	servo[servoBR] = 70 * degToServo;
-	wait1Msec(200);
+	servo[servoFL] = 120 * degToServo;
+	servo[servoFR] = 120 * degToServo;
+	servo[servoBL] = 120 * degToServo;
+	servo[servoBR] = 120 * degToServo;
+	wait1Msec(500);
 
 	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
 
 	// go forward until there's space to get onto ramp
-	while(nMotorEncoder[motorFR] < (1440 * 4))
+	while(nMotorEncoder[motorFR] < (1440 * 3.5))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);
@@ -214,12 +214,12 @@ task main()
 	wait1Msec(200);
 
 	// go onto ramp
-	while(nMotorEncoder[motorFR] > (1440 * 1))
+	while(nMotorEncoder[motorFR] < (1440 * 8))
 	{
-		motor[motorFL] = -100;
-		motor[motorFR] = StallCode(motorFR, -100);
-		motor[motorBL] = -100;
-		motor[motorBR] = -100;
+		motor[motorFL] = 100;
+		motor[motorFR] = StallCode(motorFR, 100);
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
 	}
 	// stop motors
 	motor[motorFL] = 0;
