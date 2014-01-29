@@ -114,12 +114,13 @@ task main()
 	servo[servoBL] = 90 * degToServo;
 	servo[servoBR] = 90 * degToServo;
 
+	ClearTimer(T1);
+	nMotorEncoder[motorFR] = 0;
+	nMotorEncoder[motorArm] = 0;
+
 	while (true) // infinite loop
 	{
 		waitForStart();
-		ClearTimer(T1);
-		nMotorEncoder[motorFR] = 0;
-		nMotorEncoder[motorArm] = 0;
 		getJoystickSettings(joystick); // find joystick values
 
 		pos = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2)); // get servo degrees based on right joystick x and y values
@@ -240,10 +241,31 @@ task main()
 				slowMultArm = 1; // don't do slow mode
 			}
 
-			if((nMotorEncoder[motorArm] <= 0) && (nMotorEncoder[motorArm] > -6000))
+			/*if((nMotorEncoder[motorArm] <= 0) && (nMotorEncoder[motorArm] > -3000))
 			{
 				motor[motorArm]= StallCode(motorArm, -joystick.joy2_y1 * slowMultArm);
+			}*/
+			/*int armPower = -joystick.joy2_y1 * slowMultArm;
+
+			if((nMotorEncoder[motorArm] <= 0) && (armPower > 0))
+			{
+				motor[motorArm]= StallCode(motorArm, armPower);
 			}
+			else if((nMotorEncoder[motorArm] > -3000) && (armPower < 0))
+			{
+				motor[motorArm]= StallCode(motorArm, armPower);
+			}*/
+
+			int armPower = -joystick.joy2_y1 * slowMultArm;
+
+			if(((nMotorEncoder[motorArm] <= 0) && (armPower > 0)) || ((nMotorEncoder[motorArm] > -7000) && (armPower < 0)))
+			{
+				motor[motorArm]= StallCode(motorArm, armPower);
+			}
+			/*else
+			{
+				motor[motorArm]= StallCode(motorArm, 0);
+			}*/
 		}
 		else
 		{
@@ -289,11 +311,11 @@ task main()
 		// use dpad on second controller to control lifter
     if(joystick.joy2_TopHat == 0) // if up on the dpad on controller 2 is pressed
     {
-        motor[motorLifter] = StallCode(motorLifter, 100);
+      motor[motorLifter] = 100;
     }
-    else if(joystick.joy2_TopHat == 4) // if down on the dpad on controller 2 is pressed
+    else
     {
-        motor[motorLifter] = StallCode(motorLifter, -100);
-    }
+    	motor[motorLifter] = 0;
+  	}
 	}
 }
