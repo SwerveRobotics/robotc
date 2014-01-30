@@ -9,7 +9,7 @@
 #pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     motorFlag,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S3_C2_1,     motorLifter,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S3_C2_1,     motorLifter,   tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S3_C2_2,     motorK,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoBR,              tServoStandard)
@@ -56,6 +56,9 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 			break;
 		case motorArm:
 			motorIndex = 1;
+			break;
+		case motorLifter:
+			motorIndex = 2;
 			break;
 		default:
 			break;
@@ -163,7 +166,7 @@ task main()
 			motor[motorBL] = 0;
 			motor[motorBR] = 0;
 		}
-		else if (joystick.joy1_y2 > 0 && joystick.joy1_x2 > 0) // quadrant 1
+		else if (joystick.joy1_y2 >= 0 && joystick.joy1_x2 >= 0) // quadrant 1
 		{
 			servoPos = (int)((pos) * degToServo);
 
@@ -174,12 +177,13 @@ task main()
 			wait1Msec(3*abs(servoPosLast - servoPos));
 			servoPosLast = servoPos;
 
+			motorPower = StallCode(motorFR, motorPower);
 			motor[motorFL] = motorPower;
-			motor[motorFR] = StallCode(motorFR, motorPower);
+			motor[motorFR] = motorPower;
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
 		}
-		else if (joystick.joy1_y2 > 0 && joystick.joy1_x2 < 0) // quadrant 2
+		else if (joystick.joy1_y2 >= 0 && joystick.joy1_x2 <= 0) // quadrant 2
 		{
 			servoPos = (int)((pos) * degToServo);
 
@@ -190,12 +194,13 @@ task main()
 			wait1Msec(3*abs(servoPosLast - servoPos));
 			servoPosLast = servoPos;
 
+			motorPower = StallCode(motorFR, motorPower);
 			motor[motorFL] = motorPower;
-			motor[motorFR] = StallCode(motorFR, motorPower);
+			motor[motorFR] = motorPower;
 			motor[motorBL] = motorPower;
 			motor[motorBR] = motorPower;
 		}
-		else if (joystick.joy1_y2 < 0 && joystick.joy1_x2 < 0) // quadrant 3
+		else if (joystick.joy1_y2 <= 0 && joystick.joy1_x2 <= 0) // quadrant 3
 		{
 			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
@@ -207,12 +212,13 @@ task main()
 			wait1Msec(3*abs(servoPosLast - servoPos));
 			servoPosLast = servoPos;
 
+			motorPower = StallCode(motorFR, motorPower);
 			motor[motorFL] = motorPower * -1;
-			motor[motorFR] = StallCode(motorFR, motorPower * -1);
+			motor[motorFR] = motorPower * -1;
 			motor[motorBL] = motorPower * -1;
 			motor[motorBR] = motorPower * -1;
 		}
-		else if (joystick.joy1_y2 < 0 && joystick.joy1_x2 > 0) // quadrant 4
+		else if (joystick.joy1_y2 <= 0 && joystick.joy1_x2 >= 0) // quadrant 4
 		{
 			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
 			servoPos = (int)((pos) * degToServo);
@@ -224,8 +230,9 @@ task main()
 			wait1Msec(3*abs(servoPosLast - servoPos));
 			servoPosLast = servoPos;
 
+			motorPower = StallCode(motorFR, motorPower);
 			motor[motorFL] = motorPower * -1;
-			motor[motorFR] = StallCode(motorFR, motorPower * -1);
+			motor[motorFR] = motorPower * -1;
 			motor[motorBL] = motorPower * -1;
 			motor[motorBR] = motorPower * -1;
 		}
@@ -309,13 +316,13 @@ task main()
 		}
 
 		// use dpad on second controller to control lifter
-    if(joystick.joy2_TopHat == 0) // if up on the dpad on controller 2 is pressed
+    if(joy2Btn(4))
     {
-      motor[motorLifter] = 100;
+      motor[motorLifter] = StallCode(motorLifter, 100);
     }
     else
     {
-    	motor[motorLifter] = 0;
+    	motor[motorLifter] = StallCode(motorLifter, 0);
   	}
 	}
 }
