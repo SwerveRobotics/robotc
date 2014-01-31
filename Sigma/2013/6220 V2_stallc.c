@@ -284,6 +284,11 @@ task main()
 			servo[servoWrist] = 255 - (joystick.joy2_y2 + 128); // wrist servo positions based on right joystick
 			servoLast = 255 - (joystick.joy2_y2 + 128);
 		}
+		else if(joy2Btn(2))
+		{
+			int posHorz = -1 * nMotorEncoder[motorArm] / (7000.0/255.0);
+			servo[servoWrist] = posHorz;
+		}
 		else
 		{
 			servo[servoWrist] = servoLast; // set servo position to last servo position
