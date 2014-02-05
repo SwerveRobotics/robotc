@@ -125,6 +125,7 @@ task main()
 	ClearTimer(T1);
 	nMotorEncoder[motorFR] = 0;
 	nMotorEncoder[motorArm] = 0;
+	nMotorEncoder[motorLifter] = 0;
 
 	while (true) // infinite loop
 	{
@@ -270,11 +271,19 @@ task main()
 
 			int armPower = -joystick.joy2_y1 * slowMultArm;
 
-			if(((nMotorEncoder[motorArm] < 0) && (armPower > 0)) || ((nMotorEncoder[motorArm] > -7000) && (armPower < 0)))
+			if(nMotorEncoder[motorArm] > 0 && armPower > 0)
+			{
+				motor[motorArm] = 0;
+			}
+			/*else if(nMotorEncoder[motorArm] < -7000)
+			{
+				motor[motorArm] = 0;
+			}*/
+			else if(((nMotorEncoder[motorArm] <= 0) && (armPower > 0)) || ((nMotorEncoder[motorArm] > -7000) && (armPower < 0)))
 			{
 				motor[motorArm]= StallCode(motorArm, armPower);
 			}
-			else if((nMotorEncoder[motorArm] == 0) && (armPower > 0))
+			/*else if((nMotorEncoder[motorArm] == 0) && (armPower > 0))
 			{
 				motor[motorArm]= StallCode(motorArm, armPower);
 			}
@@ -321,6 +330,7 @@ task main()
 		{
 			while(USreadDist(sonarLeft) > 5) // drive backwards until left side is 5 cm away from wall
 			{
+				writeDebugStreamLine("%d", USreadDist(sonarLeft));
 				servo[servoFL] = 0;
 				servo[servoFR] = 0;
 				servo[servoBL] = 0;
@@ -331,6 +341,8 @@ task main()
 				motor[motorFR] = StallCode(motorFR, 50);
 				motor[motorBL] = 50;
 				motor[motorBR] = 50;
+
+
 			}
 			while(USreadDist(sonarRight) > 5) // drive backwards until right side is 5 cm away from wall
 			{
@@ -345,6 +357,7 @@ task main()
 				motor[motorBL] = -50;
 				motor[motorBR] = -50;
 			}
+
 		}
 
 		if(joy2Btn(1) || joy1Btn(1))//both joy's
