@@ -36,7 +36,7 @@ float slowMult = 1; // slow mode multiplier
 float slowMultArm = 1; //slow mode multiplier for arm
 int deadZone = 15;
 float degToServo = (255.0/190.0); // converts degrees into servo values
-int pos; // angle in degrees based on right joystick
+int posSwerve; // angle in degrees based on right joystick
 float dist; // motor power based on right joystick
 int servoPos; // servo values based on pos
 int servoPosLast;
@@ -132,11 +132,8 @@ task main()
 		waitForStart();
 		getJoystickSettings(joystick); // find joystick values
 
-		pos = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2)); // get servo degrees based on right joystick x and y values
-		/*if(joystick.joy1_x2 == 0)
-		{
-			pos = 0;
-		}*/
+		posSwerve = (int)radiansToDegrees(atan2(joystick.joy1_y2, joystick.joy1_x2)); // get servo degrees based on right joystick x and y values
+
 		dist = sqrt(joystick.joy1_y2 * joystick.joy1_y2 + joystick.joy1_x2 * joystick.joy1_x2); // use distance formula to get motor powers based on right joystick x and y values
 
 		// slow mode
@@ -174,7 +171,7 @@ task main()
 		}
 		else if (joystick.joy1_y2 >= 0 && joystick.joy1_x2 >= 0) // quadrant 1
 		{
-			servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((posSwerve) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -191,7 +188,7 @@ task main()
 		}
 		else if (joystick.joy1_y2 >= 0 && joystick.joy1_x2 <= 0) // quadrant 2
 		{
-			servoPos = (int)((pos) * degToServo);
+			servoPos = (int)((posSwerve) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -208,8 +205,8 @@ task main()
 		}
 		else if (joystick.joy1_y2 <= 0 && joystick.joy1_x2 <= 0) // quadrant 3
 		{
-			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
-			servoPos = (int)((pos) * degToServo);
+			posSwerve = posSwerve - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
+			servoPos = (int)((posSwerve) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -226,8 +223,8 @@ task main()
 		}
 		else if (joystick.joy1_y2 <= 0 && joystick.joy1_x2 >= 0) // quadrant 4
 		{
-			pos = pos - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
-			servoPos = (int)((pos) * degToServo);
+			posSwerve = posSwerve - 180; // change degrees to numbers between 0 and 180 because we're not using CR servos
+			servoPos = (int)((posSwerve) * degToServo);
 
 			servo[servoFL] = servoPos;
 			servo[servoFR] = servoPos;
@@ -254,43 +251,17 @@ task main()
 				slowMultArm = 1; // don't do slow mode
 			}
 
-			/*if((nMotorEncoder[motorArm] <= 0) && (nMotorEncoder[motorArm] > -3000))
-			{
-				motor[motorArm]= StallCode(motorArm, -joystick.joy2_y1 * slowMultArm);
-			}*/
-			/*int armPower = -joystick.joy2_y1 * slowMultArm;
-
-			if((nMotorEncoder[motorArm] <= 0) && (armPower > 0))
-			{
-				motor[motorArm]= StallCode(motorArm, armPower);
-			}
-			else if((nMotorEncoder[motorArm] > -3000) && (armPower < 0))
-			{
-				motor[motorArm]= StallCode(motorArm, armPower);
-			}*/
-
 			int armPower = -joystick.joy2_y1 * slowMultArm;
 
 			if(nMotorEncoder[motorArm] > 0 && armPower > 0)
 			{
 				motor[motorArm] = 0;
 			}
-			/*else if(nMotorEncoder[motorArm] < -7000)
-			{
-				motor[motorArm] = 0;
-			}*/
+
 			else if(((nMotorEncoder[motorArm] <= 0) && (armPower > 0)) || ((nMotorEncoder[motorArm] > -7000) && (armPower < 0)))
 			{
 				motor[motorArm]= StallCode(motorArm, armPower);
 			}
-			/*else if((nMotorEncoder[motorArm] == 0) && (armPower > 0))
-			{
-				motor[motorArm]= StallCode(motorArm, armPower);
-			}
-			/*else
-			{
-				motor[motorArm]= StallCode(motorArm, 0);
-			}*/
 		}
 		else
 		{
