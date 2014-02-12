@@ -274,8 +274,9 @@ task main()
 
 		if(joy2Btn(8)) // right trigger
 		{
-			servo[servoWrist] = 255 - (joystick.joy2_y2 + 128); // wrist servo positions based on right joystick
-			servoLast = 255 - (joystick.joy2_y2 + 128);
+			servoChangeRate[servoWrist] = 2;
+			servo[servoWrist] = (joystick.joy2_y2 + 128); // wrist servo positions based on right joystick
+			servoLast = (joystick.joy2_y2 + 128);
 		}
 		else if(joy2Btn(2))
 		{
