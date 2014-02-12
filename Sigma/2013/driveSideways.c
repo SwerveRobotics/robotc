@@ -109,10 +109,10 @@ task main()
 
 	while(nMotorEncoder[motorFR] < (1440 * 4.5))
 	{
-		motor[motorFL] = 100;
-		motor[motorFR] = StallCode(motorFR, 100);
-		motor[motorBL] = 100;
-		motor[motorBR] = 100;
+		motor[motorFL] = 50;
+		motor[motorFR] = StallCode(motorFR, 50);
+		motor[motorBL] = 50;
+		motor[motorBR] = 50;
 	}
 	// stop motors
 	motor[motorFL] = 0;

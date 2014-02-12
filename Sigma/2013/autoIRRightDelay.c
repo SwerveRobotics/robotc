@@ -133,21 +133,22 @@ task main()
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
 
-	if (nMotorEncoder[motorFR] < (1440 * -2))
+	wait1Msec(500);
+	/*if (nMotorEncoder[motorFR] < (1440 * -2))
 	{
 		while(nMotorEncoder[motorFR] < (encLast + 1440*0.25))
 		{
-		motor[motorFL] = 100;
-		motor[motorFR] = StallCode(motorFR, 100);
-		motor[motorBL] = 100;
-		motor[motorBR] = 100;
+		motor[motorFL] = 50;
+		motor[motorFR] = StallCode(motorFR, 50);
+		motor[motorBL] = 50;
+		motor[motorBR] = 50;
 		}
 		// stop motors
 		motor[motorFL] = 0;
 		motor[motorFR] = StallCode(motorFR, 0);
 		motor[motorBL] = 0;
 		motor[motorBR] = 0;
-	}
+	}*/
 
 	// place cube with arm
 	while(nMotorEncoder[motorArm] > -3000){
@@ -161,14 +162,27 @@ task main()
 	motor[motorArm] = 0;
 	wait1Msec(1500);
 
-	//int encLast;
-	while(nMotorEncoder[motorFR] > (1440 * -4)) // go sideways until there's space to move around the ramp
+	if(nMotorEncoder[motorFR] > (1440 * -3))
 	{
+		while(nMotorEncoder[motorFR] > (1440 * -4.5)) // go sideways until there's space to move around the ramp
+		{
 		motor[motorFL] = -100;
 		motor[motorFR] = StallCode(motorFR, -100);
 		motor[motorBL] = -100;
 		motor[motorBR] = -100;
 		//encLast = nMotorEncoder[motorFR];
+		}
+	}
+	else
+	{
+		while(nMotorEncoder[motorFR] > (1440 * -4)) // go sideways until there's space to move around the ramp
+		{
+			motor[motorFL] = -100;
+			motor[motorFR] = StallCode(motorFR, -100);
+			motor[motorBL] = -100;
+			motor[motorBR] = -100;
+			//encLast = nMotorEncoder[motorFR];
+		}
 	}
 	// stop motors
 	motor[motorFL] = 0;
