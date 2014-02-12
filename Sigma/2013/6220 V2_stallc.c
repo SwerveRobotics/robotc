@@ -3,14 +3,14 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     motorFlag,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S3_C2_1,     motorLifter,   tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S3_C2_2,     motorK,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S3_C2_1,     motorG,        tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S3_C2_2,     motorLifter,   tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
@@ -352,11 +352,11 @@ task main()
 		// use dpad on second controller to control lifter
     if(joy2Btn(4))
     {
-      motor[motorLifter] = StallCode(motorLifter, 100);
+      motor[motorLifter] = 100;
     }
     else
     {
-    	motor[motorLifter] = StallCode(motorLifter, 0);
+    	motor[motorLifter] = 0;
   	}
 	}
 }
