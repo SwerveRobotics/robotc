@@ -161,7 +161,7 @@ task main()
 	wait1Msec(1500);
 
 	//int encLast;
-	while(nMotorEncoder[motorFR] > 0) // go sideways until there's space to move around the ramp
+	while(nMotorEncoder[motorFR] > 1000) // go backward sideways until there's space to move around the ramp
 	{
 		motor[motorFL] = -100;
 		motor[motorFR] = StallCode(motorFR, -100);
@@ -183,6 +183,27 @@ task main()
 	}*/
 
 	// turn servos
+	servo[servoFL] = 120 * degToServo;
+	servo[servoFR] = 120 * degToServo;
+	servo[servoBL] = 120 * degToServo;
+	servo[servoBR] = 120 * degToServo;
+	wait1Msec(500);
+
+	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
+
+	while(nMotorEncoder[motorFR] < 3000)
+	{
+		motor[motorFL] = 100;
+		motor[motorFR] = StallCode(motorFR, 100);
+		motor[motorBL] = 100;
+		motor[motorBR] = 100;
+	}
+	motor[motorFL] = 0;
+	motor[motorFR] = StallCode(motorFR, 0);
+	motor[motorBL] = 0;
+	motor[motorBR] = 0;
+
+	// turn servos
 	servo[servoFL] = 70 * degToServo;
 	servo[servoFR] = 70 * degToServo;
 	servo[servoBL] = 70 * degToServo;
@@ -192,7 +213,7 @@ task main()
 	nMotorEncoder[motorFR] = 0; // zero front left motor encoder
 
 	// go forward until there's space to get onto ramp
-	while(nMotorEncoder[motorFR] < (1440 * 4))
+	while(nMotorEncoder[motorFR] < (1440 * 2))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);
@@ -214,7 +235,7 @@ task main()
 
 	nMotorEncoder[motorFR] = 0;
 	// go onto ramp
-	while(nMotorEncoder[motorFR] < (1440 * 1))
+	while(nMotorEncoder[motorFR] < (1440 * 2.5))
 	{
 		motor[motorFL] = 100;
 		motor[motorFR] = StallCode(motorFR, 100);

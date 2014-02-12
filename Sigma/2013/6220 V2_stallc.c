@@ -3,7 +3,7 @@
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed)
@@ -46,9 +46,9 @@ long tooLong = 250;  // millisecond threshod for partial stall
 long sigMove = 100; // How many encoder ticks is a 'significant' movement
 
 //variables used for stall code need to be initialized
-int lastDirection[] = {0, 0, 0}; // Direction of last power -1 (reverse), 0 (stopped) or 1 (forward)
-long timeLastSigMove[] = {0, 0, 0}; // Time last significant move occurred
-long encLastSigMove[] = {0, 0, 0}; // Encoder reading at last significant move
+int lastDirection[] = {0, 0, 0, 0}; // Direction of last power -1 (reverse), 0 (stopped) or 1 (forward)
+long timeLastSigMove[] = {0, 0, 0, 0}; // Time last significant move occurred
+long encLastSigMove[] = {0, 0, 0, 0}; // Encoder reading at last significant move
 
 int StallCode(tMotor motorSentTo, int wantedPower)
 {
@@ -64,6 +64,9 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 			break;
 		case motorLifter:
 			motorIndex = 2;
+			break;
+		case motorBL:
+			motorIndex = 3;
 			break;
 		default:
 			break;
@@ -126,6 +129,7 @@ task main()
 	nMotorEncoder[motorFR] = 0;
 	nMotorEncoder[motorArm] = 0;
 	nMotorEncoder[motorLifter] = 0;
+	nMotorEncoder[motorBL] = 0;
 
 	while (true) // infinite loop
 	{
@@ -166,7 +170,7 @@ task main()
 		{
 			motor[motorFL] = 0;
 			motor[motorFR] = StallCode(motorFR, 0);
-			motor[motorBL] = 0;
+			motor[motorBL] = StallCode(motorBL, 0);
 			motor[motorBR] = 0;
 		}
 		else if (joystick.joy1_y2 >= 0 && joystick.joy1_x2 >= 0) // quadrant 1
