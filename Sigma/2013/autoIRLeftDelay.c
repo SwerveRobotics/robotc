@@ -96,56 +96,20 @@ task main()
 	// set wrist servo to starting position
 	servo[servoWrist] = 255;
 
-	// set servos
-	servo[servoFL] = 70 * degToServo;
-	servo[servoFR] = 70 * degToServo;
-	servo[servoBL] = 70 * degToServo;
-	servo[servoBR] = 70 * degToServo;
+	// set servos to go sideways
+	servo[servoFL] = 0;
+	servo[servoFR] = 0;
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
 
 	waitForStart();
 	ClearTimer(T1);
+	wait1Msec(10000);
 	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
 	nMotorEncoder[motorArm] = 0; // zero arm motor
 
 	// set wrist servo to starting position
 	servo[servoWrist] = 255;
-
-	while(nMotorEncoder[motorFR] < (1440 * 0.25))
-	{
-		motor[motorFL] = 50;
-		motor[motorFR] = StallCode(motorFR, 50);
-		motor[motorBL] = 50;
-		motor[motorBR] = 50;
-	}
-	// stop motors
-	motor[motorFL] = 0;
-	motor[motorFR] = StallCode(motorFR, 0);
-	motor[motorBL] = 0;
-	motor[motorBR] = 0;
-
-	// set servos
-	servo[servoFL] = 135 * degToServo;
-	servo[servoFR] = 135 * degToServo;
-	servo[servoBL] = 135 * degToServo;
-	servo[servoBR] = 135 * degToServo;
-	wait1Msec(700);
-
-	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
-
-	while(nMotorEncoder[motorFR] > (-1440 * 2))
-	{
-		motor[motorFL] = -50;
-		motor[motorFR] = StallCode(motorFR, -50);
-		motor[motorBL] = -50;
-		motor[motorBR] = -50;
-	}
-	// stop motors
-	motor[motorFL] = 0;
-	motor[motorFR] = StallCode(motorFR, 0);
-	motor[motorBL] = 0;
-	motor[motorBR] = 0;
-
-	nMotorEncoder[motorFR] = 0; // zero front right motor encoder
 
 	// set servos to go sideways
 	servo[servoFL] = 0;
