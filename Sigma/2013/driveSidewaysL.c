@@ -1,22 +1,20 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  HTMotor,  HTMotor)
-#pragma config(Hubs,  S3, HTServo,  HTMotor,  none,     none)
+#pragma config(Hubs,  S3, HTServo,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     sensorIR,       sensorHiTechnicIRSeeker1200)
 #pragma config(Sensor, S3,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C1_1,     motorBL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     motorFlag,     tmotorTetrix, openLoop)
-#pragma config(Motor,  mtr_S3_C2_1,     motorLifter,   tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S3_C2_2,     motorK,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S1_C2_1,    servoFR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    servoBR,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servoBL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_4,    servoFL,              tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_5,    servo5,               tServoNone)
-#pragma config(Servo,  srvo_S1_C2_6,    servoSweeper,         tServoContinuousRotation)
+#pragma config(Servo,  srvo_S1_C2_6,    servoRoller,          tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_1,    servoWrist,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_2,    servo8,               tServoNone)
 #pragma config(Servo,  srvo_S3_C1_3,    servo9,               tServoNone)
@@ -95,13 +93,6 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 
 task main()
 {
-	servo[servoWrist] = 255;
-	// set servos to default position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
-
 	waitForStart();
 	ClearTimer(T1);
 	nMotorEncoder[motorFR] = 0; // zero encoder
@@ -110,42 +101,22 @@ task main()
 	servo[servoWrist] = 255;
 
 	// set servos to default position
-	servo[servoFL] = 90 * degToServo;
-	servo[servoFR] = 90 * degToServo;
-	servo[servoBL] = 90 * degToServo;
-	servo[servoBR] = 90 * degToServo;
-	wait1Msec(200);
+	servo[servoFL] = 0;
+	servo[servoFR] = 0;
+	servo[servoBL] = 0;
+	servo[servoBR] = 0;
+	wait1Msec(750);
 
-	/*while(true)
+	while(nMotorEncoder[motorFR] < (1440 * 4.5))
 	{
-		motor[motorFL] = 100;
-		motor[motorFR] = StallCode(motorFR, 100);
-		motor[motorBL] = 100;
-		motor[motorBR] = 100;
-	}*/
-
-	while(nMotorEncoder[motorFR] < (1440 * 5))
-	{
-		motor[motorFL] = 100;
-		motor[motorFR] = StallCode(motorFR, 100);
-		motor[motorBL] = 100;
-		motor[motorBR] = 100;
+		motor[motorFL] = -50;
+		motor[motorFR] = StallCode(motorFR, -50);
+		motor[motorBL] = -50;
+		motor[motorBR] = -50;
 	}
-	/*while(nMotorEncoder[motorFR] > (1440 * -5))
-	{
-		motor[motorFL] = -100;
-		motor[motorFR] = StallCode(motorFR, -100);
-		motor[motorBL] = -100;
-		motor[motorBR] = -100;
-	}*/
 	// stop motors
 	motor[motorFL] = 0;
 	motor[motorFR] = StallCode(motorFR, 0);
 	motor[motorBL] = 0;
 	motor[motorBR] = 0;
-
-	while(true)
-	{
-		servo[servoWrist] = 255;
-	}
 }//Nicco: sometimes in the middle ofthenight, when no one can hear me ilike to pretend im a whale and i like to splash all around in my sheets while screeming at the top ofmy longs i scream like awhale.i alsolike pretending likeina puppy or cat andrandomly start climbing onto tables and laps.dont judge me.
