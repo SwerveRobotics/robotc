@@ -18,7 +18,7 @@
 int deadZone = 15;
 //int shootingSpeed = 100;
 
-long wayTooLong = 1000;  // millisecond threshold for absolute stall
+/*long wayTooLong = 1000;  // millisecond threshold for absolute stall
 long tooLong = 250;  // millisecond threshod for partial stall
 long sigMove = 100; // How many encoder ticks is a 'significant' movement
 
@@ -42,7 +42,7 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 		/*case flag:
 			motorIndex = 2;
 			break;*/
-		default:
+		/*default:
 			break;
 	}
 
@@ -83,7 +83,7 @@ int StallCode(tMotor motorSentTo, int wantedPower)
 		}
 
 	return wantedPower;	// Haven’t moved far enough yet to be significant but haven’t timed out yet
-}
+}*/
 
 //This is the slow mode function that allows you to use the slow mode. Slow mode is the mode that allows you to slow down the robot.
 void slowMode()
@@ -91,8 +91,8 @@ void slowMode()
 	//if the absolute value of joystick.joy1_y1 is greater than varible deadZone.
 	if (abs(joystick.joy1_y1) > deadZone)
 	{
-		//The left motor's value is equal to the value joystick.joy1_y1 divided by 5.
-		motor[Left] = StallCode(Left,(joystick.joy1_y1 / 4));
+		//The left motor's value is equal to the value of joystick.joy1_y1 divided by 4.
+		motor[Left] = joystick.joy1_y1 / 4;
 	}
 	//if the if statement above is not entered then
 	else
@@ -100,30 +100,20 @@ void slowMode()
 		//The left motor's value equals 0.
 		motor[Left] = 0;
 	}
-
+	//if the absolute value of joystick.joy1_y2 is greater than varible deadZone
 	if (abs(joystick.joy1_y2) > deadZone)
 	{
-		motor[Right] = StallCode(Right, (joystick.joy1_y2 / 4));
+		//The right motor's value is equal to the value of joystick.joy_y2 divided by 4
+		motor[Right] = joystick.joy1_y2 / 4;
 	}
 	else
 	{
+		//The right motor's value equals 0
 		motor[Right] = 0;
 	}
 }
 
-/*void flagSpinnerSlow()
-{
-if (joy2Btn(3) == 1)
-{
-motor[flag] = 100 / 4;
-}
-else if (joy2Btn(4) == 1)
-{
-motor[flag] = -100 / 4;
-}
-}*/
-
-//This is th secound task that splits the two joysticks into two tasks to help with efficency
+//This is th second task that splits the two joysticks into two tasks to help with efficency
 task Joystick2()
 {
 	while (true)
@@ -145,39 +135,26 @@ task Joystick2()
 
 		if (joystick.joy2_y1 > deadZone)
 		{
-			motor[sholder] = 80;
+			motor[sholder] = 40;
+		}
+		else if (joystick.joy2_y1 < -deadZone)
+		{
+			motor[sholder] = -40;
 		}
 		else
 		{
 			motor[sholder] = 0;
 		}
 
-		if (joystick.joy2_y1 < -deadZone)
-		{
-			motor[sholder] = -50;
-		}
-		else
-		{
-			motor[sholder] = 0;
-		}
+			if (abs(joystick.joy2_y2) > deadZone)
+			{
+				servo[wrist] = joystick.joy2_y2 + 128;
+			}
+			else
+			{
+				servo[wrist] = 128;
+			}
 
-		if (abs(joystick.joy2_y2) > deadZone)
-		{
-			servo[wrist] = joystick.joy2_y2 + 128;
-		}
-		else
-		{
-			servo[wrist] = 128;
-		}
-
-		/*if (joy2Btn(6) == 1)
-		{
-		flagSpinnerSlow();
-		}
-		else
-		{
-		motor[flag] = 0;
-		}*/
 
 		if (joystick.joy2_TopHat == 4)
 		{
@@ -187,20 +164,6 @@ task Joystick2()
 		{
 			servo[arm] = 40;
 		}
-
-		/*if (joy2Btn(7) == 1)
-		{
-			motor[launcher] = 100;
-		}
-		else
-		{
-			motor[launcher] = 0;
-		}
-
-		if (joy2Btn(1) == 1)
-		{
-			servo[rotater] += 1;
-		}*/
 	}
 }
 
@@ -215,30 +178,12 @@ task main()
 		if (joy1Btn(8) == 1)
 		{
 			slowMode();
-
-			/*if (abs(joystick.joy1_y1) > deadZone)
-			{
-			motor[Left] = joystick.joy1_y1 / 5;
-			}
-			else
-			{
-			motor[Left] = 0;
-			}
-
-			if (abs(joystick.joy1_y2) > deadZone)
-			{
-			motor[Right] = joystick.joy1_y2 / 5;
-			}
-			else
-			{
-			motor[Right] = 0;
-			}*/
 		}
 		else
 		{
 			if (abs(joystick.joy1_y1) > deadZone)
 			{
-				motor[Left] = StallCode(Left, (joystick.joy1_y1));
+				motor[Left] = joystick.joy1_y1;
 			}
 			else
 			{
@@ -247,76 +192,12 @@ task main()
 
 			if (abs(joystick.joy1_y2) > deadZone)
 			{
-				motor[Right] = StallCode(Right, (joystick.joy1_y2));
+				motor[Right] = joystick.joy1_y2;
 			}
 			else
 			{
 				motor[Right] = 0;
 			}
 		}
-
-		/*if (joy2Btn(7) == 1)
-		{
-		if (joystick.joy2_Buttons == 1)
-		{
-		motor[flag] = 100 / 2;
-		}
-		else if (joystick.joy2_Buttons == 2)
-		{
-		motor[flag] = -100 / 2;
-		}
-		else
-		{
-		motor[flag] = 0;
-		}
-		}
-		else
-		{
-		if (joystick.joy2_Buttons == 1)
-		{
-		motor[flag] = 100;
-		}
-		else if (joystick.joy2_Buttons == 2)
-		{
-		motor[flag] = -100;
-		}
-		else
-		{
-		motor[flag] = 0;
-		}
-		}
-
-		if (joystick.joy2_TopHat == 4)
-		{
-		servo[arm] = 127;
-		}
-		else if(joystick.joy2_TopHat == 0)
-		{
-		servo[arm] = -127;
-		}
-
-		/*float joyPos = 0;
-
-		joyPosY = joystick.joy2_y2;
-		joyPosX = joystick.joy2_x2;
-
-		/*if (joystick.joy2_TopHat == 4 && shootingSpeed > 0)
-		{
-		shootingSpeed -= 10;
-		}
-		else if (joystick.joy2_TopHat == 0 && shootingSpeed < 100
-		{
-		shootingSpeed += 10;
-		}
-		else
-		{
-
-		}
-
-		if (joy2Btn(1) == 1)
-		{
-		motor[shootingLeft] = shootingSpeed;
-		motor[shootingRight] = shootingSpeed;
-		}*/
 	}
 }
