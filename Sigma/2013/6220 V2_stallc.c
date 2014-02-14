@@ -7,7 +7,7 @@
 #pragma config(Motor,  mtr_S1_C1_2,     motorFL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     motorFR,       tmotorTetrix, PIDControl, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     motorBR,       tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C4_1,     motorArm,      tmotorTetrix, PIDControl, encoder)
 #pragma config(Motor,  mtr_S1_C4_2,     motorFlag,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S3_C2_1,     motorG,        tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S3_C2_2,     motorLifter,   tmotorTetrix, openLoop, encoder)
@@ -264,7 +264,14 @@ task main()
 
 			else if(((nMotorEncoder[motorArm] <= 0) && (armPower > 0)) || ((nMotorEncoder[motorArm] > -7000) && (armPower < 0)))
 			{
+				if(nMotorEncoder[motorArm] < -6000)
+				{
+					motor[motorArm]= StallCode(motorArm, armPower/2);
+				}
+				else
+				{
 				motor[motorArm]= StallCode(motorArm, armPower);
+				}
 			}
 		}
 		else
@@ -336,11 +343,11 @@ task main()
 
 		}
 
-		if(joy2Btn(1) || joy1Btn(1))//both joy's
+		if(joy2Btn(1))//both joy's
 		{
 			motor[motorFlag] = -100; // turn flag raiser
 		}
-		else if(joy2Btn(3) || joy1Btn(3))//both joy's
+		else if(joy2Btn(3))//both joy's
 		{
 			motor[motorFlag] = 100; // turn flag raiser
 		}
@@ -350,7 +357,7 @@ task main()
 		}
 
 		// use dpad on second controller to control lifter
-    if(joy2Btn(4))
+    if(joy1Btn(4) || joy1Btn(1) || joy2Btn(4))
     {
       motor[motorLifter] = 100;
     }
