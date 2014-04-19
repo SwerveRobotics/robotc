@@ -22,12 +22,93 @@ int distancetoIR;
 bool isbasketbasket4;
 int deadZone = 15;
 
+//start of stall code
+//------------
+//------------
+long wayTooLong = 1000;  // millisecond threshold for absolute stall
+long tooLong = 350;  // millisecond threshod for partial stall
+long sigMove = 100; // How many encoder ticks is a 'significant' movement
+
+//variables used for stall code need to be initialized
+int lastDirection[] = {0, 0, 0}; // Direction of last power -1 (reverse), 0 (stopped) or 1 (forward)
+long timeLastSigMove[] = {0, 0, 0}; // Time last significant move occurred
+long encLastSigMove[] = {0, 0, 0}; // Encoder reading at last significant move
+
+int StallCode(tMotor motorSentTo, int wantedPower)
+{
+	int motorIndex;  //index value for the arrays we are storing values in.
+	int direction = 0;
+	switch(motorSentTo) //which motor power is being sent to
+	{
+		case LeftMotor: // This is the name of one of the motors as referenced in the configuraiton.
+			motorIndex = 0;
+			break;
+		case RightMotor:
+			motorIndex = 1;
+			break;
+		/*case ForkLift:
+			motorIndex = 2;
+			break;*/
+		default:
+			break;
+	}
+
+	if (abs(wantedPower) < deadZone)  // Power below threshold, mark as stopped.
+		direction = 0;
+  else
+  	direction = (wantedPower < 0) ? -1 : 1;
+
+	if (direction == 0 || lastDirection[motorIndex] != direction)  // Stopped or changed direction.	Allow whatever power desired this time.
+		{
+    	lastDirection[motorIndex] = direction;
+			timeLastSigMove[motorIndex]	 = time1[T1];
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+
+			return wantedPower;
+		}
+
+ 	lastDirection[motorIndex] = direction;
+
+	if ( abs(encLastSigMove[motorIndex] - nMotorEncoder[motorSentTo]) > sigMove)  // Moved far enough to be considered significant, mark
+		{
+			timeLastSigMove[motorIndex]	= time1[T1];
+			encLastSigMove[motorIndex] = nMotorEncoder[motorSentTo];
+
+			return wantedPower;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > wayTooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(650,4);
+			return 0;
+		}
+
+	if ( (time1[T1] - timeLastSigMove[motorIndex]) > tooLong )  // Time since last significant move too long, stalled
+		{
+			PlayTone(365,4);
+			return wantedPower / 2;
+		}
+
+	return wantedPower;	// Haven’t moved far enough yet to be significant but haven’t timed out yet
+}
+//end of stall code-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+
 task main()
 {
 	waitForStart();
-
-		motor[motorH] = 0;
-	motor[motorI] = 0;
 
 	nMotorEncoder[LeftMotor] = 0;
 	nMotorEncoder[RightMotor] = 0;
@@ -110,10 +191,10 @@ task main()
 
 
 		//drive onto ramp
-		while (nMotorEncoder[LeftMotor] < 3400)
+		while (nMotorEncoder[LeftMotor] < 3700)
 		{
-			motor[LeftMotor] =  100;
-			motor[RightMotor] = 100;
+			motor[LeftMotor] = StallCode(LeftMotor, (100));
+			motor[RightMotor] = StallCode(RightMotor, (100));
 		}
 		motor[LeftMotor] =  0;
 		motor[RightMotor] = 0;
@@ -190,8 +271,8 @@ task main()
 		//drive onto ramp
 		while (nMotorEncoder[LeftMotor] < 3700)
 		{
-			motor[LeftMotor] =  100;
-			motor[RightMotor] = 100;
+			motor[LeftMotor] = StallCode(LeftMotor, (100));
+			motor[RightMotor] = StallCode(RightMotor, (100));
 		}
 		motor[LeftMotor] =  0;
 		motor[RightMotor] = 0;
@@ -276,8 +357,8 @@ task main()
 		//drive onto ramp
 		while (nMotorEncoder[LeftMotor] < 3700)
 		{
-			motor[LeftMotor] =  100;
-			motor[RightMotor] = 100;
+			motor[LeftMotor] = StallCode(LeftMotor, (100));
+			motor[RightMotor] = StallCode(RightMotor, (100));
 		}
 		motor[LeftMotor] =  0;
 		motor[RightMotor] = 0;
@@ -349,10 +430,16 @@ task main()
 		nMotorEncoder[LeftMotor] = 0;
 		nMotorEncoder[RightMotor] = 0;
 
+			//resets flipper
+		motor[LeftMotor] = 0;
+			nMotorEncoder[LeftMotor] = 0;
+		servo[Flipper] = 75;
+
+		//drives towards ramp
 		while (nMotorEncoder[LeftMotor] < 3700)
 		{
-			motor[LeftMotor] =  100;
-			motor[RightMotor] = 100;
+			motor[LeftMotor] = StallCode(LeftMotor, (100));
+			motor[RightMotor] = StallCode(RightMotor, (100));
 		}
 		motor[LeftMotor] =  0;
 		motor[RightMotor] = 0;
