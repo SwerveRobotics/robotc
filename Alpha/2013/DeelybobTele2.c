@@ -5,8 +5,8 @@
 #pragma config(Sensor, S3,     seeker,         sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     Right,         tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     Right2,        tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_1,     Left,          tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     Left2,         tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     Left,          tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C2_2,     Left2,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     Hook,          tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C3_2,     flag,          tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S2_C1_1,    gearshifter,          tServoStandard)
@@ -23,6 +23,7 @@ int deadZone = 15;
 
 
 
+
 //This is the slow mode function that allows you to use the slow mode. Slow mode is the mode that allows you to slow down the robot.
 void slowMode()
 {
@@ -30,8 +31,8 @@ void slowMode()
 	if (abs(joystick.joy1_y1) > deadZone)
 	{
 		//The left motor's value is equal to the value joystick.joy1_y1 divided by 4.
-		motor[Right] = -joystick.joy1_y1 / 4;
-		motor[Right2] = joystick.joy1_y1 / 4;
+		motor[Right] = joystick.joy1_y1 / 3;
+		motor[Right2] = joystick.joy1_y1 / 3;
 	}
 	//if the if statement above is not entered then
 	else
@@ -43,8 +44,8 @@ void slowMode()
 	//This is the same code as above but for the right side
 	if (abs(joystick.joy1_y2) > deadZone)
 	{
-		motor[Left] = -joystick.joy1_y2 / 4;
-		motor[Left2] = joystick.joy1_y2 / 4;
+		motor[Left] = joystick.joy1_y2 / 3;
+		motor[Left2] = -joystick.joy1_y2 / 3;
 	}
 	else
 	{
@@ -53,7 +54,7 @@ void slowMode()
 	}
 }
 
-//This is the secound task that splits the two joysticks into two tasks to help with efficency
+//This is the second task that splits the two joysticks into two tasks to help with efficency
 task Joystick2()
 {
 	while (true)
