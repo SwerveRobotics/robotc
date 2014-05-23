@@ -69,7 +69,7 @@ task main()
 //			servo[servoBL] = 135 * degToServo;
 //			servo[servoBR] = 45 * degToServo;
 		}
-		else if (dist < deadZone) // don't move
+		else if (dist < deadZone) // don't move  "Wouldn't it make sense not to use the distance formula for deadzone?" -Sig
 		{
 			motor[motorFL] = 0;
 			motor[motorFR] = 0;
