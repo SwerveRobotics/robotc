@@ -12,7 +12,7 @@ task controller()
 	{
 		getJoystickSettings(joystick);
 
-		SetSpeed(joystick.joy1_y1, deadZone);
+		SetSpeedIfAboveDeadZone(joystick.joy1_y1, deadZone);
 	}
 }
 

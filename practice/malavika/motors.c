@@ -1,7 +1,7 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-void SetSpeed(int speed, int deadZone)
+void SetSpeedIfAboveDeadZone(int speed, int deadZone)
 {
 	if(abs(speed) > deadZone)
 	{

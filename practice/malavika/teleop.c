@@ -6,9 +6,11 @@
 //#pragma debuggerWindows("joystickSimple");
 
 #include "controller.c"
+#include "PID.c"
 
 task main()
 {
+	StartTask(PID);
 	StartTask(controller);
 	while(true)
 	{
