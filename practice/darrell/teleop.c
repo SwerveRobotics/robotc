@@ -7,11 +7,11 @@
 //#pragma debuggerWindows("joystickSimple");
 
 #include "JoystickDriver.c"
-#include "controllers.c"
+#include "drive_tank.c"
 
 task main()
 {
-	StartTask(MotorController);
+	StartTask(Drive);
 
 	while(true)
 	{
