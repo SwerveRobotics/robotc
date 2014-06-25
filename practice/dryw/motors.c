@@ -1,16 +1,25 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-void MotorPower(int speed)
+void LeftMotorPower(int leftSpeed)
+void RightMotorPower(int rightSpeed)
 {
-	if(abs(speed) > 10)
-		{
-		 	motor[single] = speed;
-		}
-		else
-		{
-			motor[single] = 0;
-		}
-}
+	if(abs(leftSpeed) > 15)
+	{
+		motor[Left] = leftSpeed;
+	}
+	else
+	{
+		motor[Left] = 0;
+	}
 
+	if(abs(rightSpeed) > 15)
+	{
+		motor[Right] = rightSpeed;
+	}
+	else
+	{
+		motor[Right] = 0;
+	}
+}
 #endif
