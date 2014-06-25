@@ -3,14 +3,11 @@
 
 #include "JoystickDriver.c"
 
-task controller()
+task Controller()
 {
 	while(true)
 	{
 		getJoystickSettings(joystick);
-
- 		LeftMotorPower(joystick.joy1_y1);
- 		RightMototPower(joystick.joy1_y2);
 	}
 }
 
