@@ -5,7 +5,7 @@
 //#pragma debuggerWindows("Servos");
 //#pragma debuggerWindows("joystickSimple");
 
-#include "../Library/motors/motors.c"
+#include "motors.c"
 #include "JoystickDriver.c"
 
 int retVal = 50;
