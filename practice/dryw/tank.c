@@ -5,8 +5,8 @@ task Drive()
 {
 	while(true)
 	{
-	LeftMotorPower(joystick.joy1_y1);
-	RightMotorPower(joystick.joy1_y2);
+		LeftMotorPower(joystick.joy1_y1);
+		RightMotorPower(joystick.joy1_y2);
 	}
 }
 #endif

@@ -9,14 +9,15 @@
 #include "motorsRight.c"
 #include "motorsLeft.c"
 #include "controller.c"
-#include "tank.c"
-//#include "arcade.c"
+//#include "tank.c"
+#include "arcade.c"
+
 //Un-comment whatever drive you want to use and comment out the other one (either tank.c or arcade.c).
 
 task main()
 {
-StartTask(Controller);
-StartTask(Drive);
+	StartTask(Controller);
+	StartTask(Drive);
 
 	while(true)
 	{
