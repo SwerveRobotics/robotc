@@ -9,7 +9,8 @@ task controller()
 	{
 		getJoystickSettings(joystick);
 
- 		MotorPower(joystick.joy1_y1);
+ 		LeftMotorPower(joystick.joy1_y1);
+ 		RightMototPower(joystick.joy1_y2);
 	}
 }
 
