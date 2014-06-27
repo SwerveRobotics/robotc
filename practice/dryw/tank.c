@@ -5,8 +5,24 @@ task Drive()
 {
 	while(true)
 	{
-		LeftMotorPower(joystick.joy1_y1);
-		RightMotorPower(joystick.joy1_y2);
+		int deadZone = 15;
+
+		if(joystick.joy1_y1 > deadZone)
+		{
+			LeftMotorPower(joystick.joy1_y1);
+		}
+		else
+		{
+			LeftMotorPower(0);
+		}
+		if(joystick.joy1_y2 > deadZone)
+		{
+			RightMotorPower(joystick.joy1_y2);
+		}
+		else
+		{
+			RightMotorPower(0);
+		}
 	}
 }
 #endif
