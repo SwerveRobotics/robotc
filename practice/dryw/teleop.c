@@ -8,19 +8,19 @@
 
 #include "motors.c"
 #include "controller.c"
-#include "tank.c"
-//#include "arcade.c"
+//#include "tank.c"
+#include "arcade.c"
 
 //Un-comment whatever drive you want to use and comment out the other one (either tank.c or arcade.c).
 
 task main()
 {
-	StartTask(Controller);
-	StartTask(Drive);
+	StartTask(Controller); //Starts task of getJoystickSettings
+	StartTask(Drive); //starts task of what drive system was chosen above
 
 	while(true)
 	{
-
+		//This is an empty while loop to keep the program running
 	}
 }
 /*
