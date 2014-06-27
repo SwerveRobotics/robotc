@@ -7,9 +7,17 @@ task Drive()
 {
 	while(true)
 	{
+		int deadZone = 15;
+
 		quad = Quadrant();
 
-		if(quad == 1)
+		if(joystick.joy1_y1 < deadZone && joystick.joy1_x1 < deadZone)
+		{
+			LeftMotorPower(0);
+			RightMotorPower(0);
+		}
+
+		else if(quad == 1)
 		{
 			LeftMotorPower(joystick.joy1_y1);
 			RightMotorPower(abs(joystick.joy1_x1 - 100));
