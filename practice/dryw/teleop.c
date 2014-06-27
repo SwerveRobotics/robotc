@@ -6,11 +6,10 @@
 //#pragma debuggerWindows("Servos");
 //#pragma debuggerWindows("joystickSimple");
 
-#include "motorsRight.c"
-#include "motorsLeft.c"
+#include "motors.c"
 #include "controller.c"
-//#include "tank.c"
-#include "arcade.c"
+#include "tank.c"
+//#include "arcade.c"
 
 //Un-comment whatever drive you want to use and comment out the other one (either tank.c or arcade.c).
 

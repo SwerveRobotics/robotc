@@ -1,24 +1,26 @@
 #ifndef QUADRANT_C
 #define QUADRANT_C
 
-int Quadrant(int Quad)
+int quad;
+
+int Quadrant()
 {
 	if(joystick.joy1_x1 > 0 && joystick.joy1_y1 > 0)
 	{
-		Quad = 1;
+		quad = 1;
 	}
 	if(joystick.joy1_x1 < 0 && joystick.joy1_y1 > 0)
 	{
-		Quad = 2;
+		quad = 2;
 	}
 	if(joystick.joy1_x1 < 0 && joystick.joy1_y1 < 0)
 	{
-		Quad = 3;
+		quad = 3;
 	}
 	if(joystick.joy1_x1 > 0 && joystick.joy1_y1 < 0)
 	{
-		Quad = 4;
+		quad = 4;
 	}
-	return Quad;
+	return quad;
 }
 #endif

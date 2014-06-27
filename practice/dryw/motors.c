@@ -12,4 +12,16 @@ void LeftMotorPower(int leftSpeed)
 		motor[mtrL] = 0;
 	}
 }
+
+void RightMotorPower(int rightSpeed)
+{
+	if(abs(rightSpeed) > 15)
+	{
+		motor[mtrR] = rightSpeed;
+	}
+	else
+	{
+		motor[mtrR] = 0;
+	}
+}
 #endif
