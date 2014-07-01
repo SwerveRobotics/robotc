@@ -4,22 +4,22 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-void RequestLeftMotorSpeed(int speed = 0)
+void RequestLeftMotorSpeed(int speed)
 {
 	leftMotorRequestedSpeed = speed;
 }
 
-void RequestRightMotorSpeed(int speed = 0)
+void RequestRightMotorSpeed(int speed)
 {
 	rightMotorRequestedSpeed = speed;
 }
 
-void SetLeftMotorSpeed(int speed = 0)
+void SetLeftMotorSpeed(int speed)
 {
 	motor[left] = speed;
 }
 
-void SetRightMotorSpeed(int speed = 0)
+void SetRightMotorSpeed(int speed)
 {
 	motor[right] = speed;
 }
