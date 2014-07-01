@@ -2,9 +2,9 @@
 #define PID_INCLUDES_H
 
 // PID Tuning Constants //
-float pidPConst = 1;
-float pidIConst = 0;
-float pidDConst = 0;
+float pidPConst = 0.5292;
+float pidIConst = 0.0000000075;
+float pidDConst = 0.0375;
 
 // PID Time Delta //
 int pidChangeTime = 200;
@@ -31,5 +31,16 @@ int rightMotorRequestedSpeed = 0;
 #include "pid_controllers.c"
 #include "pid_motors.c"
 #include "pid_task.c"
+
+void InitializePIDControl()
+{
+	nMaxRegulatedSpeedNxt=128;
+	nMotorEncoder[left] = 0;
+	nMotorEncoder[right] = 0;
+	nMotorPIDSpeedCtrl[left] = mtrNoReg;
+	nMotorPIDSpeedCtrl[right] = mtrNoReg;
+	nSyncedMotors = synchNone;
+	StartTask(PID);
+}
 
 #endif
