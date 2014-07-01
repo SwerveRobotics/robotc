@@ -13,8 +13,9 @@ task PID()
 		pidLeftIntegral += (leftError * pidChangeTime);
 		pidLeftDerivative = (leftError - pidLeftPreviousError) / pidChangeTime;
 		int finalLeftMotorPower = (pidPConst * pidLeftProportional) + (pidIConst * pidLeftIntegral) + (pidDConst * pidLeftDerivative);
-		SetLeftMotorSpeed(finalLeftMotorPower);
 		pidLeftPreviousError = leftError;
+
+		SetLeftMotorSpeed(finalLeftMotorPower);
 
 		// RIGHT MOTORS //
 		int rightError = rightMotorRequestedSpeed - GetRightMotorSpeed();
@@ -22,8 +23,9 @@ task PID()
 		pidRightIntegral += (rightError * pidChangeTime);
 		pidRightDerivative = (rightError - pidRightPreviousError) / pidChangeTime;
 		int finalRightMotorPower = (pidPConst * pidRightProportional) + (pidIConst * pidRightIntegral) + (pidDConst * pidRightDerivative);
-		SetRightMotorSpeed(finalRightMotorPower);
 		pidRightPreviousError = rightError;
+
+		SetRightMotorSpeed(finalRightMotorPower);
 
 		// Time Delay //
 		wait1Msec(pidChangeTime);
