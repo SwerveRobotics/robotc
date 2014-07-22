@@ -5,13 +5,14 @@
 //#pragma debuggerWindows("Servos");
 //#pragma debuggerWindows("joystickSimple");
 
-#include "controlWithPID.c"
-#include "PID.c"
+#include "pid_control.c"
+#include "pid.c"
 
 task main()
 {
+	nMotorEncoder[single] = 0;
 	StartTask(controller);
-	StartTask(PID);
+	StartTask(pid);
 
 	while(true)
 	{
