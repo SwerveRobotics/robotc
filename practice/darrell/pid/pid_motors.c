@@ -24,6 +24,16 @@ void SetRightMotorSpeed(int speed)
 	motor[right] = speed;
 }
 
+int oldEncoderVal = nMotorEncoder[left];
+int CalculateLeftMotorSpeed()
+{
+	int currentEncoderVal = nMotorEncoder[left];
+	int encoderDelta = abs(currentEncoderVal - oldEncoderVal);
+	oldEncoderVal = currentEncoderVal;
+	return 0; // work in progress
+
+}
+
 int GetLeftMotorSpeed()
 {
 	return motor[left];
