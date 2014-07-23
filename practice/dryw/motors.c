@@ -1,16 +1,13 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-void MotorPower(int speed)
+void LeftMotorPower(int leftSpeed)
 {
-	if(abs(speed) > 10)
-		{
-		 	motor[single] = speed;
-		}
-		else
-		{
-			motor[single] = 0;
-		}
+	motor[mtrL] = leftSpeed; //Sets the left motor power to what the Drive task told it to be
 }
 
+void RightMotorPower(int rightSpeed)
+{
+	motor[mtrR] = rightSpeed; //Sets the right motor power to what the Drive task told it to be
+}
 #endif

@@ -3,13 +3,11 @@
 
 #include "JoystickDriver.c"
 
-task controller()
+task Controller()
 {
 	while(true)
 	{
-		getJoystickSettings(joystick);
-
- 		MotorPower(joystick.joy1_y1);
+		getJoystickSettings(joystick); //Gets joystick settings so we can give an input to the robot
 	}
 }
 
