@@ -7,7 +7,7 @@ task Controller()
 {
 	while(true)
 	{
-		getJoystickSettings(joystick);
+		getJoystickSettings(joystick); //Gets joystick settings so we can give an input to the robot
 	}
 }
 

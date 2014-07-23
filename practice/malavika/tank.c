@@ -1,7 +1,7 @@
 #ifndef TANK_C
 #define TANK_C
 
-task tank()
+task drive()
 {
 	int deadZone = 15;
 
