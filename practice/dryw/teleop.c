@@ -6,8 +6,7 @@
 //#pragma debuggerWindows("Servos");
 //#pragma debuggerWindows("joystickSimple");
 
-#include "motorsRight.c"
-#include "motorsLeft.c"
+#include "motors.c"
 #include "controller.c"
 //#include "tank.c"
 #include "arcade.c"
@@ -16,12 +15,12 @@
 
 task main()
 {
-	StartTask(Controller);
-	StartTask(Drive);
+	StartTask(Controller); //Starts task of getJoystickSettings
+	StartTask(Drive); //starts task of what drive system was chosen above
 
 	while(true)
 	{
-
+		//This is an empty while loop to keep the program running
 	}
 }
 /*
