@@ -3,11 +3,11 @@
 
 void LeftMotorPower(int leftSpeed)
 {
-	motor[mtrL] = leftSpeed; //Sets the left motor power to what the Drive task told it to be
+	motor[mtrL] = (abs(leftSpeed) + 12) * (5 / 7) * sgn(leftSpeed); //Sets the left motor power to what the Drive task told it to be
 }
 
 void RightMotorPower(int rightSpeed)
 {
-	motor[mtrR] = rightSpeed; //Sets the right motor power to what the Drive task told it to be
+	motor[mtrR] = (abs(rightSpeed) + 12) * (5 / 7) * sgn(rightSpeed); //Sets the right motor power to what the Drive task told it to be
 }
 #endif

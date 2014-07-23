@@ -8,8 +8,8 @@
 
 #include "motors.c"
 #include "controller.c"
-//#include "tank.c"
-#include "arcade.c"
+#include "tank.c"
+//#include "arcade.c"
 
 //Un-comment whatever drive you want to use and comment out the other one (either tank.c or arcade.c).
 
@@ -20,7 +20,7 @@ task main()
 
 	while(true)
 	{
-		//This is an empty while loop to keep the program running
+		//This is an empty loop to keep the program running
 	}
 }
 /*
