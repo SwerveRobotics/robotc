@@ -3,14 +3,16 @@
 
 
 
-void DriveMotor (int power)
+void DriveRightMotor(int power)
 {
-	motor[single] = power;
-
+	motor[right] = power;
 }
 
 
-
+void DriveLeftMotor(int power)
+{
+	motor[left] = power;
+}
 
 
 #endif
