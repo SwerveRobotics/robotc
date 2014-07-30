@@ -7,7 +7,7 @@ task Drive()
 
 	while(true)
 	{
-		if(joystick.joy1_y1 > deadZone)
+		if(abs(joystick.joy1_y1) > deadZone)
 		{
 			LeftMotorPower(joystick.joy1_y1);
 		}
@@ -18,7 +18,7 @@ task Drive()
 		//If the left joystick is out of the deazone, it gives the left motor a power value that corresponds to the joystick value
 		//Otherwise, the left motor power is 0
 
-		if(joystick.joy1_y2 > deadZone)
+		if(abs(joystick.joy1_y2) > deadZone)
 		{
 			RightMotorPower(joystick.joy1_y2);
 		}
