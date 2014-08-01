@@ -1,10 +1,8 @@
-#ifndef CONTROL_WITH_PID_C
-#define CONTROL_WITH_PID_C
+#ifndef PID_CONTROL_C
+#define PID_CONTROL_C
 
 #include "JoystickDriver.c"
 #include "pid_motors.c"
-
-int deadZone = 15;
 
 task controller()
 {
