@@ -7,7 +7,7 @@
 //#pragma debuggerWindows("joystickSimple");
 
 #include "JoystickDriver.c"
-#include "drive_arcade.c"
+#include "drive_tank.c"
 
 task main()
 {
