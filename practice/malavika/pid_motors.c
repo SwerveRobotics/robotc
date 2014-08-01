@@ -1,6 +1,7 @@
-#ifndef MOTORS_C
-#define MOTORS_C
+#ifndef PID_MOTORS_C
+#define PID_MOTORS_C
 
+const float deadZone = 15;
 int requestedSpeed = 0;
 
 void RequestMotorSpeed(int speed)
@@ -8,14 +9,14 @@ void RequestMotorSpeed(int speed)
 	requestedSpeed = speed;
 }
 
-void SetMotorSpeed(int speed)
+void SetMotorSpeed(tMotor mtr, int speed)
 {
-	motor[single] = speed;
+	motor[mtr] = speed;
 }
 
-int GetMotorSpeed()
+int GetMotorSpeed(tMotor mtr,)
 {
-	return motor[single];
+	return motor[mtr];
 }
 
 #endif
