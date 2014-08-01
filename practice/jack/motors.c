@@ -1,12 +1,12 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-int RunMotorForOneSecond(int speed)
+void SetLeftMotorSpeed(int speed)
 {
-	motor[single] = speed;
-	wait1Msec(1000);
-	motor[single] = 0;
-	return motor[single];
+	motor[left] = speed;
 }
-
+void SetRightMotorSpeed(int speed)
+{
+	motor[right] = speed;
+}
 #endif
