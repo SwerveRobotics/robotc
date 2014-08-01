@@ -16,7 +16,7 @@ task Drive()
 		else
 		{
 		LeftMotorPower(joystick.joy1_y1 + joystick.joy1_x1);
-		RightMotorPower(joystick.joy1_y1 - joystick.joy1_x1)
+		RightMotorPower(joystick.joy1_y1 - joystick.joy1_x1);
 		}
 	}
 }
