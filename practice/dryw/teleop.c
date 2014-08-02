@@ -8,10 +8,12 @@
 
 #include "motors.c"
 #include "controller.c"
-#include "tank.c"
-//#include "arcade.c"
 
-//Un-comment whatever drive you want to use and comment out the other one (either tank.c or arcade.c).
+//#include "tank.c"
+//#include "arcade.c"
+#include "lineFollower.c"
+
+//Un-comment whatever drive you want to use and comment out the other one (either tank.c, arcade.c, or lineFollower.c).
 
 task main()
 {
