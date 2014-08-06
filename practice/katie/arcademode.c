@@ -9,30 +9,3 @@
 
 #include "motors.c"
 #include "JoystickDriver.c"
-
-
-
-task main()
-{
-	while(true)
-	{
-		getJoystickSettings(joystick);
-
-		if(abs(joystick.joy1_y1) > 15)
-		{
-			DriveLeftMotor(joystick.joy1_y1);
-		}
-		else
-		{
-			DriveLeftMotor(0);
-		}
-		if(abs(joystick.joy1_y2) >15)
-		{
-			DriveRightMotor(joystick.joy1_y2);
-		}
-		else
-		{
-			DriveRightMotor(0);
-		}
-	}
-}
