@@ -26,14 +26,44 @@ int AttenuateControllerOutput(int output)
 // Assumes speed value is coming from a controller //
 void SetLeftMotorSpeed(int speed)
 {
-	motor[left] = AttenuateControllerOutput(speed);
+	motor[leftFront] = AttenuateControllerOutput(speed);
+	motor[leftRear] = AttenuateControllerOutput(speed);
 }
 
 // Assumes speed value is coming from a controller //
 void SetRightMotorSpeed(int speed)
 {
-	motor[right] = AttenuateControllerOutput(speed);
+	motor[rightFront] = AttenuateControllerOutput(speed);
+	motor[rightRear] = AttenuateControllerOutput(speed);
 }
 
+void Strafe(int speed)
+{
+	motor[rightFront] = -1.0*AttenuateControllerOutput(speed);
+	motor[leftRear] = -1.0*AttenuateControllerOutput(speed);
+
+	motor[rightRear] = AttenuateControllerOutput(speed);
+	motor[leftFront] = AttenuateControllerOutput(speed);
+}
+
+
+void Turn(int speed)
+{
+	motor[rightFront] = -1.0*AttenuateControllerOutput(speed);
+	motor[rightRear] = -1.0*AttenuateControllerOutput(speed);
+	motor[leftFront] = AttenuateControllerOutput(speed);
+	motor[leftRear] = AttenuateControllerOutput(speed);
+}
+
+void MoveArm(int speed)
+{
+	motor[arm1] = speed;
+	motor[arm2] = speed;
+}
+
+void MoveBucket(int speed)
+{
+	motor[bucket] = speed;
+}
 
 #endif
