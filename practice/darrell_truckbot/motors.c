@@ -26,13 +26,15 @@ int AttenuateControllerOutput(int output)
 // Assumes speed value is coming from a controller //
 void SetLeftMotorSpeed(int speed)
 {
-	motor[left] = AttenuateControllerOutput(speed);
+	motor[left2] = AttenuateControllerOutput(speed);
+	motor[left1] = AttenuateControllerOutput(speed);
 }
 
 // Assumes speed value is coming from a controller //
 void SetRightMotorSpeed(int speed)
 {
-	motor[right] = AttenuateControllerOutput(speed);
+	motor[right2] = AttenuateControllerOutput(speed);
+	motor[right1] = AttenuateControllerOutput(speed);
 }
 
 

@@ -8,6 +8,7 @@
 
 #include "controller.c"
 #include "arcade.c"
+#include "colors.c"
 
 task main()
 {

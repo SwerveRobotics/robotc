@@ -3,6 +3,8 @@
 
 #include "controller_defines.h"
 #include "motors.c"
+int motorLeft = 0;
+int motorRight = 0;
 
 task Drive()
 {
@@ -10,7 +12,8 @@ task Drive()
 	while(true)
 	{
 		getJoystickSettings(joystick);
-
+		motorLeft = AttenuateControllerOutput(joystick.joy1_y1);
+		motorRight = AttenuateControllerOutput(joystick.joy1_y2);
 		// Left Motor Control //
 		if(abs(joystick.joy1_y1) > deadZone)
 		{
@@ -24,7 +27,7 @@ task Drive()
 		// Right Motor Control //
 		if(abs(joystick.joy1_y2) > deadZone)
 		{
-			SetRightMotorSpeed(joystick.joy1_y1);
+			SetRightMotorSpeed(joystick.joy1_y2);
 		}
 		else
 		{
