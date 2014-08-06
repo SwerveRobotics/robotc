@@ -15,6 +15,8 @@ task main()
 	StartTask(drive);
 	StartTask(controller);
 
+	IntializeColors();
+
 	while(true)
 	{
 		// don't stop the task
