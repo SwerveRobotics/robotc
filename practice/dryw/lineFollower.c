@@ -1,20 +1,25 @@
 #ifndef DRIVE_C
 #define DRIVE_C
 
-enum {black = 0, white = 1, grey = 2, blue = 3, red = 4, unknown = 5};
-int floorColorEnum;
+#include "enums.c"
+#include "structs.c"
 
-struct colorRange {
-	int min;
-	int max;
-};
-struct colorRange colorBlue;
 task Drive()
 {
 	while(true)
 	{
-		colorBlue.min = 5;
-		floorColorEnum = 2;
+		colorArray[UNKNOWN].min = 0;
+		colorArray[UNKNOWN].max = 1;
+		colorArray[BLACK].min = 2;
+		colorArray[BLACK].max = 3;
+		colorArray[WHITE].min = 4;
+		colorArray[WHITE].max = 5;
+		colorArray[GREY].min = 6;
+		colorArray[GREY].max = 7;
+		colorArray[BLUE].min = 8;
+		colorArray[BLUE].max = 9;
+		colorArray[RED].min = 10;
+		colorArray[RED].max = 11;
 	}
 }
 #endif
