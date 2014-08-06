@@ -11,11 +11,14 @@
 
 #include "JoystickDriver.c"
 #include "drive_tank.c"
+#include "colors.c"
+#include "sensors.c"
 
 task main()
 {
-	waitForStart();
 	StartTask(Drive);
+
+	InitColorValues();
 
 	while(true)
 	{
