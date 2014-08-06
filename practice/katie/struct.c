@@ -1,5 +1,5 @@
-#ifndef STRUCTENUM_C
-#define STRUCTENUM_C
+#ifndef STRUCT_C
+#define STRUCT_C
 
 struct
 {

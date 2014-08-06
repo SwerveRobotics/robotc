@@ -9,7 +9,7 @@
 
 #include "motors.c"
 #include "JoystickDriver.c"
-
+#include "struct.c"
 
 
 task main()
