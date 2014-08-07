@@ -3,17 +3,15 @@
 
 task Initialize()
 {
-	colorArray[UNKNOWN].min = 0;
-	colorArray[UNKNOWN].max = 1;
-	colorArray[BLACK].min = 2;
-	colorArray[BLACK].max = 3;
-	colorArray[WHITE].min = 4;
-	colorArray[WHITE].max = 5;
-	colorArray[GREY].min = 6;
-	colorArray[GREY].max = 7;
-	colorArray[BLUE].min = 8;
-	colorArray[BLUE].max = 9;
-	colorArray[RED].min = 10;
-	colorArray[RED].max = 11;
+	colorArray[BLACK].min = 0;
+	colorArray[BLACK].max = 1;
+	colorArray[WHITE].min = 2;
+	colorArray[WHITE].max = 3;
+	colorArray[GREY].min = 4;
+	colorArray[GREY].max = 5;
+	colorArray[BLUE].min = 6;
+	colorArray[BLUE].max = 7;
+	colorArray[RED].min = 8;
+	colorArray[RED].max = 9;
 }
 #endif
