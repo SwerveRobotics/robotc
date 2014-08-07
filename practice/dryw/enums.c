@@ -3,7 +3,6 @@
 
 typedef enum
 {
-	UNKNOWN,
 	BLACK,
 	WHITE,
 	GREY,
