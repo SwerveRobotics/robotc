@@ -13,11 +13,13 @@ const float intercept = joyMin - slope;
 
 void LeftMotorPower(int leftSpeed)
 {
-	motor[mtrL] = slope * leftSpeed + intercept * sgn(leftSpeed); //Sets the left motor power to what the Drive task told it to be and manipulates the power acordingly.
+	motor[mtrL] = slope * leftSpeed + intercept * sgn(leftSpeed);
+	//Sets the left motor power to what the Drive task told it to be and manipulates the power acordingly.
 }
 
 void RightMotorPower(int rightSpeed)
 {
-	motor[mtrR] = slope * rightSpeed + intercept * sgn(rightSpeed); //Sets the right motor power to what the Drive task told it to be and manipulates the power acordingly.
+	motor[mtrR] = slope * rightSpeed + intercept * sgn(rightSpeed);
+	//Sets the right motor power to what the Drive task told it to be and manipulates the power acordingly.
 }
 #endif

@@ -1,10 +1,7 @@
-#ifndef DRIVE_C
-#define DRIVE_C
+#ifndef INITIALIZATION_C
+#define INITIALIZATION_C
 
-#include "enums.c"
-#include "structs.c"
-
-task Drive()
+task Initialize()
 {
 	colorArray[UNKNOWN].min = 0;
 	colorArray[UNKNOWN].max = 1;
@@ -18,10 +15,5 @@ task Drive()
 	colorArray[BLUE].max = 9;
 	colorArray[RED].min = 10;
 	colorArray[RED].max = 11;
-
-	while(true)
-	{
-
-	}
 }
 #endif
