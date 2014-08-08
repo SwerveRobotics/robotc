@@ -1,6 +1,7 @@
 #ifndef COLORS_C
 #define COLORS_C
 
+//These are the colors we will be detecting with the color sensor for the line follower
 typedef enum
 {
 	BLACK,
@@ -11,6 +12,7 @@ typedef enum
 }
 floorColorEnum;
 
+//This struct is for the minimum and maximum values of each color to give us a range to detect a color
 struct
 {
 	int min;
@@ -20,6 +22,7 @@ colorRange;
 
 colorRange colorArray[6];
 
+//Sets the color minimums and maximums
 void InitColorVals()
 {
 	colorArray[BLACK].min = 0;
@@ -35,5 +38,4 @@ void InitColorVals()
 }
 
 #include "colorDetect.c"
-
 #endif

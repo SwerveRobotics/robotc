@@ -6,28 +6,29 @@
 
 #pragma debuggerWindows("nxtLCDScreen");
 //#pragma debuggerWindows("Servos");
-//#pragma debuggerWindows("joystickSimple");
+#pragma debuggerWindows("joystickSimple");
 
-#include "motors.c"
 #include "controller.c"
+#include "motors.c"
 
-//#include "tank.c"
-//#include "arcade.c"
-#include "lineFollower1.c"
-//#include "lineFollower2.c"
 //Un-comment whatever drive you want to use and comment out the other ones
+//#include "tank.c"
+#include "arcade.c"
+//#include "lineFollower1.c"
+//#include "lineFollower2.c"
 
 task main()
 {
-	StartTask(Controller); //Starts task of getJoystickSettings
-	StartTask(Drive); //starts task of what drive system was chosen above
+	//Starts tasks to get joystick values and whatever drive was chosen
+	StartTask(Controller);
+	StartTask(Drive);
 
 	while(true)
 	{
+		//If button 1 is pressed, display the current color sensor value
 		if(joy1Btn(1) == 1)
 		{
 			nxtDisplayTextLine(1, "Sensor Value: %d", SensorValue[colorL]);
-			//If button 1 is pressed, display the current color sensor value
 		}
 	}
 }

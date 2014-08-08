@@ -7,20 +7,19 @@ task Drive()
 {
 	while(true)
 	{
+		//If the sensor detects a black floor, the robot turns right
+		//If the sensor detects a white floor, the robot turns left
 		if(OnColor(BLACK, SensorValue[colorL]))
 		{
 			LeftMotorPower(100);
 			RightMotorPower(50);
 		}
-		// Turns right if black color is detected
 
 		if(OnColor(WHITE, SensorValue[colorL]))
 		{
 			LeftMotorPower(50);
 			RightMotorPower(100);
 		}
-		// Turns left if white color is detected
-
 	}
 }
 #endif
