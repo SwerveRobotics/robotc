@@ -1,30 +1,25 @@
  #ifndef DRIVE_C
 #define DRIVE_C
 
-#include "enums.c"
-#include "structs.c"
-#include "initialization.c"
-#include "colorDetect.c"
+#include "colors.c"
 
 task Drive()
 {
-	StartTask(Initialize);
 	while(true)
 	{
-		if(SensorValue[colorL] > colorArray[BLACK].min && SensorValue[colorL] > colorArray[BLACK].max)
-		{
-			LeftMotorPower(100);
-			RightMotorPower(50);
-		}
-		// Turns right if black color is detected from the left sensor
-
-		if(SensorValue[colorR] > colorArray[BLACK].min && SensorValue[colorR] > colorArray[BLACK].max)
+		//If the left sensor detects a black floor, the robot turns left
+		//If the right sensor detects a black floor, the robot turns right
+		if(OnColor(BLACK, SensorValue[colorL]))
 		{
 			LeftMotorPower(50);
 			RightMotorPower(100);
 		}
-		// Turns left if black color is detected from the right sensor
 
+		if(OnColor(BLACK, SensorValue[colorR]))
+		{
+			LeftMotorPower(100);
+			RightMotorPower(50);
+		}
 	}
 }
 #endif
