@@ -1,7 +1,7 @@
 #ifndef INITIALIZATION_C
 #define INITIALIZATION_C
 
-task Initialize()
+void Initialize()
 {
 	colorArray[BLACK].min = 0;
 	colorArray[BLACK].max = 1;
