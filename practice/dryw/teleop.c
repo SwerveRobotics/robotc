@@ -14,8 +14,6 @@
 //Un-comment whatever drive you want to use and comment out the other ones
 //#include "tank.c"
 //#include "arcade.c"
-#include "lineFollower1.c"
-//#include "lineFollower2.c"
 
 task main()
 {

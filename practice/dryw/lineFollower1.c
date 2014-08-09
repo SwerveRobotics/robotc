@@ -1,9 +1,9 @@
-#ifndef DRIVE_C
-#define DRIVE_C
+#ifndef LINE_C
+#define LINE_C
 
 #include "colors.c"
 
-task Drive()
+task Line()
 {
 	while(true)
 	{
