@@ -20,7 +20,7 @@ struct
 }
 colorRange;
 
-colorRange colorArray[6];
+colorRange colorArray[5];
 
 //Sets the color minimums and maximums
 void InitColorVals()
@@ -38,4 +38,5 @@ void InitColorVals()
 }
 
 #include "colorDetect.c"
+
 #endif
