@@ -10,10 +10,13 @@
 #include "motors.c"
 #include "JoystickDriver.c"
 #include "struct.c"
+#include "enum.c"
 
 
 task main()
 {
+	InitColorsStruct();
+
 	while(true)
 	{
 		getJoystickSettings(joystick);
