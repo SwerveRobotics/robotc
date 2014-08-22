@@ -19,6 +19,8 @@ task main()
 	StartTask(Drive);
 
 	InitColorValues();
+	if(LightSensorOnColor(BLACK_COLOR_ENUM, 35))
+		int x = 3;
 
 	while(true)
 	{
