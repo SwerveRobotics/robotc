@@ -21,7 +21,7 @@ task main()
 	{
 		getJoystickSettings(joystick);
 
-		if(abs(joystick.joy1_y1) > 15)
+		if(abs(joystick.joy1_y1) > DEAD_ZONE)
 		{
 			DriveLeftMotor(joystick.joy1_y1);
 		}
@@ -29,7 +29,7 @@ task main()
 		{
 			DriveLeftMotor(0);
 		}
-		if(abs(joystick.joy1_y2) >15)
+		if(abs(joystick.joy1_y2) >DEAD_ZONE)
 		{
 			DriveRightMotor(joystick.joy1_y2);
 		}
