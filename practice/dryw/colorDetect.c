@@ -10,12 +10,10 @@ bool OnColor(floorColorEnum floorColor, int SensorVal)
 		nxtDisplayTextLine(0, "%d", floorColor);
 		return true;
 	}
-
 	else
 	{
 		nxtDisplayTextLine(0, "Unknown");
 		return false;
 	}
-
 }
 #endif
