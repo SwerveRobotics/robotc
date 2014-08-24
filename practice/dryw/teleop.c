@@ -9,9 +9,8 @@
 //#pragma debuggerWindows("Servos");
 #pragma debuggerWindows("joystickSimple");
 
-#include "controller.c"
-#include "motors.c"
-#include "library/sonar.c"
+#include "../../Library/motors/motors.c"
+#include "../../Library/sensors/sonar.c"
 
 //Un-comment whatever drive you want to use and comment out the other ones
 #include "tank.c"
@@ -32,7 +31,7 @@ task main()
 		}
 		if(joy1Btn(2) == 1)
 		{
-			ToWall(1);
+			GoToObject(1);
 		}
 	}
 }
