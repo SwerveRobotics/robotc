@@ -7,6 +7,7 @@
 
 #include "../../Library/motors/motors.c"
 #include "JoystickDriver.c"
+#include "struct_stuff.c"
 
 int retVal = 50;
 
