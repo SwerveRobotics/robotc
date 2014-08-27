@@ -7,7 +7,7 @@ task drive()
 	{
 		getJoystickSettings(joystick);
 
-		if(abs(joystick.joy1_y1) > deadZone)
+		if(abs(joystick.joy1_y1) > DEAD_ZONE)
 		{
 			SetSpeed(left, joystick.joy1_y1);
 		}
@@ -16,7 +16,7 @@ task drive()
 			SetSpeed(left, 0);
 		}
 
-		if(abs(joystick.joy1_y2) > deadZone)
+		if(abs(joystick.joy1_y2) > DEAD_ZONE)
 		{
 			SetSpeed(right, joystick.joy1_y2);
 		}
