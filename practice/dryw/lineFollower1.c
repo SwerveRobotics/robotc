@@ -1,7 +1,7 @@
 #ifndef LINE_C
 #define LINE_C
 
-#include "colors.c"
+#include "../../Library/sensors/colors.c"
 
 task Line()
 {
