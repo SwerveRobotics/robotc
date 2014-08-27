@@ -2,12 +2,12 @@
 #define SONAR_C
 
 //Ratio between centimeters and inches
-int centimetersToInches = 2.54;
+float const CENTIMETERS_TO_INCHES = 2.54;
 
 //Displays on the NXT screen how far away the sensor is from an object in inches
-void Sonar()
+void DisplaySonarOnNXTDisplay()
 {
-	nxtDisplayTextLine(0, "Distance(Inches): %d", SensorValue[sonar] / centimetersToInches);
+	nxtDisplayTextLine(0, "Distance(Inches): %d", SensorValue[sonar] / CENTIMETERS_TO_INCHES);
 }
 
 
