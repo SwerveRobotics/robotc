@@ -8,6 +8,7 @@
 #pragma debuggerWindows("joystickSimple");
 
 #include "motors.c"
+#include "controllers.c"
 #include "JoystickDriver.c"
 #include "struct.c"
 #include "enum.c"
