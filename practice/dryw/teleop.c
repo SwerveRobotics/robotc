@@ -1,5 +1,5 @@
-#pragma config(Sensor, S2,     colorL,         sensorCOLORFULL)
-#pragma config(Sensor, S3,     colorR,         sensorCOLORFULL)
+#pragma config(Sensor, S2,     colorL,         sensorI2CHiTechnicColor)
+#pragma config(Sensor, S3,     colorR,         sensorI2CHiTechnicColor)
 #pragma config(Sensor, S4,     sonar,          sensorSONAR)
 #pragma config(Motor,  motorA,          mtrL,          tmotorNXT, openLoop, reversed, encoder)
 #pragma config(Motor,  motorB,          mtrR,          tmotorNXT, openLoop, reversed, encoder)
