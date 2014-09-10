@@ -3,7 +3,7 @@
 
 #include "JoystickDriver.c"
 
-int deadZone = 15;
+int DEADZONE = 15;
 
 //Gets joystick settings so we can give an input to the robot
 task Controller()
