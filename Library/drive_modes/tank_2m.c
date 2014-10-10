@@ -37,8 +37,8 @@ void DriveBackward(int speed)
 
 void TurnLeft(int speed)
 {
-	DriveLeftMotors(speed);
-	DriveRightMotors(-1*speed);
+	DriveLeftMotors(-1*speed);
+	DriveRightMotors(speed);
 }
 
 void TurnRight(int speed)
