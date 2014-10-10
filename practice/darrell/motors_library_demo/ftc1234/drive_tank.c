@@ -12,7 +12,7 @@ task Drive()
 		getJoystickSettings(joystick);
 
 		// Left Motor Control //
-		if(abs(joystick.joy1_y1) > CONTROLLER_DEAD_ZONE)
+		if(abs(joystick.joy1_y1) > ANALOG_DEAD_ZONE)
 		{
 			DriveLeftMotors(joystick.joy1_y1);
 		}
@@ -22,7 +22,7 @@ task Drive()
 		}
 
 		// Right Motor Control //
-		if(abs(joystick.joy1_y2) > CONTROLLER_DEAD_ZONE)
+		if(abs(joystick.joy1_y2) > ANALOG_DEAD_ZONE)
 		{
 			DriveRightMotors(joystick.joy1_y2);
 		}
