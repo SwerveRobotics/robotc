@@ -9,12 +9,12 @@ tMotor BACK_LEFT_MOTOR;
 tMotor FRONT_RIGHT_MOTOR;
 tMotor BACK_RIGHT_MOTOR;
 
-void RegisterDriveMotors(tMotor FleftMotor, tMotor BleftMotor, tMotor FrightMotor, tMotor BrightMotor)
+void RegisterDriveMotors(tMotor frontLeftM, tMotor backLeftM, tMotor frontRightM, tMotor backRightM)
 {
-	FRONT_LEFT_MOTOR = FleftMotor;
-	BACK_LEFT_MOTOR = BleftMotor;
-	FRONT_RIGHT_MOTOR = FrightMotor;
-	BACK_RIGHT_MOTOR = BrightMotor;
+	FRONT_LEFT_MOTOR = frontLeftM;
+	BACK_LEFT_MOTOR = backLeftM;
+	FRONT_RIGHT_MOTOR = frontRightM;
+	BACK_RIGHT_MOTOR = backRightM;
 }
 
 void DriveLeftMotors(int speed)
