@@ -9,29 +9,29 @@ float EncoderDistance(int inches)
 	return revolutions * 1440;
 }
 
-//Drives forward at given speed until the distance has been reached
-void DriveDistance(int distance, int speed)
+//Drives forward at given power until the distance has been reached
+void DriveDistance(int distance, int power)
 {
 	nMotorEncoder[FRONT_LEFT_MOTOR] = 0;
 	while(nMotorEncoder[FRONT_LEFT_MOTOR] < EncoderDistance(distance))
 	{
-		DriveForward(speed);
+		DriveForward(power);
 	}
 	DriveForward(0);
 }
 
-void TurnRightDegrees(int degrees, int speed)
+void TurnRightDegrees(int degrees, int power)
 {
 	SensorValue[gyro] = 0;
 	while(SensorValue[gyro] < -1 * degrees)
 	{
-		TurnRight(speed);
+		TurnRight(power);
 	}
 	DriveForward(0);
 }
 
-void TurnLeftDegrees(int degrees, int speed)
+void TurnLeftDegrees(int degrees, int power)
 {
-	TurnRightDegrees(-1 * degrees, -1 * speed);
+	TurnRightDegrees(-1 * degrees, -1 * power);
 }
 #endif

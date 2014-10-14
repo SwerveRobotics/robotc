@@ -14,36 +14,36 @@ void RegisterDriveMotors(tMotor leftM, tMotor rightM)
 	RIGHT_MOTOR = rightM;
 }
 
-void DriveLeftMotors(int speed)
+void DriveLeftMotors(int power)
 {
-	SetMotorSpeed(LEFT_MOTOR, speed);
+	SetMotorPower(LEFT_MOTOR, power);
 }
 
-void DriveRightMotors(int speed)
+void DriveRightMotors(int power)
 {
-	SetMotorSpeed(RIGHT_MOTOR, speed);
+	SetMotorPower(RIGHT_MOTOR, power);
 }
 
-void DriveForward(int speed)
+void DriveForward(int power)
 {
-	DriveLeftMotors(speed);
-	DriveRightMotors(speed);
+	DriveLeftMotors(power);
+	DriveRightMotors(power);
 }
 
-void DriveBackward(int speed)
+void DriveBackward(int power)
 {
-	DriveForward(-1*speed);
+	DriveForward(-1 * power);
 }
 
-void TurnLeft(int speed)
+void TurnLeft(int power)
 {
-	DriveLeftMotors(-1*speed);
-	DriveRightMotors(speed);
+	DriveLeftMotors(-1 * power);
+	DriveRightMotors(power);
 }
 
-void TurnRight(int speed)
+void TurnRight(int power)
 {
-	TurnLeft(-1*speed);
+	TurnLeft(-1 * power);
 }
 
 #endif
