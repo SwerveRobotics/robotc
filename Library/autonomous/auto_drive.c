@@ -1,13 +1,11 @@
 #ifndef AUTO_DRIVE_FUNCTIONS_C
 #define AUTO_DRIVE_FUNCTIONS_C
 
-#include "../drive_modes/tank_4m.c"
-
 //Takes an input of inches and converts to encoder ticks, assuming 4 inch wheels
 float EncoderDistance(int inches)
 {
 	float circumference = PI * 4;
-	float revolutions= inches / circumference;
+	float revolutions = inches / circumference;
 	return revolutions * 1440;
 }
 
@@ -22,4 +20,18 @@ void DriveDistance(int distance, int speed)
 	DriveForward(0);
 }
 
+void TurnRightDegrees(int degrees, int speed)
+{
+	SensorValue[gyro] = 0;
+	while(SensorValue[gyro] < -1 * degrees)
+	{
+		TurnRight(speed);
+	}
+	DriveForward(0);
+}
+
+void TurnLeftDegrees(int degrees, int speed)
+{
+	TurnRightDegrees(-1 * degrees, -1 * speed);
+}
 #endif
