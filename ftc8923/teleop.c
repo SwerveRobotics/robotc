@@ -17,6 +17,8 @@
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = true;
+	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
+
 	StartTask(Drive);
 	while(true)
 	{
