@@ -23,14 +23,6 @@ task main()
 
 	//waitForStart
 
-	//Robot drives backward until it reaches the rolling goal
-	//Goal grabbers extend
-	//Robot drives back towards ramp
-	//Robot turns right to go to parking zone
-	//Robot drives strait toward parking zone
-	DriveDistance(120, -100);
-	servo[goalGrabber] = 128;
-	DriveDistance(100, 100);
-	TurnRightDegrees(30, 100);
-	DriveDistance(25, 100);
+
+
 }
