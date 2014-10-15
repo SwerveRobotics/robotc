@@ -15,22 +15,58 @@
 
 #include "../Library/drive_modes/tank_4m.c"
 #include "../Library/autonomous/auto_drive.c"
+#include "center_objectives.c"
 
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
 
+	int position = 0;
 	//waitForStart
 
-	//Robot drives backward until it reaches the rolling goal
-	//Goal grabbers extend
-	//Robot drives back towards ramp
-	//Robot turns right to go to parking zone
-	//Robot drives strait toward parking zone
-	DriveDistance(120, -100);
-	servo[goalGrabber] = 128;
-	DriveDistance(100, 100);
-	TurnRightDegrees(30, 100);
-	DriveDistance(25, 100);
+	//Robot detects position of IR beacon
+	for(int i = 64; i < 96; i++)
+	{
+		servo[irRotator] = i;
+		if(servo[irRotator] == 70 && SensorValue[IRSensor] == 4)
+		{
+			position = 1;
+		}
+
+		else if(servo[irRotator] == 90 && SensorValue[IRSensor] == 4)
+		{
+			position = 3;
+		}
+
+		//This have no if statement, as the robot can't see the beacon from the ramp
+		else
+		{
+			position = 2;
+		}
+	}
+
+	//Robot knocks over kickstand for the position it's in
+	if(position == 1)
+	{
+		RampKickPos1();
+	}
+
+	else if(position == 2)
+	{
+		RampKickPos2();
+	}
+
+	else if(position == 3)
+	{
+		RampKickPos3();
+	}
+
+	/*
+	rotatate ir sensor
+	detect beacon
+	drive off ramp
+	turn to face kickstand
+	drive until kickstand is reached
+	*/
 }
