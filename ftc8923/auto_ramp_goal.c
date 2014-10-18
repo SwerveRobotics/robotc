@@ -21,6 +21,9 @@ task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
+	RegisterEncoderMotor(mtrFL);
+	WHEEL_DIAMETER = 4;
+	GEAR_RATIO = 1.5;
 
 	waitForStart();
 
@@ -29,7 +32,7 @@ task main()
 	//Robot drives back towards ramp
 	//Robot turns right to go to parking zone
 	//Robot drives strait toward parking zone
-	DriveDistance(10, -100);
+	DriveDistance(120, -100);
 	/*servo[goalGrabber] = 128;
 	DriveDistance(100, 100);
 	//TurnRightDegrees(30, 100);
