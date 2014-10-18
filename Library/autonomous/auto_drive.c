@@ -1,37 +1,49 @@
 #ifndef AUTO_DRIVE_FUNCTIONS_C
 #define AUTO_DRIVE_FUNCTIONS_C
 
-//Takes an input of inches and converts to encoder ticks, assuming 4 inch wheels
-float EncoderDistance(int inches)
+int WHEEL_DIAMETER = 4;
+float GEAR_RATIO = 1;
+
+tMotor ENCODER_MOTOR;
+
+void RegisterEncoderMotor(tMotor motorName)
 {
-	float circumference = PI * 4;
-	float revolutions = inches / circumference;
-	return revolutions * 1440;
+	ENCODER_MOTOR = motorName;
+}
+
+//Takes an input of encoder ticks and converts to inches
+float EncoderDistance(int ticks)
+{
+	float circumference = PI * WHEEL_DIAMETER;
+	float revolutions = (ticks / 1440) * GEAR_RATIO;
+	return revolutions * circumference;
 }
 
 //Drives forward at given power until the distance has been reached
-void DriveDistance(int distance, int power)
+void DriveDistance(int inches, int power)
 {
-	nMotorEncoder[FRONT_LEFT_MOTOR] = 0;
-	while(nMotorEncoder[FRONT_LEFT_MOTOR] < EncoderDistance(distance))
+	nMotorEncoder[ENCODER_MOTOR] = 0;
+	while(EncoderDistance(nMotorEncoder[ENCODER_MOTOR]) < inches)
 	{
 		DriveForward(power);
 	}
 	DriveForward(0);
 }
 
-void TurnRightDegrees(int degrees, int power)
+//Turns left until the gyro reads a vaule equal to or greater than the degrees
+void TurnLeftDegrees(int degrees, int power)
 {
 	SensorValue[gyro] = 0;
-	while(SensorValue[gyro] < -1 * degrees)
+	while(abs(SensorValue[gyro]) < degrees)
 	{
 		TurnRight(power);
 	}
 	DriveForward(0);
 }
 
-void TurnLeftDegrees(int degrees, int power)
+//Turns right until the gyro reads a vaule equal to or greater than the degrees
+void TurnRightDegrees(int degrees, int power)
 {
-	TurnRightDegrees(-1 * degrees, -1 * power);
+	TurnRightDegrees(degrees, -1 * power);
 }
 #endif
