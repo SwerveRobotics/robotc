@@ -36,7 +36,7 @@ void TurnLeftDegrees(int degrees, int power)
 	SensorValue[gyro] = 0;
 	while(abs(SensorValue[gyro]) < degrees)
 	{
-		TurnRight(power);
+	  TurnLeft(power);
 	}
 	DriveForward(0);
 }
@@ -44,6 +44,6 @@ void TurnLeftDegrees(int degrees, int power)
 //Turns right until the gyro reads a vaule equal to or greater than the degrees
 void TurnRightDegrees(int degrees, int power)
 {
-	TurnRightDegrees(degrees, -1 * power);
+	TurnLeftDegrees(degrees, -1 * power);
 }
 #endif
