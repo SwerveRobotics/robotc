@@ -19,7 +19,7 @@
 #ifndef SWERVE_MOTORS.C
 #define SWERVE_MOTORS.C
 
-#include Joystick_Functions.c
+#include "Joystick_Swive_Functions.c"
 
 #define TICK_TO_DEGREE_MOTOR (0.46)
 #define DEGREE_TO_TICK_SERVO (0.71)
@@ -78,10 +78,10 @@ void SetSwiveServo(string loc, int dir)
 }
 void TomDriveSwive()
 {
-	DriveSwive(FR, tomDir, TomSpeed(FR) * powFactor);
-	DriveSwive(FL, tomDir, TomSpeed(FL) * powFactor);
-	DriveSwive(BL, tomDir, TomSpeed(BL) * powFactor);
-	DriveSwive(BR, tomDir, TomSpeed(BR) * powFactor);
+	DriveSwive(FR, tomDir, TomSpeed(FR) * GetJoystickPower);
+	DriveSwive(FL, tomDir, TomSpeed(FL) * GetJoystickPower);
+	DriveSwive(BL, tomDir, TomSpeed(BL) * GetJoystickPower);
+	DriveSwive(BR, tomDir, TomSpeed(BR) * GetJoystickPower);
 }
 
 #endif
