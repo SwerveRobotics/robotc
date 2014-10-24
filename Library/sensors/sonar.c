@@ -1,17 +1,7 @@
 #ifndef SONAR_C
 #define SONAR_C
 
-#ifdef TANK_2M
-#include "../drive_modes/tank_2m.c"
-#else
-#ifdef TANK_4M
-#include "../drive_modes/tank_4m.c"
-#else
-#ifdef TANK_6M
-#include "../drive_modes/tank_6m.c"
-#endif
-#endif
-#endif
+#include "../drive_modes/drive_modes.h"
 
 //Ratio between centimeters and inches
 const float CENTIMETERS_TO_INCHES = 2.54;
