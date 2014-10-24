@@ -1,6 +1,18 @@
 #ifndef COLORS_C
 #define COLORS_C
 
+tSensors COLOR_SENSOR;
+
+void RegisterColorSensor(tSensors colorSensorName)
+{
+	COLOR_SENSOR = colorSensorName;
+}
+
+int ReadColorSensor()
+{
+	return SensorValue[COLOR_SENSOR];
+}
+
 //These are the colors we will be detecting with the color sensor for the line follower
 typedef enum
 {
@@ -23,6 +35,8 @@ ColorRange;
 ColorRange colorArray[5];
 
 //Sets the color minimums and maximums
+//@todo may need to adjust this so that we can register the
+// colors on a per-team basis
 void InitColorVals()
 {
 	colorArray[BLACK_COLOR].min = 0;
@@ -39,9 +53,9 @@ void InitColorVals()
 
 //If the sensor detects a color, it returns true and displays the color
 //Otherwise it returns false and displays "Unknown"
-bool OnColor(floorColorEnum floorColor, int SensorVal)
+bool OnColor(floorColorEnum floorColor)
 {
-	if(SensorVal > colorArray[floorColor].min && SensorVal > colorArray[floorColor].max)
+	if(SensorVal > colorArray[floorColor].min && ReadColorSensor() > colorArray[floorColor].max)
 	{
 		return floorColor;
 	}
