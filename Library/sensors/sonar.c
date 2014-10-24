@@ -1,8 +1,6 @@
 #ifndef SONAR_C
 #define SONAR_C
 
-#define TANK_2M
-
 #ifndef TANK_2M
 #include "../drive_modes/tank_2m.c"
 #else
@@ -16,7 +14,7 @@
 #endif
 
 //Ratio between centimeters and inches
-float const CENTIMETERS_TO_INCHES = 2.54;
+const float CENTIMETERS_TO_INCHES = 2.54;
 tSensors SONAR_SENSOR;
 
 void RegisterSonarSensor(tSensors sonarSensorName)
