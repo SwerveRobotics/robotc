@@ -1,12 +1,18 @@
-#include "joystickdriver.c"
+#ifndef JOYSTICK_SWIVE_FUNCTIONS.C
+#define JOYSTICK_SWIVE_FUNCTIONS.C
 
-#ifndef JOYSTICK_FUNCTIONS.C
-#define JOYSTICK_FUNCTIONS.C
+#include "joystickdriver.c"
 
 #define TICK_TO_PERCENT_JOY (0.78)
 
 int x = joystick.joy1_x2 * TICK_TO_PERCENT_JOY;
 int y = joystick.joy1_y2 * TICK_TO_PERCENT_JOY;
+
+task main()
+{
+
+}
+
 
 int GetJoystickTranslate()
 {
