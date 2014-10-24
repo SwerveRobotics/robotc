@@ -19,9 +19,25 @@ void DriveLeftMotors(int power)
 	SetMotorPower(LEFT_MOTOR, power);
 }
 
+void StopLeftDriveMotors()
+{
+	DriveLeftMotors(0);
+}
+
 void DriveRightMotors(int power)
 {
 	SetMotorPower(RIGHT_MOTOR, power);
+}
+
+void StopRightDriveMotors()
+{
+	DriveRightMotors(0);
+}
+
+void StopAllDriveMotors()
+{
+	StopLeftDriveMotors();
+	StopRightDriveMotors();
 }
 
 void DriveForward(int power)
@@ -45,5 +61,7 @@ void TurnRight(int power)
 {
 	TurnLeft(-1 * power);
 }
+
+
 
 #endif

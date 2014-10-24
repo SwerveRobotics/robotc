@@ -23,10 +23,26 @@ void DriveLeftMotors(int power)
 	SetMotorPower(BACK_LEFT_MOTOR, power);
 }
 
+void StopLeftDriveMotors()
+{
+	DriveLeftMotors(0);
+}
+
 void DriveRightMotors(int power)
 {
 	SetMotorPower(FRONT_RIGHT_MOTOR, power);
 	SetMotorPower(BACK_RIGHT_MOTOR, power);
+}
+
+void StopRightDriveMotors()
+{
+	DriveRightMotors(0);
+}
+
+void StopAllDriveMotors()
+{
+	StopLeftDriveMotors();
+	StopRightDriveMotors();
 }
 
 void DriveForward(int power)
