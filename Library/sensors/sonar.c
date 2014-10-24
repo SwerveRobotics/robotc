@@ -1,13 +1,13 @@
 #ifndef SONAR_C
 #define SONAR_C
 
-#ifndef TANK_2M
+#ifdef TANK_2M
 #include "../drive_modes/tank_2m.c"
 #else
-#ifndef TANK_4M
+#ifdef TANK_4M
 #include "../drive_modes/tank_4m.c"
 #else
-#ifndef TANK_6M
+#ifdef TANK_6M
 #include "../drive_modes/tank_6m.c"
 #endif
 #endif
