@@ -4,8 +4,8 @@
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_1,     mtrFL,         tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     mtrBL,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_1,     mtrFL,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_2,     mtrBL,         tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    irRotator,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -26,14 +26,24 @@ task main()
 	{
 		getJoystickSettings(joystick);
 
-		if(joystick.joy1_Buttons == 1)
+		if(joy1Btn(1) == 1)
 		{
 			servo[irRotator] = servo[irRotator] + 1;
 		}
 
-		if(joystick.joy1_Buttons == 2)
+		if(joy1Btn(2) == 1)
 		{
 			servo[irRotator] = servo[irRotator] - 1;
+		}
+
+		if(joy1Btn(3) == 1)
+		{
+			servo[goalGrabber] = 0;
+		}
+
+		if(joy1Btn(4) == 1)
+		{
+			servo[goalGrabber] = 96;
 		}
 	}
 }
