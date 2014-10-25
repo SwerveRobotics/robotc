@@ -20,7 +20,7 @@ float EncoderDistance(int ticks)
 }
 
 //Drives forward at given power until the distance has been reached
-void DriveDistance(int inches, int power)
+void DriveForwardDistance(int inches, int power)
 {
 	nMotorEncoder[ENCODER_MOTOR] = 0;
 	while(EncoderDistance(nMotorEncoder[ENCODER_MOTOR]) < inches)
@@ -30,13 +30,23 @@ void DriveDistance(int inches, int power)
 	DriveForward(0);
 }
 
+void DriveBackwardDistance(int inches, int power)
+{
+	nMotorEncoder[ENCODER_MOTOR] = 0;
+	while(EncoderDistance(nMotorEncoder[ENCODER_MOTOR]) > -inches)
+	{
+		DriveBackward(power);
+	}
+	DriveBackward(0);
+}
+
 //Turns left until the gyro reads a vaule equal to or greater than the degrees
 void TurnLeftDegrees(int degrees, int power)
 {
 	SensorValue[gyro] = 0;
 	while(abs(SensorValue[gyro]) < degrees)
 	{
-	  TurnLeft(power);
+		TurnRight(power);
 	}
 	DriveForward(0);
 }
@@ -44,6 +54,6 @@ void TurnLeftDegrees(int degrees, int power)
 //Turns right until the gyro reads a vaule equal to or greater than the degrees
 void TurnRightDegrees(int degrees, int power)
 {
-	TurnLeftDegrees(degrees, -1 * power);
+	TurnRightDegrees(degrees, -1 * power);
 }
 #endif
