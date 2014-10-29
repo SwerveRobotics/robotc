@@ -25,7 +25,10 @@
 
 task main()
 {
-
-
+	StartTask(Drive);
+	while(true)
+	{
+		//...
+	}
 
 }
