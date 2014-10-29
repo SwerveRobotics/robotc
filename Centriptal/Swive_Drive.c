@@ -23,24 +23,28 @@
 
 #define TICK_TO_DEGREE_MOTOR (0.46)
 #define DEGREE_TO_TICK_SERVO (0.71)
-#define SWIVE_GEAR_RATIO_MOTOR (1.3)
 #define SWIVE_GEAR_RATIO_SERVO (0.5)
 
-typedef enumWord {FR,FL,BL,BR}POS;
+typedef enumWord {FR,FL,BL,BR}POS;//This doesn't appear to be the usual method of enumeration
 
-
-
-typedef struct
+typedef struct //define swerve drive module data type
 {
-	POS swivePos;
 	int direction;
 	int power;
 	int tomPosition; //angle from center of robot to drive
 }SWIVE;
 
-SWIVE SwiveFR;
-SwiveFR.swivePos = FR;
-SwiveFR.tomPosition  = (swivePos + 1) * 45;
+SWIVE Swive[4];
+
+void InitializeSwive() //May not be nessecary. Served as a test of the struct, array, and enum.
+{
+	Swive[FR].tomPosition = 45;
+	Swive[FL].tomPosition = 135;
+	Swive[BL].tomPosition = 225;
+	Swive[BR].tomPosition = 315;
+}
+
+void TomDrive(int dir,int rot, int multPower);
 
 /*void DriveSwive(string loc, int dir, int power)
 {
