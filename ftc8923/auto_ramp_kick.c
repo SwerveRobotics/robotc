@@ -1,10 +1,10 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
-#pragma config(Motor,  mtr_S1_C1_1,     mtrFL,         tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     mtrBL,         tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_1,     mtrFR,         tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     mtrBR,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     mtrFL,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_2,     mtrBL,         tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    irRotator,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -16,52 +16,57 @@
 #include "../Library/drive_modes/tank_4m.c"
 #include "../Library/autonomous/auto_drive.c"
 #include "center_objectives.c"
+#include "JoystickDriver.c"
 
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
-
 	int position = 0;
-	//waitForStart
+	#include "initialize_robot.h"
+
+	waitForStart();
 
 	//Robot detects position of IR beacon
-	for(int i = 64; i < 96; i++)
+	servo[irRotator] = 217;
+	wait1Msec(5000);
+	if(SensorValue[IRSensor] == 4)
 	{
-		servo[irRotator] = i;
-		if(servo[irRotator] == 70 && SensorValue[IRSensor] == 4)
-		{
-			position = 1;
-		}
+		nxtDisplayTextLine(1, "1");
+		nxtDisplayTextLine(1, "%d", SensorValue[IRSensor]);
+	}
 
-		else if(servo[irRotator] == 90 && SensorValue[IRSensor] == 4)
-		{
-			position = 3;
-		}
+	servo[irRotator] = 225;
+	wait1Msec(5000);
+	if(SensorValue[IRSensor] == 4)
+	{
+		nxtDisplayTextLine(1, "2");
+		nxtDisplayTextLine(2, "%d", SensorValue[IRSensor]);
+	}
 
-		//This have no if statement, as the robot can't see the beacon from the ramp
-		else
-		{
-			position = 2;
-		}
+	servo[irRotator] = 240;
+	wait1Msec(5000);
+	if(SensorValue[IRSensor] == 4)
+	{
+		nxtDisplayTextLine(1, "3");
+		nxtDisplayTextLine(2, "%d", SensorValue[IRSensor]);
 	}
 
 	//Robot knocks over kickstand for the position it's in
 	if(position == 1)
 	{
-		RampKickPos1();
+		nxtDisplayTextLine(1, "1");
 	}
 
 	else if(position == 2)
 	{
-		RampKickPos2();
+		nxtDisplayTextLine(1, "2");
 	}
 
 	else if(position == 3)
 	{
-		RampKickPos3();
+		nxtDisplayTextLine(1, "3");
 	}
-
+		wait1Msec(1000);
 	/*
 	rotatate ir sensor
 	detect beacon
