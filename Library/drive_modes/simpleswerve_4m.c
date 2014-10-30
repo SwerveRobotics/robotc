@@ -5,7 +5,8 @@
 
 typedef enumWord{FRONT_RIGHT,FRONT_LEFT,BACK_LEFT,BACK_RIGHT}POS;
 
-typedef struct //define swerve drive module data type
+//define swerve drive module data type
+typedef struct
 {
 	int position;
 	int power;
@@ -52,9 +53,9 @@ int MIN_SERVO_ANGLE = -PI/2;
 ///wheel radius (in meters in this set up)
 int WHEEL_RADIUS = 0.0508 ;
 
-
+//maximum motor speed in meters per second based on a 4inch diameter wheel and a 154rpm motor
 const int MAX_MOTOR_SPEED_MPS = 0.8193; // it might make sense to make a library file for a bunch of constants like this, and unit conversions, this is with a 4in diameter wheel btw
-
+//unit conversion between "motor power" units and meters per second, based on a 4in diameter wheel.
 const int MOTOR_POWER_PER_MPS = 120.7671; //we really should just make a bunch of these
 
 //sets parameters that are specific to different hardware configurations.
