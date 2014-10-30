@@ -51,13 +51,14 @@ void InitColorVals()
 	colorArray[RED_COLOR].max = 9;
 }
 
+
 //If the sensor detects a color, it returns true and displays the color
 //Otherwise it returns false and displays "Unknown"
 bool OnColor(floorColorEnum floorColor)
 {
-	if(SensorVal > colorArray[floorColor].min && ReadColorSensor() > colorArray[floorColor].max)
+	if(ReadColorSensor() > colorArray[floorColor].min && ReadColorSensor() < colorArray[floorColor].max)
 	{
-		return floorColor;
+		return true;
 	}
 	else
 	{
