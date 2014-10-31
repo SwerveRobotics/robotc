@@ -53,7 +53,20 @@ void BeconPos1()
 
 void BeaconPos2()
 {
-	while
+	while(nMotorEncoder[Left] <= 4320)
+	{
+		motor[Left] = 60;
+		motor[Left2] = 60;
+		motor[Right] = 60;
+		motor[Right2] = 60;
+	}
+	motor[Left] = 0;
+	motor[Left2] = 0;
+	motor[Right] = 0;
+	motor[Right2] = 0;
+	nMotorEncoder[Left] = 0;
+
+	while(nMotorEncoder[Left] <= )
 }
 
 task main()
@@ -64,11 +77,14 @@ task main()
 
 	while(true)
 	{
-			if(SensorValue[IROne] == 4 && SensorValue[IRTwo] == 5)
+			if(SensorValue[IROne] == 4 && SensorValue[IRTwo] == 6)
 			{
 				BeconPos1();
 			}
-			else if
+			else if(SensorValue[IROne] == 5 && SensorValue[IRTwo] == 7)
+			{
+				BeaconPos2();
+			}
 	}
 
 
