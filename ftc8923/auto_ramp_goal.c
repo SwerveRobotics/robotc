@@ -21,11 +21,7 @@
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
-	RegisterEncoderMotor(mtrFR);
-	WHEEL_DIAMETER = 4;
-	GEAR_RATIO = 1.5;
-	servo[goalGrabber] = 96;
+	#include "initialize_robot.h"
 
 	waitForStart();
 
@@ -34,13 +30,22 @@ task main()
 	//Robot drives back towards ramp
 	//Robot turns right to go to parking zone
 	//Robot drives strait toward parking zone
+	//Robot turns while in parking zone
+	//Robot ensures goal is in parking zone
+
 	DriveBackwardDistance(80, 20);
 	servo[goalGrabber] = 0;
 	wait1Msec(500);
+
+	//This doesn't use TurnRightDegrees, as we don't have a gyro
 	TurnRight(50);
 	wait1Msec(300);
+
 	DriveForwardDistance(94, 20);
+
+	//Not using the funtion for the same reason above
 	TurnRight(50);
 	wait1Msec(500);
+
 	DriveForwardDistance(10,20);
 }
