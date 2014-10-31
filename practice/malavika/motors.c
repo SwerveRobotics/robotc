@@ -1,17 +1,17 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-const float deadZone = 15.0;
-const float maxJoy = 128.0;
-const float minSpeed = 20.0;
-const float maxSpeed = 100.0;
+const float DEAD_ZONE = 15.0;
+const float MAX_JOY = 128.0;
+const float MIN_SPEED = 20.0;
+const float MAX_SPEED = 100.0;
 
-const float slope = (maxSpeed - minSpeed)/(maxJoy - deadZone);
-const float intercept = minSpeed - slope * deadZone;
+const float SLOPE = (MAX_SPEED - MIN_SPEED)/(MAX_JOY - DEAD_ZONE);
+const float INTERCEPT = MIN_SPEED - SLOPE * DEAD_ZONE;
 
 void SetSpeed(tMotor mtr, int speed)
 {
-	motor[mtr] = (slope * abs(speed) + intercept) * sgn(speed);
+	motor[mtr] = (SLOPE * abs(speed) + INTERCEPT) * sgn(speed);
 }
 
 #endif

@@ -47,4 +47,8 @@ bool OnColor(FloorColorEnum floorColor, int sensorVal)
 	}
 }
 
+void DisplayColorOnNXT()
+{
+}
+
 #endif
