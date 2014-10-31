@@ -39,12 +39,12 @@ void RegisterDriveServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIn
 }
 
 //make an enum to easily reference the four different assemblies by their position on the robot.
-typedef enum
+typedef enumWord
 {
-	FRONT_RIGHT_ASSEMBLY;
-	FRONT_LEFT_ASSEMBLY;
-	BACK_LEFT_ASSEMBLY;
-	BACK_RIGHT_ASSEMBLY;
+	FRONT_RIGHT_ASSEMBLY,
+	FRONT_LEFT_ASSEMBL,
+	BACK_LEFT_ASSEMBLY,
+	BACK_RIGHT_ASSEMBLY,
 }
 	MotorEnum;
 
@@ -100,8 +100,6 @@ const float MAX_MOTOR_SPEED_MPS = 0.8193;
 //unit conversion between "motor power" units and meters per second, based on a 4in diameter wheel.
 const float MOTOR_POWER_PER_MPS = 120.7671;
 
-float SERVO_ANGLE_TO_VAL = ((MAX_SERVO_VAL - MIN_SERVO_VAL) / (MAX_SERVO_ANGLE - MIN_SERVO_ANGLE))
-
 //maximum value the servo can be sent to
 int MAX_SERVO_VAL = 255;
 //minimum value the servo can be sent to
@@ -113,6 +111,7 @@ float MIN_SERVO_ANGLE = -PI/2.0;
 //these are more based off of the type of servo used, so maybe a definition based on that would be easier.
 //this is kept out of all the config stuff cuz it could be implemented more generally.
 
+float SERVO_ANGLE_TO_VAL = ((MAX_SERVO_VAL - MIN_SERVO_VAL) / (MAX_SERVO_ANGLE - MIN_SERVO_ANGLE));
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //Now that we have the prerequisites set up and defined, we can start defining some functions:
@@ -147,10 +146,10 @@ void initializeDriveAssemblies()
 float JoystickToRadiansPerSecond(int joystickZPosition)
 {
 	int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; 	// allowed input range from the joystick.
-	float maxRadiansPerSecond= MAX_MOTOR_SPEED_MPS * MAX_MOTOR_GEAR_RATIO) / LARGEST_CENTER_RADIUS;	//maximum rotational speed possible.
+	float maxRadiansPerSecond= (MAX_MOTOR_SPEED_MPS * MAX_MOTOR_GEAR_RATIO) / LARGEST_CENTER_RADIUS;	//maximum rotational speed possible.
 	float attenuationSlope =  maxRadiansPerSecond / joystickRange;	//mapping maximum rotational speed to the allowed joystick input range, aka. finding the slope.
 	float attenuationIntercept = sgn(joystickZPosition) * attenuationSlope * ANALOG_DEAD_ZONE;	//finding the range taken up by the dead zone, aka. finding the intercept.
-	float angularSpeed = (attenuationslope * joystickZPosition) + attenuationIntercept;	//slope-intercept form of attenuation.
+	float angularVelocity = (attenuationSlope * joystickZPosition) + attenuationIntercept;	//slope-intercept form of attenuation.
 	return angularVelocity;	//this is the "desired" angular velocity based on the joystick input above.
 }
 
@@ -160,7 +159,7 @@ int JoystickToMetersPerSecond(int joystickXorYPosition, int joystickZPosition)
 {
 	int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
 	float fastestMotorSpeedInRotationalComponent = JoystickToRadiansPerSecond(joystickZPosition) * LARGEST_CENTER_RADIUS; //find the largest component of motor velocity used to rotate the robot (limiting factor)
-	float maximumLinearSpeed = sqrt( pow(MAX_MOTOR_SPEED_MPS, 2) - pow(motorSpeedInRotationalComponent, 2)); //calculate the maximum linear speed "left over" from the current rotational motion.
+	float maximumLinearSpeed = sqrt( pow(MAX_MOTOR_SPEED_MPS, 2) - pow(fastestMotorSpeedInRotationalComponent, 2)); //calculate the maximum linear speed "left over" from the current rotational motion.
 	float attenuationSlope = maximumLinearSpeed / joystickRange;	//map the maximum linear speed to the joystick range, aka. finding the slope.
 	float attenuationIntercept = sgn(joystickXorYPosition) * attenuationSlope * ANALOG_DEAD_ZONE;	//finding the range taken by the dead zone, aka. finding the intercept.
 	float linearVelocityInXorY = attenuationSlope * joystickXorYPosition + attenuationIntercept;	//slope-intercept for of attenuation.
