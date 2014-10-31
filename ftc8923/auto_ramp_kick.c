@@ -15,6 +15,7 @@
 
 #include "../Library/drive_modes/tank_4m.c"
 #include "../Library/autonomous/auto_drive.c"
+#include "../Library/sensors/ir_seeker.c"
 #include "center_objectives.c"
 #include "JoystickDriver.c"
 
@@ -31,7 +32,7 @@ task main()
 	//Robot detects position of IR beacon and uses corresponding function accordingly
 	servo[irRotator] = position1;
 	wait1Msec(5000);
-	if(SensorValue[IRSensor] == 4)
+	if(ReadIRSensor() == 4)
 	{
 		RampKickPos1();
 	}
@@ -40,7 +41,7 @@ task main()
 	{
 		servo[irRotator] = position2;
 		wait1Msec(5000);
-		if(SensorValue[IRSensor] == 4)
+		if(ReadIRSensor() == 4)
 		{
 			RampKickPos2();
 		}
@@ -49,7 +50,7 @@ task main()
 		{
 			servo[irRotator] = position3;
 			wait1Msec(5000);
-			if(SensorValue[IRSensor] == 4)
+			if(ReadIRSensor() == 4)
 			{
 				RampKickPos3();
 			}
