@@ -6,9 +6,10 @@ void RampKickPos1()
 	/*Robot drive off ramp
 	Turns to face center structure
 	Knocks down kickstand*/
-	DriveForwardDistance(20, 100);
-	TurnLeftDegrees(90, 100);
-	DriveForwardDistance(30, 100);
+	DriveForwardDistance(40, 20);
+	TurnLeft(100);
+	wait1Msec(500);
+	DriveForwardDistance(40, 20);
 }
 
 void RampKickPos2()
@@ -16,9 +17,10 @@ void RampKickPos2()
 	/*Robot drive off ramp
 	Turns to face center structure
 	Knocks down kickstand*/
-	DriveForwardDistance(30, 100);
-	TurnLeftDegrees(135, 100);
-	DriveForwardDistance(30, 100);
+	DriveForwardDistance(50, 20);
+	TurnLeft(100);
+	wait1Msec(500);
+	DriveForwardDistance(30, 20);
 }
 
 void RampKickPos3()
@@ -28,10 +30,12 @@ void RampKickPos3()
 	Drives toward center structure
 	Turns to face kcikstand
 	Knocks down kickstand*/
-	DriveForwardDistance(20, 100);
-	TurnLeftDegrees(90, 100);
-	DriveForwardDistance(20, 100);
-	TurnRightDegrees(90, 100);
-	DriveForwardDistance(10, 100);
+	DriveForwardDistance(40, 20);
+	TurnLeft(100);
+	wait1Msec(500);
+	DriveForwardDistance(30, 20);
+	TurnRight(100);
+	wait1Msec(500);
+	DriveForwardDistance(10, 20);
 }
 #endif
