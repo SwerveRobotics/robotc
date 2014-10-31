@@ -1,10 +1,10 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
-#pragma config(Motor,  mtr_S1_C1_1,     mtrFL,         tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S1_C1_2,     mtrBL,         tmotorTetrix, openLoop, reversed)
-#pragma config(Motor,  mtr_S1_C2_1,     mtrFR,         tmotorTetrix, openLoop, encoder)
-#pragma config(Motor,  mtr_S1_C2_2,     mtrBR,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
+#pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C2_1,     mtrFL,         tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C2_2,     mtrBL,         tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S1_C3_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_2,    irRotator,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C3_3,    servo3,               tServoNone)
@@ -15,58 +15,45 @@
 
 #include "../Library/drive_modes/tank_4m.c"
 #include "../Library/autonomous/auto_drive.c"
+#include "../Library/sensors/ir_seeker.c"
 #include "center_objectives.c"
+#include "JoystickDriver.c"
 
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
+	#include "initialize_robot.h"
+	int position1 = 217;
+	int position2 = 225;
+	int position3 = 240;
 
-	int position = 0;
-	//waitForStart
+	waitForStart();
 
-	//Robot detects position of IR beacon
-	for(int i = 64; i < 96; i++)
-	{
-		servo[irRotator] = i;
-		if(servo[irRotator] == 70 && SensorValue[IRSensor] == 4)
-		{
-			position = 1;
-		}
-
-		else if(servo[irRotator] == 90 && SensorValue[IRSensor] == 4)
-		{
-			position = 3;
-		}
-
-		//This have no if statement, as the robot can't see the beacon from the ramp
-		else
-		{
-			position = 2;
-		}
-	}
-
-	//Robot knocks over kickstand for the position it's in
-	if(position == 1)
+	//Robot detects position of IR beacon and uses corresponding function accordingly
+	servo[irRotator] = position1;
+	wait1Msec(5000);
+	if(ReadIRSensor() == 4)
 	{
 		RampKickPos1();
 	}
 
-	else if(position == 2)
+	else
 	{
-		RampKickPos2();
-	}
+		servo[irRotator] = position2;
+		wait1Msec(5000);
+		if(ReadIRSensor() == 4)
+		{
+			RampKickPos2();
+		}
 
-	else if(position == 3)
-	{
-		RampKickPos3();
+		else
+		{
+			servo[irRotator] = position3;
+			wait1Msec(5000);
+			if(ReadIRSensor() == 4)
+			{
+				RampKickPos3();
+			}
+		}
 	}
-
-	/*
-	rotatate ir sensor
-	detect beacon
-	drive off ramp
-	turn to face kickstand
-	drive until kickstand is reached
-	*/
 }
