@@ -91,7 +91,9 @@ float SERVO_GEAR_RATIO[4] = {1.0,1.0,1.0,1.0};
 //WHEEL_RADIUS in meters.
 float WHEEL_RADIUS[4] = {0.0508,0.0508,0.0508,0.0508};
 
-float LARGEST_CENTER_RADIUS (0.2286) //change this to check and set to the largest number in CENTER_RADIUS
+float LARGEST_CENTER_RADIUS = 0.2286; //change this to check and set to the largest number in CENTER_RADIUS
+
+float MAX_MOTOR_GEAR_RATIO = 1;// change this to check and sst to thee largest number in MOTOR_GEAR_RATIO
 
 //maximum motor speed in meters per second based on a 4inch diameter wheel and a 154rpm motor
 const float MAX_MOTOR_SPEED_MPS = 0.8193;
@@ -145,7 +147,7 @@ void initializeDriveAssemblies()
 float JoystickToRadiansPerSecond(int joystickZPosition)
 {
 	int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; 	// allowed input range from the joystick.
-	float maxRadiansPerSecond= MAX_MOTOR_SPEED_MPS * MOTOR_GEAR_RATIO) / LARGEST_CENTER_RADIUS;	//maximum rotational speed possible.
+	float maxRadiansPerSecond= MAX_MOTOR_SPEED_MPS * MAX_MOTOR_GEAR_RATIO) / LARGEST_CENTER_RADIUS;	//maximum rotational speed possible.
 	float attenuationSlope =  maxRadiansPerSecond / joystickRange;	//mapping maximum rotational speed to the allowed joystick input range, aka. finding the slope.
 	float attenuationIntercept = sgn(joystickZPosition) * attenuationSlope * ANALOG_DEAD_ZONE;	//finding the range taken up by the dead zone, aka. finding the intercept.
 	float angularSpeed = (attenuationslope * joystickZPosition) + attenuationIntercept;	//slope-intercept form of attenuation.
@@ -188,15 +190,46 @@ float CalculateDriveSpeed(float velocityX,float velocityY,float velocityZ,int dr
 {
 	float driveXComponent = velocityX + (velocityZ * Drive[driveIdentifier].radiusFromCenter * cos(Drive[driveIdentifier].offsetAngle)); //find the component of the drive assembly velocity that is in X.
 	float driveYComponent = velocityY - (velocityZ * Drive[driveIdentifier].radiusFromCenter * sin(Drive[driveIdentifier].offsetAngle)); //find the component of the drive assembly velocity that is in Y.
-	float driveSpeed = sqrt(pow(driveXComponent, 2) + pow(driveYComponent, 2)); //use pythagoras to find the speed the drive assembly in question should be moving at.
+	float driveSpeed = sqrt(pow(driveXComponent, 2) + pow(driveYComponent, 2)); //find the speed the drive assembly in question should be moving at.
 	return driveSpeed;
 }
 
 //Convert from SI units to MotorPower and Servo Position units, then set the motorPower and servoPosition arguments of the motor in question accordingly.
 void SetDriveVelocity(float driveSpeed, float driveAngle,int driveIdentifier)
 {
-	Drive[driveIdentifier].motorPower = MOTOR_POWER_PER_MPS * Drive[driveIdentifier].motorGearRatio * driveSpeed ;
-	Drive[driveIdentifier].servoPosition = SERVO_ANGLE_TO_VAL * Drive[driveIdentifier].servoGearRatio * driveAngle
+	Drive[driveIdentifier].motorPower = MOTOR_POWER_PER_MPS * Drive[driveIdentifier].motorGearRatio * driveSpeed;
+	Drive[driveIdentifier].servoPosition = SERVO_ANGLE_TO_VAL * Drive[driveIdentifier].servoGearRatio * driveAngle;
 }
+
+/*
+The actual driver controlled portion of the program looks something like this then:
+
+	RegisterDriveMotors(FLM, BLM, FRM, BRM);
+
+	RegisterDriveServos(FLS, BLS, FRS, BRS);
+
+	// SetPhysicalConfiguration() // defaults are fine
+
+	InitializeDriveAssemblies();
+
+	while(true)
+	{
+
+		getJoyStickSettings(joystick.joy1_x1);
+		getJoystickSettings(joystick.joy1_y1);
+		getJoystickSettings(joystick.joy2_x1);
+
+			for (MotorEnum index; index < 4; index++)
+		{
+			SetDriveVelocity(
+			(CalculateDriveSpeed(JoystickToMetersPerSecond(joystick.joy1_x, 1joystick.joy2_x1), JoystickToMetersPerSecond(joystick.joy1_y1, joystick.joy2_x1), JoystickToRadiansPerSecond(joystick.joy2_x1), index),
+			 CalculateDriveAngle(JoystickToMetersPerSecond(joystick.joy1_x, 1joystick.joy2_x1), JoystickToMetersPerSecond(joystick.joy1_y1, joystick.joy2_x1), JoystickToRadiansPerSecond(joystick.joy2_x1), index),
+			 index)
+		}
+	}
+
+And autonomous is basically a sequence of moves input by the same function, but replacing the joystick calculations with values. Some additional tools for autonomous need to be written.
+
+*/
 
 #endif
