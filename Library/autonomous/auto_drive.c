@@ -2,7 +2,7 @@
 #define AUTO_DRIVE_FUNCTIONS_C
 
 int WHEEL_DIAMETER = 4;
-float GEAR_RATIO = 1;
+float GEAR_RATIO = 1.0;
 
 tMotor ENCODER_MOTOR;
 
@@ -12,10 +12,10 @@ void RegisterEncoderMotor(tMotor motorName)
 }
 
 //Takes an input of encoder ticks and converts to inches
-float EncoderDistance(int ticks)
+float EncoderDistance(float ticks)
 {
 	float circumference = PI * WHEEL_DIAMETER;
-	float revolutions = (ticks / 1440) * GEAR_RATIO;
+	float revolutions = (ticks / 1440.0) * GEAR_RATIO;
 	return revolutions * circumference;
 }
 
@@ -51,9 +51,21 @@ void TurnLeftDegrees(int degrees, int power)
 	DriveForward(0);
 }
 
+void TurnLeftTime(int time, int power)
+{
+	TurnLeft(power);
+	wait1Msec(time);
+}
+
 //Turns right until the gyro reads a vaule equal to or greater than the degrees
 void TurnRightDegrees(int degrees, int power)
 {
-	TurnRightDegrees(degrees, -1 * power);
+	TurnLeftDegrees(degrees, -1 * power);
+}
+
+void TurnRightTime(int time, int power)
+{
+	TurnRight(power);
+	TurnLeft(power);
 }
 #endif

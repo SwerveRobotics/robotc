@@ -1,6 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
+#pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker1200)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_1,     mtrFL,         tmotorTetrix, openLoop)
@@ -23,37 +23,31 @@ task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
 	#include "initialize_robot.h"
-	int position1 = 217;
-	int position2 = 225;
-	int position3 = 240;
+	int position1 = 244;
+	int position3 = 221;
 
-	waitForStart();
+	//waitForStart();
 
 	//Robot detects position of IR beacon and uses corresponding function accordingly
-	servo[irRotator] = position1;
-	wait1Msec(5000);
+	servo[irRotator] = position3;
+	wait1Msec(500);
 	if(ReadIRSensor() == 4)
 	{
-		RampKickPos1();
+		RampKickPos3();
 	}
 
 	else
 	{
-		servo[irRotator] = position2;
-		wait1Msec(5000);
+		servo[irRotator] = position1;
+		wait1Msec(500);
 		if(ReadIRSensor() == 4)
 		{
-			RampKickPos2();
+			RampKickPos1();
 		}
 
 		else
 		{
-			servo[irRotator] = position3;
-			wait1Msec(5000);
-			if(ReadIRSensor() == 4)
-			{
-				RampKickPos3();
-			}
+			RampKickPos2();
 		}
 	}
 }
