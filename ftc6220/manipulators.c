@@ -1,5 +1,5 @@
-#ifndef MANIPULATOR_CONTROL.C
-#define MANIPULATOR_CONTROL.C
+#ifndef MANIPULATORS.C
+#define MANIPULATORS.C
 
 //14. This section is intentionally left blank.
 
