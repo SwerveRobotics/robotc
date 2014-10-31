@@ -11,6 +11,8 @@ typedef struct //define swerve drive module data type
 	int power;
 	int offsetAngle;
 	float radius;
+	float motorRatio;
+	float servoRatio;
 }SWIVE;
 
 SWIVE Swive[4];
@@ -27,20 +29,10 @@ float OFFSET_ANGLE[4] = {PI/4, 3 * PI/4, 5 * PI/4, 7 * PI/4};
 // for use in some of the joystick scaling, we need the largest radius value.
 #define LARGEST_RADIUS (0.2286) //change this to find the largest number in RADIUS
 
-void initializeSwiveGeometry()//sets drive geometry the swive struct
-{
-	for (POS p; p < 4; p++)
-	{
-		Swive[p].radius = RADIUS[p];
-		Swive[p].offsetAngle = OFFSET_ANGLE[p];
-	}
-
-}
-
 //The motorgearratio is the gear ratio between the motor and the wheel
-int MOTOR_GEAR_RATIO = 1;
+float MOTOR_GEAR_RATIO = 1.206;
 //The servogearratio is the gear ratio between the servo and the turntable
-int SERVO_GEAR_RATIO = 1;
+float SERVO_GEAR_RATIO[4] = {1, 1, 1, 1};
 //maximum value the servo can be sent to
 int MAX_SERVO_VAL = 255;
 //minimum value the servo can be sent to
@@ -53,23 +45,22 @@ int MIN_SERVO_ANGLE = -PI/2;
 int WHEEL_RADIUS = 0.0508 ;
 
 
+void initializeSwiveGeometry()//sets drive geometry the swive struct
+{
+	for (POS p; p < 4; p++)
+	{
+		Swive[p].radius = RADIUS[p];
+		Swive[p].offsetAngle = OFFSET_ANGLE[p];
+		Swive[p].motorRatio = MOTOR_GEAR_RATIO;
+		Swive[p].servoRatio = SERVO_GEAR_RATIO[p];
+	}
+
+}
+
+
 const int MAX_MOTOR_SPEED_MPS = 0.8193; // it might make sense to make a library file for a bunch of constants like this, and unit conversions, this is with a 4in diameter wheel btw
 
 const int MOTOR_POWER_PER_MPS = 120.7671; //we really should just make a bunch of these
-
-//sets parameters that are specific to different hardware configurations.
-void SetDrivePhysicalConfiguration(int radius,int offsetAngle, int motorGearRatio, int servoGearRatio, int maxServoValue, int minServoValue, int maxServoAngle, int minServoAngle, int wheelRadius)
-{
-	RADIUS = radius;
-	OFFSET_ANGLE = offsetAngle;
-	MOTOR_GEAR_RATIO = motorGearRatio;
-	SERVO_GEAR_RATIO = servoGearRatio;
-	MAX_SERVO_VAL = maxServoAngle;
-	MIN_SERVO_VAL = minServoAngle;
-	MAX_SERVO_ANGLE = maxServoAngle;
-	MIN_SERVO_ANGLE = minServoAngle;
-	WHEEL_RADIUS = wheelRadius;
-}
 
 //Attenuate the joystick input being used for angular velocity based on the maximum radius and the maximum motor speed, then convert to radians per second
 int JoystickToRadiansPerSecond(int joystickZPosition)
@@ -93,10 +84,10 @@ int JoystickToMetersPerSecond(int joystickXorYPosition, int joystickZPosition)
 //velocityZ is the angular (Round and round) component in rad/s
 //This reference frame is relative to the robot in all instances.
 //So, the angular argument turns it like a car, while the x and y arguments strafe it around the field
-float CalculateMotorAngle(int velocityX, int velocityY, int velocityZ,int driveIdentifier)
+float CalculateMotorAngle(int velocityX, int velocityY, int velocityZ,POS driveID)
 {
 	//used the arctangent function to find the angular component of the velocity vector for the chosen motor
-	int motorAngle = atan((velocityX + velocityZ * RADIUS[driveIdentifier] * cos(OFFSET_ANGLE[driveIdentifier])) / (velocityY - velocityZ * RADIUS[driveIdentifier] * sin(OFFSET_ANGLE[driveIdentifier])));
+	int motorAngle = atan((velocityX + velocityZ * Swive[driveID].radius * cos(Swive[driveID].offsetAngle)) / (velocityY - velocityZ * Swive[driveID].radius * sin(Swive[driveID].offsetAngle)));
 	return motorAngle;
 }
 
@@ -106,16 +97,16 @@ float CalculateMotorAngle(int velocityX, int velocityY, int velocityZ,int driveI
 //velocityZ is the angular (Round and round) component in rad/s
 //This reference frame is relative to the robot in all instances.
 //So, the angular argument turns it like a car, while the x and y arguments strafe it around the field
-int CalculateMotorSpeed(int velocityX,int velocityY,int velocityZ,int driveIdentifier)
+int CalculateMotorSpeed(int velocityX,int velocityY,int velocityZ,POS driveID)
 {
 	// uses the pythagorean theorem to find the magnitude of the velocity vector for the chosen motor
-	int motorSpeed = sqrt(pow((velocityX + velocityZ * RADIUS[driveIdentifier] * cos(OFFSET_ANGLE[driveIdentifier])), 2) + pow((velocityY - velocityZ * RADIUS[driveIdentifier] * sin(OFFSET_ANGLE[driveIdentifier])), 2));
+	int motorSpeed = sqrt(pow((velocityX + velocityZ * Swive[driveID].radius * cos(Swive[driveID].offsetAngle)), 2) + pow((velocityY - velocityZ * Swive[driveID].radius * sin(Swive[driveID].offsetAngle)), 2));
 	return motorSpeed;
 }
 
 //Convert the calculated units to the units for our servos and motors, then send to the drive assemblies
 //this will need to be rewritten with more thought as to the particulars of limited servo ranges...
-void SetDriveVelocity(int speed, int angle,int driveIdentifier)
+void SetDriveVelocity(int speed, int angle,POS driveID)
 {
 	//convert radians to servo positions
 	//the way this is set up is the reason that the servos should be set to the center position facing forwards
@@ -124,8 +115,8 @@ void SetDriveVelocity(int speed, int angle,int driveIdentifier)
 	//convert m/s to motor power
 	int power = MOTOR_POWER_PER_MPS * speed * MOTOR_GEAR_RATIO ;
 	//send the values to the corresponding motor and servo
-	Swive[driveIdentifier].power = power;
-	Swive[driveIdentifier].position = position;
+	Swive[driveID].power = power;
+	Swive[driveID].position = position;
 }
 
 #endif
