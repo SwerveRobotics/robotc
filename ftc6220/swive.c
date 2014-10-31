@@ -28,6 +28,8 @@ task drive()
 	{
 		getJoystickSettings(joystick);
 
+		initializeSwiveGeometry();
+
 		int X_Velocity = JoystickToMetersPerSecond(joystick.joy1_x2, joystick.joy1_x1);
 		int Y_Velocity = JoystickToMetersPerSecond(joystick.joy1_y2, joystick.joy1_x1);
 		int Z_Velocity = JoystickToRadiansPerSecond(joystick.joy1_x1);
