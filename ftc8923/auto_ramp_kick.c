@@ -21,57 +21,38 @@
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
-	int position = 0;
 	#include "initialize_robot.h"
+	int position1 = 217;
+	int position2 = 225;
+	int position3 = 240;
 
 	waitForStart();
 
-	//Robot detects position of IR beacon
-	servo[irRotator] = 217;
+	//Robot detects position of IR beacon and uses corresponding function accordingly
+	servo[irRotator] = position1;
 	wait1Msec(5000);
 	if(SensorValue[IRSensor] == 4)
 	{
-		nxtDisplayTextLine(1, "1");
-		nxtDisplayTextLine(1, "%d", SensorValue[IRSensor]);
+		RampKickPos1();
 	}
 
-	servo[irRotator] = 225;
-	wait1Msec(5000);
-	if(SensorValue[IRSensor] == 4)
+	else
 	{
-		nxtDisplayTextLine(1, "2");
-		nxtDisplayTextLine(2, "%d", SensorValue[IRSensor]);
-	}
+		servo[irRotator] = position2;
+		wait1Msec(5000);
+		if(SensorValue[IRSensor] == 4)
+		{
+			RampKickPos2();
+		}
 
-	servo[irRotator] = 240;
-	wait1Msec(5000);
-	if(SensorValue[IRSensor] == 4)
-	{
-		nxtDisplayTextLine(1, "3");
-		nxtDisplayTextLine(2, "%d", SensorValue[IRSensor]);
+		else
+		{
+			servo[irRotator] = position3;
+			wait1Msec(5000);
+			if(SensorValue[IRSensor] == 4)
+			{
+				RampKickPos3();
+			}
+		}
 	}
-
-	//Robot knocks over kickstand for the position it's in
-	if(position == 1)
-	{
-		nxtDisplayTextLine(1, "1");
-	}
-
-	else if(position == 2)
-	{
-		nxtDisplayTextLine(1, "2");
-	}
-
-	else if(position == 3)
-	{
-		nxtDisplayTextLine(1, "3");
-	}
-		wait1Msec(1000);
-	/*
-	rotatate ir sensor
-	detect beacon
-	drive off ramp
-	turn to face kickstand
-	drive until kickstand is reached
-	*/
 }
