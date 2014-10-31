@@ -1,31 +1,29 @@
 #ifndef MOTORS_C
 #define MOTORS_C
 
-#include "../controllers/controller.c"
+#include "motor_defines.h"
+#include "../controllers/controller_defines.h"
 
-//Sets the minimums and maximums of motor powers and joystick values.
-const float JOY_MAX = 128.0;
-const float MOTOR_MIN = 20.0;
-const float MOTOR_MAX = 100.0;
 
-//Sets the slope and y-intercept of the function to look nicer below.
-const float SLOPE = (MOTOR_MAX - MOTOR_MIN) /(JOY_MAX - DEADZONE);
-const float INTERCEPT = DEADZONE - SLOPE;
+// Assuming a linear relationship between these values, we can solve for the slope //
+const float LINEAR_MOTOR_CONTROL_SLOPE = (MAX_MOTOR_POWER-MIN_MOTOR_POWER)/(MAX_ANALOG-ANALOG_DEAD_ZONE);
+// Solve for the Y-intercept (equation was sovled for with a simple system of two equations assuming a linear relationship)
+const float LINEAR_MOTOR_CONTROL_INTERCEPT = (MIN_MOTOR_POWER-(LINEAR_MOTOR_CONTROL_SLOPE*ANALOG_DEAD_ZONE));
 
-int InputScale(int controllerVal)
+// Calculates Output from Input based on a Linear Relationship
+int AttenuateControllerOutput(int output)
 {
-	return (SLOPE * controllerVal + INTERCEPT);
+	// using linear equation in slope-intercept form of y = mx + b
+  return (LINEAR_MOTOR_CONTROL_SLOPE*output + sgn(output)*LINEAR_MOTOR_CONTROL_INTERCEPT);
 }
 
-//Sets the left motor power to what the Drive task told it to be and manipulates the power acordingly.
-void LeftMotorPower(int leftSpeed)
+// Set Motor Power
+void SetMotorPower(tMotor motorName, int power)
 {
-	motor[mtrL] = InputScale(leftSpeed) * sgn(leftSpeed);
+	if(ASSUME_CONTROLLER_INPUT==true)
+		motor[motorName] = AttenuateControllerOutput(power);
+	else
+		motor[motorName] = power;
 }
 
-//Sets the right motor power to what the Drive task told it to be and manipulates the power acordingly.
-void RightMotorPower(int rightSpeed)
-{
-	motor[mtrR] = InputScale(rightSpeed) * sgn(rightSpeed);
-}
 #endif

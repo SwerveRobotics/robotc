@@ -1,9 +1,8 @@
 #ifndef DRIVE_C
 #define DRIVE_C
 
+#include "../Library/drive_modes/tank_4m.c"
 #include "JoystickDriver.c"
-#include "../library/controllers/controller_defines.h"
-#include "../library/drive_modes/tank_2m.c"
 
 task Drive()
 {
@@ -11,7 +10,7 @@ task Drive()
 	{
 		getJoystickSettings(joystick);
 
-		// Left Motor Control //
+		//If the left joystick is out out of the deadzone, the left motors are powered
 		if(abs(joystick.joy1_y1) > ANALOG_DEAD_ZONE)
 		{
 			DriveLeftMotors(joystick.joy1_y1);
@@ -21,7 +20,7 @@ task Drive()
 			DriveLeftMotors(0);
 		}
 
-		// Right Motor Control //
+		//If the right joystick is out out of the deadzone, the right motors are powered
 		if(abs(joystick.joy1_y2) > ANALOG_DEAD_ZONE)
 		{
 			DriveRightMotors(joystick.joy1_y2);
@@ -30,7 +29,6 @@ task Drive()
 		{
 			DriveRightMotors(0);
 		}
-
 	}
 }
 #endif
