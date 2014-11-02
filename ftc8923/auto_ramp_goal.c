@@ -17,6 +17,7 @@
 #include "../Library/autonomous/auto_drive.c"
 #include "center_objectives.c"
 #include "JoystickDriver.c"
+#include "../Library/sensors/ir_seeker.c"
 
 task main()
 {
@@ -34,18 +35,11 @@ task main()
 	//Robot ensures goal is in parking zone
 
 	DriveBackwardDistance(80, 20);
-	servo[goalGrabber] = 0;
+	servo[goalGrabber] = 160;
+	DriveBackwardDistance(5, 20);
 	wait1Msec(500);
-
-	//This doesn't use TurnRightDegrees, as we don't have a gyro
-	TurnRight(50);
-	wait1Msec(300);
-
+	TurnRightTime(300, 50);
 	DriveForwardDistance(94, 20);
-
-	//Not using the funtion for the same reason above
-	TurnRight(50);
-	wait1Msec(500);
-
+	TurnRightTime(500, 50);
 	DriveForwardDistance(10,20);
 }

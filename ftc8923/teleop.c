@@ -21,30 +21,24 @@ task main()
 {
 	ASSUME_CONTROLLER_INPUT = true;
 	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
+	servo[irRotator] = 128;
+	servo[goalGrabber] = 160;
+
+	waitForStart();
 
 	StartTask(Drive);
 	while(true)
 	{
 		getJoystickSettings(joystick);
 
-		if(joy1Btn(1) == 1)
+		if(joy2Btn(1) == 1)
 		{
-			servo[irRotator] = servo[irRotator] + 1;
+			servo[goalGrabber] = 100;
 		}
 
-		if(joy1Btn(2) == 1)
+		if(joy2Btn(3) == 1)
 		{
-			servo[irRotator] = servo[irRotator] - 1;
-		}
-
-		if(joy1Btn(3) == 1)
-		{
-			servo[goalGrabber] = 0;
-		}
-
-		if(joy1Btn(4) == 1)
-		{
-			servo[goalGrabber] = 96;
+			servo[goalGrabber] = 160;
 		}
 	}
 }
