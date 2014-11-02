@@ -66,6 +66,6 @@ void TurnRightDegrees(int degrees, int power)
 void TurnRightTime(int time, int power)
 {
 	TurnRight(power);
-	TurnLeft(power);
+	wait1Msec(time);
 }
 #endif
