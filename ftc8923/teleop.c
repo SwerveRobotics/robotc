@@ -16,13 +16,11 @@
 #define TANK_4M
 
 #include "tank.c"
+#include "init_teleop.c"
 
 task main()
 {
-	ASSUME_CONTROLLER_INPUT = true;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
-	servo[irRotator] = 128;
-	servo[goalGrabber] = 160;
+	InitializeTeleop();
 
 	waitForStart();
 
