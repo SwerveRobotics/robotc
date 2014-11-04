@@ -27,9 +27,10 @@ void DriveForwardDistance(int inches, int power)
 	{
 		DriveForward(power);
 	}
-	DriveForward(0);
+	StopAllDriveMotors();
 }
 
+//Drives backward at given power until the distance has been reached
 void DriveBackwardDistance(int inches, int power)
 {
 	nMotorEncoder[ENCODER_MOTOR] = 0;
@@ -37,7 +38,7 @@ void DriveBackwardDistance(int inches, int power)
 	{
 		DriveBackward(power);
 	}
-	DriveBackward(0);
+	StopAllDriveMotors();
 }
 
 //Turns left until the gyro reads a vaule equal to or greater than the degrees
@@ -48,13 +49,15 @@ void TurnLeftDegrees(int degrees, int power)
 	{
 		TurnRight(power);
 	}
-	DriveForward(0);
+	StopAllDriveMotors();
 }
 
+//Turns left at a given power until a time limit is reached
 void TurnLeftTime(int time, int power)
 {
 	TurnLeft(power);
 	wait1Msec(time);
+	StopAllDriveMotors();
 }
 
 //Turns right until the gyro reads a vaule equal to or greater than the degrees
@@ -63,9 +66,9 @@ void TurnRightDegrees(int degrees, int power)
 	TurnLeftDegrees(degrees, -1 * power);
 }
 
+//Turns right at a given power until a time limit is reached
 void TurnRightTime(int time, int power)
 {
-	TurnRight(power);
-	wait1Msec(time);
+	TurnLeftTime(time, -power);
 }
 #endif

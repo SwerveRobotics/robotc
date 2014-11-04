@@ -17,7 +17,6 @@
 
 task main()
 {
-	ASSUME_CONTROLLER_INPUT = false;
 	InitializeAuto();
 
 	waitForStart();
