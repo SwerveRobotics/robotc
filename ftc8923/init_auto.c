@@ -3,6 +3,7 @@
 
 void InitializeAuto()
 {
+	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
 	RegisterEncoderMotor(mtrFR);
 	RegisterIRSeeker(IRSensor);

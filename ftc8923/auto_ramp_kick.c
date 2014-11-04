@@ -17,7 +17,6 @@
 
 task main()
 {
-	ASSUME_CONTROLLER_INPUT = false;
 	InitializeAuto();
 	int position1 = 244;
 	int position3 = 221;
