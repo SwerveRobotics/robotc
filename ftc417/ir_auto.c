@@ -9,8 +9,10 @@
 
 #include "Joystickdriver.c"
 
-void BeconPos1()
+//this is for the first position of the center goal
+void BeaconPos1()
 {
+	//move the robot forward 3-4 rotations
 		while(nMotorEncoder[Left] <= 4320)
 		{
 			motor[Right] = 60;
@@ -24,7 +26,8 @@ void BeconPos1()
 		motor[Left2] = 0;
 		nMotorEncoder[Left] = 0;
 
-		while(nMotorEncoder[Left] <= 720)
+	//turn the robot by half a rotation
+		while(nMotorEncoder[Left] >= -720)
 		{
 			motor[Right] = 60;
 			motor[Right2] = 60;
@@ -37,6 +40,7 @@ void BeconPos1()
 		motor[Left2] = 0;
 		nMotorEncoder[Left] = 0;
 
+	//move the robot forward by 2 rotations
 		while(nMotorEncoder[Left] <= 2160)
 		{
 			motor[Right] = 60;
@@ -53,7 +57,8 @@ void BeconPos1()
 
 void BeaconPos2()
 {
-	while(nMotorEncoder[Left] <= 4320)
+	//move the robot forward by 3.5-4.5 rotations
+	while(nMotorEncoder[Left] <= 4420)
 	{
 		motor[Left] = 60;
 		motor[Left2] = 60;
@@ -66,7 +71,75 @@ void BeaconPos2()
 	motor[Right2] = 0;
 	nMotorEncoder[Left] = 0;
 
-	while(nMotorEncoder[Left] <= )
+	//turn the robot by about half a rotation
+	while(nMotorEncoder[Left] >= -720)
+	{
+		motor[Left] = -60;
+		motor[Left2] = -60;
+		motor[Right] = 60;
+		motor[Right2] = 60;
+	}
+	motor[Left] = 0;
+	motor[Left2] = 0;
+	motor[Right] = 0;
+	motor[Right2] = 0;
+	nMotorEncoder[Left] = 0;
+
+	//move forward by two rotations
+	while(nMotorEncoder[Left] <= 2160)
+	{
+		motor[Left] = 60;
+		motor[Left2] = 60;
+		motor[Right] = 60;
+		motor[Right2] = 60;
+	}
+	motor[Left] = 0;
+	motor[Left2] = 0;
+	motor[Right] = 0;
+	motor[Right2] = 0;
+	nMotorEncoder[Left] = 0;
+}
+
+void BeaconPos3()
+{
+	while(nMotorEncoder[Left] <= 4520)
+	{
+		motor[Left] = 60;
+		motor[Left2] = 60;
+		motor[Right] = 60;
+		motor[Right2] = 60;
+	}
+	motor[Left] = 0;
+	motor[Left2] = 0;
+	motor[Right] = 0;
+	motor[Right2] = 0;
+	nMotorEncoder[Left] = 0;
+
+	while(nMotorEncoder[Left] >= -720)
+	{
+		motor[Left] = 60;
+		motor[Left2] = 60;
+		motor[Right] = 60;
+		motor[Right2] = 60;
+	}
+	motor[Left] = 0;
+	motor[Left2] = 0;
+	motor[Right] = 0;
+	motor[Right2] = 0;
+	nMotorEncoder[Left] = 0;
+
+	while(nMotorEncoder[Left] <= 2160)
+	{
+		motor[Left] = 60;
+		motor[Left2] = 60;
+		motor[Right] = 60;
+		motor[Right2] = 60;
+	}
+	motor[Left] = 0;
+	motor[Left2] = 0;
+	motor[Right] = 0;
+	motor[Right2] = 0;
+	nMotorEncoder[Left] = 0;
 }
 
 task main()
@@ -79,13 +152,15 @@ task main()
 	{
 			if(SensorValue[IROne] == 4 && SensorValue[IRTwo] == 6)
 			{
-				BeconPos1();
+				BeaconPos1();
 			}
 			else if(SensorValue[IROne] == 5 && SensorValue[IRTwo] == 7)
 			{
 				BeaconPos2();
 			}
+			else if(SensorValue[IROne] == 6 && SensorValue[IRTwo] == 5)
+			{
+				BeaconPos3();
+			}
 	}
-
-
 }
