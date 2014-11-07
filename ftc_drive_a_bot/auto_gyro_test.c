@@ -18,40 +18,27 @@
 
 int TURN_TEST = 45; // will turn left 45 degrees for test
 
-bool failed = false;
 task main()
 {
-	//StartTask(Drive);
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mot1, mot2);
 	RegisterGyroSensor(gyroSensor);
-	startGyro();
-	resetGyro();
-	TurnLeft(75);
-	DisplayGyroAngleOnNXTDisplay();
-	while(true)
-	{
-		DisplayGyroAngleOnNXTDisplay();
-
-		// Stop if the gyro reading is invalid
-		if (!gyroValid()) {
-			failed = true;
-			break;
-		}
-		// Turn until we exceed the requested (absolute) angle
-		int angle = abs(readGyro());
-		if (angle > TURN_TEST) {
-			break;
-		}
-	}
-	StopAllDriveMotors();
-	if(failed == true)
-		nxtDisplayTextLine(1, "FAILED");
-	else
-		nxtDisplayTextLine(1, "SUCCESS");
+	StartTask(Drive);
 
 	while(true)
 	{
+		if(joy1Btn(1)==1)
+		{
+			StopTask(Drive);
+			TurnLeftDegrees(10,50);
+			StartTask(Drive);
+		}
+		if(joy1Btn(2)==1)
+		{
+			StopTask(Drive);
+			TurnRightDegrees(10,50);
+			StartTask(Drive);
+		}
+		StopAllDriveMotors();
 	}
-
 }
