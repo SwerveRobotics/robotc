@@ -23,21 +23,21 @@ task main()
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mot1, mot2);
 	RegisterGyroSensor(gyroSensor);
-	StartTask(Drive);
+	StartTask(DriveTank);
 
 	while(true)
 	{
 		if(joy1Btn(1)==1)
 		{
-			StopTask(Drive);
+			StopTask(DriveTank);
 			TurnLeftDegrees(10,50);
-			StartTask(Drive);
+			StartTask(DriveTank);
 		}
 		if(joy1Btn(2)==1)
 		{
-			StopTask(Drive);
+			StopTask(DriveTank);
 			TurnRightDegrees(10,50);
-			StartTask(Drive);
+			StartTask(DriveTank);
 		}
 		StopAllDriveMotors();
 	}
