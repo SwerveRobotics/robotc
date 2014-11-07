@@ -91,4 +91,9 @@ void startGyro() {
 	}
 }
 
+void DisplayGyroAngleOnNXTDisplay()
+{
+	nxtDisplayTextLine(0, "Angle: %d", readGyro());
+}
+
 #endif
