@@ -6,8 +6,8 @@ void RampKickPos1()
 	/*Robot drive off ramp
 	Turns to face center structure
 	Knocks down kickstand*/
-	DriveForwardDistance(55, 20);
-	TurnLeftTime(1000, 100);
+	DriveForwardDistance(60, 20);
+	TurnLeftTime(800, 100);
 	//DriveForwardDistance(40, 20);
 }
 

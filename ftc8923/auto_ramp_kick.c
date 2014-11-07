@@ -19,7 +19,7 @@ task main()
 {
 	InitializeAuto();
 	int position1 = 244;
-	int position3 = 221;
+	int position3 = 220;
 
 	waitForStart();
 
