@@ -30,6 +30,7 @@ void TurnLeftDegrees(int degrees, int power)
 		}
 	}
 	StopAllDriveMotors();
+	stopGyro();
 }
 
 void TurnRightDegrees(int degrees, int power)
