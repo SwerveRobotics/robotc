@@ -24,25 +24,24 @@
 
 task drive()
 {
+	initializeDriveAssemblies();
+
 	while(true)
 	{
 		getJoystickSettings(joystick);
-
-		initializeSwiveGeometry();
 
 		int X_Velocity = JoystickToMetersPerSecond(joystick.joy1_x2, joystick.joy1_x1);
 		int Y_Velocity = JoystickToMetersPerSecond(joystick.joy1_y2, joystick.joy1_x1);
 		int Z_Velocity = JoystickToRadiansPerSecond(joystick.joy1_x1);
 
-		float angleZ[4];
-		int speedXY[4];
 
-		for (POS p; p < BACK_RIGHT; p++)
+		for (MotorEnum p; p < BACK_RIGHT; p++)
 		{
-			angleZ[p] = CalculateMotorAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
-			speedXY[p] = CalculateMotorSpeed(X_Velocity, Y_Velocity, Z_Velocity, p);
+			Drive[p].Zangle = CalculateMotorAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
+			Drive[p].speedXY = CalculateMotorSpeed(X_Velocity, Y_Velocity, Z_Velocity, p);
 			SetDriveVelocity(speedXY[p], angleZ[p], p);
 		}
+		WriteToDevices();
 
 	}
 }
