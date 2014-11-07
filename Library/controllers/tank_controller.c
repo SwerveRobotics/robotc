@@ -8,7 +8,7 @@
 #include "../drive_modes/drive_modes.h"
 #include "../controllers/controller_defines.h"
 
-task Drive()
+task DriveTank()
 {
 	while(true)
 	{
