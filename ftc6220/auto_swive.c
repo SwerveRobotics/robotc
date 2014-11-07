@@ -1,7 +1,7 @@
-#ifndef AUTO_SWIVE.C
-#define AUTO_SWIVE.C
+#ifndef AUTO_SWIVE_C
+#define AUTO_SWIVE_C
 
-#include "../Library/drive_modes/simpleswerve_4m.c"
+#include "../Library/drive_modes/swerve_4m.c"
 
 const float WHEEL_DIAMETER = 10.16;
 const int ENCODER_RESOLUTION = 1024;
