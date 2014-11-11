@@ -7,7 +7,7 @@ void RampKickPos1()
 	Turns to face center structure
 	Knocks down kickstand*/
 	DriveForwardDistance(60, 20);
-	TurnLeftTime(800, 100);
+	TurnLeftDegrees(120, 50);
 	//DriveForwardDistance(40, 20);
 }
 
