@@ -21,6 +21,8 @@ task main()
 
 	waitForStart();
 
+	//Robot goes partally to the goal
+	//Robot turns to line up with goal
 	//Robot drives backward until it reaches the rolling goal
 	//Goal grabbers extend
 	//Robot drives back towards ramp
@@ -28,13 +30,19 @@ task main()
 	//Robot drives strait toward parking zone
 	//Robot turns while in parking zone
 	//Robot ensures goal is in parking zone
+	//Robot turns more to get into the parking zone better
+	//Robot backs up to ensure goal is in parking zone
 
-	DriveBackwardDistance(80, 20);
+	DriveBackwardDistance(60, 20);
+	TurnLeftTime(400, 20);
+	DriveBackwardDistance(20, 20);
 	servo[goalGrabber] = 160;
 	DriveBackwardDistance(5, 20);
 	wait1Msec(500);
-	TurnRightTime(300, 50);
-	DriveForwardDistance(94, 20);
+	TurnRightTime(250, 50);
+	DriveForwardDistance(97, 20);
 	TurnRightTime(500, 50);
-	DriveForwardDistance(10,20);
+	DriveForwardDistance(10, 20);
+	TurnRightTime(500, 50);
+	DriveBackwardDistance(10, 20);
 }

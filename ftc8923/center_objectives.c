@@ -7,8 +7,10 @@ void RampKickPos1()
 	Turns to face center structure
 	Knocks down kickstand*/
 	DriveForwardDistance(60, 20);
-	TurnLeftTime(800, 100);
-	//DriveForwardDistance(40, 20);
+	TurnRightTime(500, 50);
+	DriveBackwardDistance(40, 20);
+	TurnRightTime(250, 50);
+	DriveBackwardDistance(40, 100);
 }
 
 void RampKickPos2()
@@ -32,13 +34,10 @@ void RampKickPos3()
 	Turns to face kcikstand
 	Knocks down kickstand*/
 	servo[irRotator] = 0;
-	wait1Msec(500);
-	//DriveForwardDistance(40, 20);
-	//TurnLeft(100);
-	//wait1Msec(500);
-	//DriveForwardDistance(30, 20);
-	//TurnRight(100);
-	//wait1Msec(500);
-	//DriveForwardDistance(10, 20);
+	DriveForwardDistance(60, 20);
+	TurnLeftTime(500, 50);
+	DriveForwardDistance(40, 20);
+	TurnRightTime(600, 50);
+	DriveBackwardDistance(30, 100);
 }
 #endif
