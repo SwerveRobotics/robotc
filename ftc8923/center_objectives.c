@@ -1,6 +1,35 @@
 #ifndef CENTER_OBJECTIVES_C
 #define CENTER_OBJECTIVES_C
 
+void DetectRampIR()
+{
+	int position1 = 244;
+	int position3 = 220;
+
+	//Robot detects position of IR beacon and uses corresponding function accordingly
+	servo[irRotator] = position3;
+	wait1Msec(500);
+	if(ReadIRSensor() == 4)
+	{
+		CENTER_GOAL_POSITION = 3;
+	}
+
+	else
+	{
+		servo[irRotator] = position1;
+		wait1Msec(500);
+		if(ReadIRSensor() == 4)
+		{
+			CENTER_GOAL_POSITION = 3;
+		}
+
+		else
+		{
+			CENTER_GOAL_POSITION = 2;
+		}
+	}
+}
+
 void RampKickPos1()
 {
 	/*Robot drive off ramp
