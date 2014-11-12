@@ -18,7 +18,7 @@ void BeaconPos1()
 		while(nMotorEncoder[Left] <= 4320)
 		{
 			motor[Right] = motorPower;
-			motor[Right2] = 60;
+			motor[Right2] = motorPower;
 			motor[Left] = motorPower;
 			motor[Left2] = motorPower;
 		}
@@ -57,6 +57,7 @@ void BeaconPos1()
 		nMotorEncoder[Left] = 0;
 }
 
+//function for the 2nd position of the center goal
 void BeaconPos2()
 {
 	//move the robot forward by 3.5-4.5 rotations
@@ -102,6 +103,7 @@ void BeaconPos2()
 	nMotorEncoder[Left] = 0;
 }
 
+//function for the 3rd position of the center goal
 void BeaconPos3()
 {
 	while(nMotorEncoder[Left] <= 4520)
