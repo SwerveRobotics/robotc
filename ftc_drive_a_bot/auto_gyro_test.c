@@ -21,6 +21,11 @@ const int TURN_TEST_POWER = 30;
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
+
+	// Gyro Calibration for Drive-a-bot 3 //
+	LEFT_TURN_GYRO_OVERRUN = 10;
+	RIGHT_TURN_GYRO_OVERRUN = 5;
+
 	RegisterDriveMotors(mot1, mot2);
 	RegisterGyroSensor(gyroSensor);
 
@@ -28,22 +33,22 @@ task main()
 	{
 		if(joy1Btn(1)==1)
 		{
-			TurnLeftDegrees(10,TURN_TEST_POWER);
+			TurnLeftDegrees(90,TURN_TEST_POWER);
 		}
 		if(joy1Btn(2)==1)
 		{
-			TurnRightDegrees(10,TURN_TEST_POWER);
+			TurnRightDegrees(90,TURN_TEST_POWER);
 		}
 		if(joy1Btn(3)==1)
 		{
 			TurnLeftDegrees(90,TURN_TEST_POWER);
-			StopAllDriveMotors();
+			wait1Msec(1000);
 			TurnRightDegrees(180,TURN_TEST_POWER);
-			StopAllDriveMotors();
+			wait1Msec(1000);
 			TurnLeftDegrees(180,TURN_TEST_POWER);
-			StopAllDriveMotors();
+			wait1Msec(1000);
 			TurnRightDegrees(90,TURN_TEST_POWER);
-			StopAllDriveMotors();
+			wait1Msec(1000);
 		}
 		StopAllDriveMotors();
 	}
