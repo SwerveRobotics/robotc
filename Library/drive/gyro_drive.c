@@ -14,8 +14,10 @@ void TurnLeftDegrees(int degrees, int power)
 {
 	startGyro();
 	resetGyro();
+	ClearTimer(T1);
 	TurnLeft(power);
 	bool failed = false;
+	degrees -= GYRO_OVERRUN;
 	while(true)
 	{
 		// Stop if the gyro reading is invalid

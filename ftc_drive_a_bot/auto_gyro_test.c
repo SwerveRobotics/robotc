@@ -16,29 +16,36 @@
 #include "../library/controllers/tank_controller.c"
 #include "../library/drive/gyro_drive.c"
 
-int TURN_TEST = 45; // will turn left 45 degrees for test
+const int TURN_TEST_POWER = 30;
 
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mot1, mot2);
 	RegisterGyroSensor(gyroSensor);
-	StartTask(DriveTank);
 
 	while(true)
 	{
 		if(joy1Btn(1)==1)
 		{
-			StopTask(DriveTank);
-			TurnLeftDegrees(10,50);
-			StartTask(DriveTank);
+			TurnLeftDegrees(10,TURN_TEST_POWER);
 		}
 		if(joy1Btn(2)==1)
 		{
-			StopTask(DriveTank);
-			TurnRightDegrees(10,50);
-			StartTask(DriveTank);
+			TurnRightDegrees(10,TURN_TEST_POWER);
+		}
+		if(joy1Btn(3)==1)
+		{
+			TurnLeftDegrees(90,TURN_TEST_POWER);
+			StopAllDriveMotors();
+			TurnRightDegrees(180,TURN_TEST_POWER);
+			StopAllDriveMotors();
+			TurnLeftDegrees(180,TURN_TEST_POWER);
+			StopAllDriveMotors();
+			TurnRightDegrees(90,TURN_TEST_POWER);
+			StopAllDriveMotors();
 		}
 		StopAllDriveMotors();
 	}
+
 }
