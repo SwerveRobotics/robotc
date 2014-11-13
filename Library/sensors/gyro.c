@@ -3,10 +3,10 @@
 
 #include "../../drivers/hitechnic-gyro.h"
 
-#define GYRO_OVERRUN (5)
-#define GYRO_PERIOD (10)
-#define GYRO_FLOAT_SPEED (10.0)
-#define GYRO_CAL_SAMPLES (25)
+const int GYRO_OVERRUN = -1;
+const int GYRO_PERIOD = 10;
+const float GYRO_FLOAT_SPEED = 10.0;
+const int GYRO_CAL_SAMPLES = 25;
 
 tSensors GYRO_SENSOR;
 void RegisterGyroSensor(tSensors gyroSensorName)
