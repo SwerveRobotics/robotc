@@ -15,7 +15,7 @@
 
 #define TANK_4M
 
-#include "tank.c"
+#include "../Library/controllers/tank_controller.c"
 #include "init_teleop.c"
 
 task main()
@@ -24,7 +24,7 @@ task main()
 
 	waitForStart();
 
-	StartTask(Drive);
+	StartTask(DriveTank);
 	while(true)
 	{
 		getJoystickSettings(joystick);
