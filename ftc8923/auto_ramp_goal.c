@@ -1,5 +1,5 @@
-#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
+	 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Sensor, S2,     gyroSensor,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
@@ -34,15 +34,18 @@ task main()
 	//Robot backs up to ensure goal is in parking zone
 
 	DriveBackwardDistance(60, 20);
-	TurnLeftTime(400, 20);
-	DriveBackwardDistance(20, 20);
-	servo[goalGrabber] = 160;
-	DriveBackwardDistance(5, 20);
+	TurnLeftDegrees(7, 50);
+	DriveBackwardDistance(27, 20);
+	GrabGoal();
+	DriveBackwardDistance(8, 20);
 	wait1Msec(500);
-	TurnRightTime(250, 50);
-	DriveForwardDistance(97, 20);
-	TurnRightTime(500, 50);
-	DriveForwardDistance(10, 20);
-	TurnRightTime(500, 50);
-	DriveBackwardDistance(10, 20);
+	TurnRightDegrees(17, 50);
+	wait1Msec(100);
+	DriveForwardDistance(93, 60);
+	TurnRightDegrees(135, 50);
+	DriveBackwardDistance(20, 20);
+	ReleaseGoal();
+	DriveForwardDistance(65, 60);
+	TurnRightDegrees(130, 50);
+	DriveBackwardDistance(40, 20);
 }
