@@ -1,4 +1,4 @@
-	 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S2,     gyroSensor,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
@@ -39,13 +39,22 @@ task main()
 	GrabGoal();
 	DriveBackwardDistance(8, 20);
 	wait1Msec(500);
-	TurnRightDegrees(17, 50);
+	TurnRightDegrees(19, 50);
 	wait1Msec(100);
 	DriveForwardDistance(93, 60);
 	TurnRightDegrees(135, 50);
 	DriveBackwardDistance(20, 20);
 	ReleaseGoal();
-	DriveForwardDistance(65, 60);
-	TurnRightDegrees(130, 50);
-	DriveBackwardDistance(40, 20);
+	DriveForwardDistance(70, 60);
+	TurnRightDegrees(107, 50);
+	DriveBackwardDistance(54, 20);
+	wait1Msec(200);
+	GrabGoal();
+	//DriveBackwardDistance(8, 20);
+	wait1Msec(500);
+	DriveForwardDistance(48, 20);
+	TurnRightDegrees(30, 50);
+	DriveForwardDistance(45, 60);
+	TurnLeftDegrees(135, 50);
+	DriveBackwardDistance(20, 20);
 }
