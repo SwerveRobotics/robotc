@@ -1,5 +1,5 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S2,     gyroSensor,           sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
@@ -21,20 +21,28 @@ task main()
 
 	waitForStart();
 
+	//Robot goes partally to the goal
+	//Robot turns to line up with goal
 	//Robot drives backward until it reaches the rolling goal
 	//Goal grabbers extend
-	//Robot continues to drive backwards until goal grabber is in position
 	//Robot drives back towards ramp
 	//Robot turns right to go to parking zone
 	//Robot drives strait toward parking zone
 	//Robot turns while in parking zone
 	//Robot ensures goal is in parking zone
+	//Robot turns more to get into the parking zone better
+	//Robot backs up to ensure goal is in parking zone
 
-	DriveBackwardDistance(80, 20);
+	DriveBackwardDistance(60, 20);
+	TurnLeftTime(400, 20);
+	DriveBackwardDistance(20, 20);
 	servo[goalGrabber] = 160;
 	DriveBackwardDistance(5, 20);
-	TurnRightDegrees(15, 50);
-	DriveForwardDistance(94, 20);
-	TurnRightDegrees(60, 50);
-	DriveForwardDistance(10,20);
+	wait1Msec(500);
+	TurnRightTime(250, 50);
+	DriveForwardDistance(97, 20);
+	TurnRightTime(500, 50);
+	DriveForwardDistance(10, 20);
+	TurnRightTime(500, 50);
+	DriveBackwardDistance(10, 20);
 }
