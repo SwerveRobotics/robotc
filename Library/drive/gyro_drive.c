@@ -14,8 +14,9 @@ void TurnLeftDegrees(int degrees, int power)
 {
 	// MAKE SURE THE ROBOT IS STATIONARY WHEN THIS FUNCTION IS CALLED
 	startGyro();
+	wait1Msec(200);
 	resetGyro();
-	clearTimer(T1);
+	ClearTimer(T4);
 	TurnLeft(power);
 	bool failed = false;
 	degrees -= LEFT_TURN_GYRO_OVERRUN;
@@ -40,8 +41,9 @@ void TurnRightDegrees(int degrees, int power)
 {
 	// MAKE SURE THE ROBOT IS STATIONARY WHEN THIS FUNCTION IS CALLED
 	startGyro();
+	wait1Msec(200);
 	resetGyro();
-	clearTimer(T1);
+	ClearTimer(T4);
 	TurnRight(power);
 	bool failed = false;
 	degrees -= RIGHT_TURN_GYRO_OVERRUN;

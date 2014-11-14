@@ -23,8 +23,8 @@ task main()
 	ASSUME_CONTROLLER_INPUT = false;
 
 	// Gyro Calibration for Drive-a-bot 3 //
-	LEFT_TURN_GYRO_OVERRUN = 10;
-	RIGHT_TURN_GYRO_OVERRUN = 5;
+	LEFT_TURN_GYRO_OVERRUN = 15;
+	RIGHT_TURN_GYRO_OVERRUN = 10;
 
 	RegisterDriveMotors(mot1, mot2);
 	RegisterGyroSensor(gyroSensor);
