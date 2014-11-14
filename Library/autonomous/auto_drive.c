@@ -44,8 +44,8 @@ void DriveBackwardDistance(int inches, int power)
 //Turns left until the gyro reads a vaule equal to or greater than the degrees
 void TurnLeftDegrees(int degrees, int power)
 {
-	SensorValue[gyro] = 0;
-	while(abs(SensorValue[gyro]) < degrees)
+	resetGyro();
+	while(readGyro() < degrees)
 	{
 		TurnRight(power);
 	}
