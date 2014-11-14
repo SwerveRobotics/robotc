@@ -16,29 +16,41 @@
 #include "../library/controllers/tank_controller.c"
 #include "../library/drive/gyro_drive.c"
 
-int TURN_TEST = 45; // will turn left 45 degrees for test
+const int TURN_TEST_POWER = 30;
 
 task main()
 {
 	ASSUME_CONTROLLER_INPUT = false;
+
+	// Gyro Calibration for Drive-a-bot 3 //
+	LEFT_TURN_GYRO_OVERRUN = 10;
+	RIGHT_TURN_GYRO_OVERRUN = 5;
+
 	RegisterDriveMotors(mot1, mot2);
 	RegisterGyroSensor(gyroSensor);
-	StartTask(DriveTank);
 
 	while(true)
 	{
 		if(joy1Btn(1)==1)
 		{
-			StopTask(DriveTank);
-			TurnLeftDegrees(10,50);
-			StartTask(DriveTank);
+			TurnLeftDegrees(90,TURN_TEST_POWER);
 		}
 		if(joy1Btn(2)==1)
 		{
-			StopTask(DriveTank);
-			TurnRightDegrees(10,50);
-			StartTask(DriveTank);
+			TurnRightDegrees(90,TURN_TEST_POWER);
+		}
+		if(joy1Btn(3)==1)
+		{
+			TurnLeftDegrees(90,TURN_TEST_POWER);
+			wait1Msec(1000);
+			TurnRightDegrees(180,TURN_TEST_POWER);
+			wait1Msec(1000);
+			TurnLeftDegrees(180,TURN_TEST_POWER);
+			wait1Msec(1000);
+			TurnRightDegrees(90,TURN_TEST_POWER);
+			wait1Msec(1000);
 		}
 		StopAllDriveMotors();
 	}
+
 }

@@ -3,10 +3,15 @@
 
 #include "../../drivers/hitechnic-gyro.h"
 
-#define GYRO_OVERRUN (5)
-#define GYRO_PERIOD (10)
-#define GYRO_FLOAT_SPEED (10.0)
-#define GYRO_CAL_SAMPLES (25)
+// ATTENTION!
+// Calibration of these will be necessary to perfect your turns
+// Calibration should be handled within your team's code
+int LEFT_TURN_GYRO_OVERRUN = 5;
+int RIGHT_TURN_GYRO_OVERRUN = 5;
+
+const int GYRO_PERIOD = 10;
+const float GYRO_FLOAT_SPEED = 10.0;
+const int GYRO_CAL_SAMPLES = 25;
 
 tSensors GYRO_SENSOR;
 void RegisterGyroSensor(tSensors gyroSensorName)
