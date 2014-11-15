@@ -1,4 +1,4 @@
-#include "../Library/drive_modes/tank_4m.c"
+#include "../Library/drive_modes/drive_modes.h"
 #include "../Library/sensors/ir_seeker.c"
 #include "../Library/sensors/gyro.c"
 #include "../Library/drive/gyro_drive.c"
