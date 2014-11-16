@@ -21,6 +21,10 @@ task main()
 
 	waitForStart();
 
+	TurnLeftDegrees(90, 20);
+	//TurnRightDegrees(180, 20);
+	//TurnLeftDegrees(180, 20);
+	//TurnRightDegrees(90, 20);
 
 
 }

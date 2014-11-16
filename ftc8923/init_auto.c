@@ -12,5 +12,8 @@ void InitializeAuto()
 	GEAR_RATIO = 1.5;
 	ReleaseGoal();
 	servo[irRotator] = 255;
+
+	LEFT_TURN_GYRO_OVERRUN = 5;
+	RIGHT_TURN_GYRO_OVERRUN = 5;
 }
 #endif

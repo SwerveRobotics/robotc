@@ -42,19 +42,19 @@ task main()
 	TurnRightDegrees(19, 50);
 	wait1Msec(100);
 	DriveForwardDistance(93, 60);
-	TurnRightDegrees(135, 50);
+	TurnRightDegrees(130, 50);
 	DriveBackwardDistance(20, 20);
 	ReleaseGoal();
 	DriveForwardDistance(70, 60);
-	TurnRightDegrees(107, 50);
-	DriveBackwardDistance(54, 20);
+	TurnRightDegrees(115, 50);
+	DriveBackwardDistance(53, 20);
 	wait1Msec(200);
 	GrabGoal();
 	//DriveBackwardDistance(8, 20);
 	wait1Msec(500);
 	DriveForwardDistance(48, 20);
-	TurnRightDegrees(30, 50);
+	TurnRightDegrees(10, 50);
 	DriveForwardDistance(45, 60);
 	TurnLeftDegrees(135, 50);
-	DriveBackwardDistance(20, 20);
+	DriveBackwardDistance(17, 20);
 }
