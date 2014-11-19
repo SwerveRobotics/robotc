@@ -41,29 +41,12 @@ void DriveBackwardDistance(int inches, int power)
 	StopAllDriveMotors();
 }
 
-//Turns left until the gyro reads a vaule equal to or greater than the degrees
-void TurnLeftDegrees(int degrees, int power)
-{
-	SensorValue[gyro] = 0;
-	while(abs(SensorValue[gyro]) < degrees)
-	{
-		TurnRight(power);
-	}
-	StopAllDriveMotors();
-}
-
 //Turns left at a given power until a time limit is reached
 void TurnLeftTime(int time, int power)
 {
 	TurnLeft(power);
 	wait1Msec(time);
 	StopAllDriveMotors();
-}
-
-//Turns right until the gyro reads a vaule equal to or greater than the degrees
-void TurnRightDegrees(int degrees, int power)
-{
-	TurnLeftDegrees(degrees, -1 * power);
 }
 
 //Turns right at a given power until a time limit is reached
