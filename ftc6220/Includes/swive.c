@@ -1,7 +1,7 @@
 #ifndef SWIVE_C
 #define SWIVE_C
 
-#include "../library/drive_modes/swerve_4m.c"
+#include "../../library/drive_modes/swerve_4m.c"
 #include "JoystickDriver.c"
 
 // MOVE SWERVE CONSTANTS HERE //
@@ -9,15 +9,23 @@
 
 task drive()
 {
+
 	initializeDriveAssemblies();
 
+	float joyX1;
+	float joyX2;
+	float joyY2;
 	while(true)
 	{
 		getJoystickSettings(joystick);
 
-		int X_Velocity = JoystickToMetersPerSec(joystick.joy1_x2, joystick.joy1_x1);
-		int Y_Velocity = JoystickToMetersPerSec(joystick.joy1_y2, joystick.joy1_x1);
-		int Z_Velocity = JoystickToRadsPerSec(joystick.joy1_x1);
+		joyX2 = joystick.joy1_x2;
+		joyX1 = joystick.joy1_x1;
+		joyY2 = joystick.joy1_y2;
+
+		int X_Velocity = JoystickToMetersPerSec(joyX2, joyX1);
+		int Y_Velocity = JoystickToMetersPerSec(joyY2, joyX1);
+		int Z_Velocity = JoystickToRadsPerSec(joyX1);
 
 
 		for (MotorEnum p; p < BACK_RIGHT; p++)
