@@ -1,5 +1,6 @@
 #pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTServo,  none)
-#pragma config(Sensor, S2,     gyroSensor,           sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     gyroSensor,     sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBR,         tmotorTetrix, openLoop, reversed)
@@ -22,40 +23,48 @@ task main()
 	InitializeAuto();
 	waitForStart();
 
-	//Robot goes partally to the goal
-	//Robot turns to line up with goal
-	//Robot drives backward until it reaches the rolling goal
-	//Goal grabbers extend
-	//Robot drives back towards ramp
-	//Robot turns right to go to parking zone
-	//Robot drives strait toward parking zone
-	//Robot turns while in parking zone
-	//Robot ensures goal is in parking zone
-	//Robot turns more to get into the parking zone better
-	//Robot backs up to ensure goal is in parking zone
-
+	//Goto and grab medium goal
 	DriveBackwardDistance(60, 20);
-	TurnLeftDegrees(7, 50);
+	wait1Msec(250);
+	TurnLeftDegrees(9, 50);
+	wait1Msec(250);
 	DriveBackwardDistance(27, 20);
 	GrabGoal();
 	DriveBackwardDistance(8, 20);
-	wait1Msec(500);
+
+	//Place goal in parking zone
+	wait1Msec(250);
 	TurnRightDegrees(19, 50);
-	wait1Msec(100);
+	wait1Msec(250);
 	DriveForwardDistance(93, 60);
-	TurnRightDegrees(130, 50);
+	wait1Msec(250);
+	TurnRightDegrees(80, 50);
+	wait1Msec(250);
+	TurnRightDegrees(80, 50);
+	wait1Msec(250);
 	DriveBackwardDistance(20, 20);
 	ReleaseGoal();
+
+	//Go back for small goal
+	wait1Msec(250);
 	DriveForwardDistance(70, 60);
-	TurnRightDegrees(115, 50);
+	wait1Msec(250);
+	TurnRightDegrees(120, 50);
+	wait1Msec(250);
 	DriveBackwardDistance(53, 20);
-	wait1Msec(200);
+	wait1Msec(250);
 	GrabGoal();
 	//DriveBackwardDistance(8, 20);
-	wait1Msec(500);
+
+	//Place goal in parking zone
+	wait1Msec(250);
 	DriveForwardDistance(48, 20);
+	wait1Msec(250);
 	TurnRightDegrees(10, 50);
+	wait1Msec(250);
 	DriveForwardDistance(45, 60);
+	wait1Msec(250);
 	TurnLeftDegrees(135, 50);
+	wait1Msec(250);
 	DriveBackwardDistance(17, 20);
 }
