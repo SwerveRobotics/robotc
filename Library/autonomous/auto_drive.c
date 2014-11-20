@@ -4,6 +4,8 @@
 int WHEEL_DIAMETER = 4;
 float GEAR_RATIO = 1.0;
 
+const float TICKS_PER_REVOLUTION = 1440.0;
+
 tMotor ENCODER_MOTOR;
 
 void RegisterEncoderMotor(tMotor motorName)
@@ -25,7 +27,7 @@ void ResetEncoderValue()
 float EncoderDistance(float ticks)
 {
 	float circumference = PI * WHEEL_DIAMETER;
-	float revolutions = (ticks / 1440.0) * GEAR_RATIO;
+	float revolutions = (ticks / TICKS_PER_REVOLUTION) * GEAR_RATIO;
 	return revolutions * circumference;
 }
 
@@ -33,7 +35,7 @@ float EncoderDistance(float ticks)
 void DriveForwardDistance(int inches, int power)
 {
 	ResetEncoderValue();
-	while(EncoderDistance(ReadEncoderValue()) < inches)
+	while(EncoderDistance(abs(ReadEncoderValue())) < abs(inches))
 	{
 		DriveForward(power);
 	}
@@ -43,12 +45,7 @@ void DriveForwardDistance(int inches, int power)
 //Drives backward at given power until the distance has been reached
 void DriveBackwardDistance(int inches, int power)
 {
-	ResetEncoderValue();
-	while(EncoderDistance(ReadEncoderValue()) > -inches)
-	{
-		DriveBackward(power);
-	}
-	StopAllDriveMotors();
+	DriveForwardDistance(inches, -1*power);
 }
 
 //Turns left at a given power until a time limit is reached
