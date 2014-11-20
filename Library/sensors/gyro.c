@@ -86,11 +86,11 @@ bool gyroValid() {
 
 void stopGyro() {
 	GYRO_READY = false;
-	stopTask(gyro);
+	StopTask(gyro);
 }
 
 void startGyro() {
-	startTask(gyro);
+	StartTask(gyro);
 	while (!GYRO_READY) {
 		abortTimeslice();
 	}

@@ -11,9 +11,8 @@
 #define TANK_2M
 
 #include "JoystickDriver.c"
-#include "../library/controllers/controller_defines.h"
+#include "../library/drive_modes/drive_modes.h"
 #include "../library/sensors/gyro.c"
-#include "../library/controllers/tank_controller.c"
 #include "../library/drive/gyro_drive.c"
 
 const int TURN_TEST_POWER = 30;
