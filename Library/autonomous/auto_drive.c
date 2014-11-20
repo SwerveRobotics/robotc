@@ -11,6 +11,16 @@ void RegisterEncoderMotor(tMotor motorName)
 	ENCODER_MOTOR = motorName;
 }
 
+int ReadEncoderValue()
+{
+	return nMotorEncoder[ENCODER_MOTOR];
+}
+
+void ResetEncoderValue()
+{
+	nMotorEncoder[ENCODER_MOTOR] = 0;
+}
+
 //Takes an input of encoder ticks and converts to inches
 float EncoderDistance(float ticks)
 {
@@ -22,8 +32,8 @@ float EncoderDistance(float ticks)
 //Drives forward at given power until the distance has been reached
 void DriveForwardDistance(int inches, int power)
 {
-	nMotorEncoder[ENCODER_MOTOR] = 0;
-	while(EncoderDistance(nMotorEncoder[ENCODER_MOTOR]) < inches)
+	ResetEncoderValue();
+	while(EncoderDistance(ReadEncoderValue()) < inches)
 	{
 		DriveForward(power);
 	}
@@ -33,8 +43,8 @@ void DriveForwardDistance(int inches, int power)
 //Drives backward at given power until the distance has been reached
 void DriveBackwardDistance(int inches, int power)
 {
-	nMotorEncoder[ENCODER_MOTOR] = 0;
-	while(EncoderDistance(nMotorEncoder[ENCODER_MOTOR]) > -inches)
+	ResetEncoderValue();
+	while(EncoderDistance(ReadEncoderValue()) > -inches)
 	{
 		DriveBackward(power);
 	}

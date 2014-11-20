@@ -5,6 +5,7 @@
 // NOTE: This file relies on the user having correctly defined their
 // tank drive mode option from those shown in drive_modes.h
 
+#include "../autonomous/auto_drive.c"
 #include "../drive_modes/drive_modes.h"
 #include "../sensors/gyro.c"
 
@@ -12,7 +13,8 @@
 
 void TurnLeftDegrees(int degrees, int power)
 {
-	// MAKE SURE THE ROBOT IS STATIONARY WHEN THIS FUNCTION IS CALLED
+	//The wait is here to ensure the robot comes to a stop before calibrating the gyro
+	wait1Msec(250);
 	startGyro();
 	wait1Msec(200);
 	resetGyro();
@@ -39,7 +41,8 @@ void TurnLeftDegrees(int degrees, int power)
 
 void TurnRightDegrees(int degrees, int power)
 {
-	// MAKE SURE THE ROBOT IS STATIONARY WHEN THIS FUNCTION IS CALLED
+	//The wait is here to ensure the robot comes to a stop before calibrating the gyro
+	wait1Msec(250);
 	startGyro();
 	wait1Msec(200);
 	resetGyro();
@@ -62,5 +65,35 @@ void TurnRightDegrees(int degrees, int power)
 	}
 	StopAllDriveMotors();
 	stopGyro();
+}
+
+void DriveForwardDistanceGyro(int distance, int power)
+{
+	//The wait is here to ensure the robot comes to a stop before calibrating the gyro
+	wait1Msec(250);
+	startGyro();
+	wait1Msec(200);
+	resetGyro();
+	ClearTimer(T4);
+	ResetEncoderValue();
+	DriveLeftMotors(power);
+	DriveRightMotors(power);
+	while(true)
+	{
+		if(ReadEncoderValue() > distance)
+		{
+			break;
+		}
+
+		DriveRightMotors(power * readGyro());
+		DriveLeftMotors(power * readGyro());
+	}
+	StopAllDriveMotors();
+	stopGyro();
+}
+
+void DriveBackwardDistanceGyro(int distance, int power)
+{
+	DriveForwardDistanceGyro(distance, -1 * power);
 }
 #endif
