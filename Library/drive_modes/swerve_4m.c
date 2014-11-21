@@ -12,6 +12,7 @@ tMotor BACK_LEFT_MOTOR;
 tMotor FRONT_RIGHT_MOTOR;
 tMotor BACK_RIGHT_MOTOR;
 
+
 TServoIndex FRONT_LEFT_SERVO;
 TServoIndex BACK_LEFT_SERVO;
 TServoIndex FRONT_RIGHT_SERVO;
@@ -187,8 +188,8 @@ float CalculateDriveSpeed(float velocityX,float velocityY,float velocityZ, Motor
 //Convert from SI units to MotorPower and Servo Position units, then set the motorPower and servoPosition
 //arguments of the motor in question accordingly.
 
-void WriteToDevices(){
-
+void WriteToDevices()
+{
 	mpsToMotor(  FRONT_RIGHT_MOTOR, Drive[FRONT_RIGHT].motorPower);
 	mpsToMotor(  FRONT_LEFT_MOTOR,  Drive[FRONT_LEFT].motorPower);
 	mpsToMotor(  BACK_LEFT_MOTOR,   Drive[BACK_LEFT].motorPower);
