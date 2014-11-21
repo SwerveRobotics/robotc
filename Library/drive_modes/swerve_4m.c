@@ -2,6 +2,7 @@
 #define SWERVE_4M_C
 
 #include "../controllers/controller_defines.h"
+#include "../motors/motors.c"
 
 // these variables will be used to write to the motors and servos
 tMotor FRONT_LEFT_MOTOR;
@@ -13,27 +14,6 @@ TServoIndex FRONT_LEFT_SERVO;
 TServoIndex BACK_LEFT_SERVO;
 TServoIndex FRONT_RIGHT_SERVO;
 TServoIndex BACK_RIGHT_SERVO;
-
-
-const float CENTER_RADIUS = 0.2286;//meters
-
-const float MOTOR_GEAR_RATIO = 1.0;
-
-const float SERVO_GEAR_RATIO = 1.0;
-
-const float WHEEL_RADIUS = 0.2286;//meters
-
-const float MAX_MOTOR_SPEED_MPS = 0.8193;//theoretical max based on 154rpm motor and 4in diameter wheel // gear ratio?
-const float MOTOR_POWER_PER_MPS = 120.7671; //theoretical motor power nessesary to move at 1 m/s
-
-//min and max values the servo can be sent to     //shouldnt these be given?
-const float MAX_SERVO_VAL = 255.0;
-const float MIN_SERVO_VAL = 0.0;
-
-const float MAX_SERVO_ANGLE = 3.14/2.0;
-const float MIN_SERVO_ANGLE = -3.14/2.0;
-
-const float SERVO_ANGLE_TO_VAL = ((MAX_SERVO_VAL - MIN_SERVO_VAL) / (MAX_SERVO_ANGLE - MIN_SERVO_ANGLE));
 
 int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
 
@@ -50,13 +30,11 @@ typedef enumWord
 //swerve module structure for storing all values specific to any given drive assembly
 typedef struct
 {
-	float offsetAngle;
+	float offsetAngle;        //in degrees
 
-	float servoPosition;     	//in servo position units (0 - 255)
-	int motorPower;         //in motor power units (0 - 100)
+	float servoPosition;     	//in degrees (0 - 360)
+	float motorPower;         //in motor power units (0 - 100)
 
-	int speedXY;
-	int Zangle;
 }
 DriveAssemblyState;
 
@@ -89,16 +67,16 @@ void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex f
 void initializeDriveAssemblies()
 {
 	//  FRONT_RIGHT Swerve Drive Module   //
-	Drive[FRONT_RIGHT].offsetAngle     = 3.14 / 4.0;
+	Drive[FRONT_RIGHT].offsetAngle     = 45.0;
 
 	//  FRONT_LEFT Swerve Drive Module   //
-	Drive[FRONT_LEFT].offsetAngle      = 3.0 * 3.14 / 4.0;
+	Drive[FRONT_LEFT].offsetAngle      = 135.0;
 
 	//  BACK_RIGHT Swerve Drive Module   //
-	Drive[BACK_LEFT].offsetAngle       = 5.0 * 3.14 / 4.0;
+	Drive[BACK_LEFT].offsetAngle       = 225.0;
 
 	//  BACK_RIGHT Swerve Drive Module   //
-	Drive[BACK_RIGHT].offsetAngle      = 7.0 * 3.14 / 4.0;
+	Drive[BACK_RIGHT].offsetAngle      = 315.0;
 
 }
 
@@ -115,13 +93,13 @@ void initializeDriveAssemblies()
 //and find the "desired" angular velocity.
 float JoystickToRadsPerSec(float joystickZ)
 {
-	float maxRadiansPerSecond = (MAX_MOTOR_SPEED_MPS * MOTOR_GEAR_RATIO) / CENTER_RADIUS;
+	float maxRadsPerSecond = (MAX_MOTOR_SPEED_CMPS * MOTOR_GEAR_RATIO) / CENTER_RADIUS;
 	//maximum rotational speed possible.
 
-	float attenuationSlope =  maxRadiansPerSecond / joystickRange;
+	float attenuationSlope =  maxRadsPerSecond / joystickRange;
 	//mapping maximum rotational speed to the allowed joystick input range, aka. finding the slope.
 
-	float attenuationIntercept = -1 * ANALOG_DEAD_ZONE * sgn(joystickZ) * attenuationSlope;	//check for /0
+	float attenuationIntercept = -1 * ANALOG_DEAD_ZONE * sgn(joystickZ) * attenuationSlope;
 	//finding the range taken up by the dead zone, aka. finding the intercept.
 
 	if (abs(joystickZ) < ANALOG_DEAD_ZONE)
@@ -139,24 +117,31 @@ float JoystickToRadsPerSec(float joystickZ)
 //direction at this instant.
 //Which is in turn scaled off of the current angular speed. This means that the angular velocity limits the
 //linear velocity.
-int JoystickToMetersPerSec(float joystickXorY, float joystickZ)
+float JoystickToCMPerSec(float joystickXorY, float joystickZ)
 {
-
 	float fastestMotorRotationRate = JoystickToRadsPerSec(joystickZ) * CENTER_RADIUS;
 	//find the largest component of motor velocity used to rotate the robot (limiting factor)
 
-	float maximumLinearSpeed = sqrt( pow(MAX_MOTOR_SPEED_MPS, 2) + pow(fastestMotorRotationRate, 2));
+	float maximumLinearSpeed = sqrt( pow(MAX_MOTOR_SPEED_CMPS, 2) - pow(fastestMotorRotationRate, 2) );
 	//calculate the maximum linear speed "left over" from the current rotational motion.
 
 	float attenuationSlope = maximumLinearSpeed / joystickRange;
 	//map the maximum linear speed to the joystick range, aka. finding the slope.
 
-	float attenuationIntercept = sgn(joystickXorY) * attenuationSlope * ANALOG_DEAD_ZONE;
+	float attenuationIntercept = -1 * sgn(joystickXorY) * attenuationSlope * ANALOG_DEAD_ZONE;
 	//finding the range taken by the dead zone, aka. finding the intercept.
 
 	float linearVelocityInXorY = attenuationSlope * joystickXorY + attenuationIntercept;
 	//slope-intercept for of attenuation.
-	return maximumLinearSpeed;
+
+	if (abs(joystickXorY) < ANALOG_DEAD_ZONE)
+	{
+		return 0;
+	}
+	else
+	{
+		return linearVelocityInXorY;
+	}
 	//return linearVelocityInXorY; // this is the "desired" linear velocity along whichever axis this was applied to.
 }
 
@@ -171,7 +156,16 @@ float CalculateDriveAngle(float velocityX, float velocityY, float velocityZ, Mot
 	//used the arctangent function to find the angular component of the velocity vector for the chosen motor
 	float driveXComponent = velocityX + (velocityZ * CENTER_RADIUS * cos(Drive[driveIdentifier].offsetAngle));
 	float driveYComponent = velocityY - (velocityZ * CENTER_RADIUS * sin(Drive[driveIdentifier].offsetAngle));
-	return atan(driveXComponent / driveYComponent); //drive angle
+	int tangent = 57.3 * atan2(driveXComponent, driveYComponent); //drive angle
+	if (tangent < 0)
+	{
+		return tangent + 360;
+	}
+	else
+	{
+		return tangent;
+	}
+
 }
 
 //Calculate the speed that a drive assembly should be traveling at:
@@ -182,31 +176,26 @@ float CalculateDriveAngle(float velocityX, float velocityY, float velocityZ, Mot
 //drives it kind of like a car.
 float CalculateDriveSpeed(float velocityX,float velocityY,float velocityZ, MotorEnum driveIdentifier)
 {
-	float driveXComponent = velocityX + (velocityZ * CENTER_RADIUS * cos(Drive[driveIdentifier].offsetAngle));
-	float driveYComponent = velocityY - (velocityZ * CENTER_RADIUS * sin(Drive[driveIdentifier].offsetAngle));
+	float driveXComponent = velocityX + (velocityZ * CENTER_RADIUS * cos(57.3 * Drive[driveIdentifier].offsetAngle) / 6.28);
+	float driveYComponent = velocityY - (velocityZ * CENTER_RADIUS * sin(57.3 * Drive[driveIdentifier].offsetAngle) / 6.28);
 	float driveSpeed = sqrt(pow(driveXComponent, 2) + pow(driveYComponent, 2)); //drive speed
 	return driveSpeed;
 }
 
 //Convert from SI units to MotorPower and Servo Position units, then set the motorPower and servoPosition
 //arguments of the motor in question accordingly.
-void SetDriveVelocity(float driveSpeed, float driveAngle, MotorEnum driveIdentifier)
-{
-	Drive[driveIdentifier].motorPower = MOTOR_POWER_PER_MPS * MOTOR_GEAR_RATIO * driveSpeed;
-	Drive[driveIdentifier].servoPosition = SERVO_ANGLE_TO_VAL * SERVO_GEAR_RATIO * driveAngle;
-}
 
 void WriteToDevices(){
 
-	motor[FRONT_RIGHT_MOTOR] =  Drive[FRONT_RIGHT].motorPower;
-	motor[FRONT_LEFT_MOTOR]  =  Drive[FRONT_LEFT].motorPower;
-	motor[BACK_LEFT_MOTOR]   =  Drive[BACK_LEFT].motorPower;
-	motor[BACK_RIGHT_MOTOR]  =  Drive[BACK_RIGHT].motorPower;
+	mpsToMotor(  FRONT_RIGHT_MOTOR, Drive[FRONT_RIGHT].motorPower);
+	mpsToMotor(  FRONT_LEFT_MOTOR,  Drive[FRONT_LEFT].motorPower);
+	mpsToMotor(  BACK_LEFT_MOTOR,   Drive[BACK_LEFT].motorPower);
+	mpsToMotor(  BACK_RIGHT_MOTOR,  Drive[BACK_RIGHT].motorPower);
 
-	servo[FRONT_RIGHT_SERVO] =  Drive[FRONT_RIGHT].servoPosition;
-	servo[FRONT_LEFT_SERVO]  =  Drive[FRONT_RIGHT].servoPosition;
-	servo[BACK_LEFT_SERVO]   =  Drive[BACK_LEFT].servoPosition;
-	servo[BACK_RIGHT_SERVO]  =  Drive[BACK_RIGHT].servoPosition;
+	degToCRServo(FRONT_RIGHT_SERVO, Drive[FRONT_RIGHT].servoPosition);
+	degToCRServo(FRONT_LEFT_SERVO,  Drive[FRONT_RIGHT].servoPosition);
+	degToCRServo(BACK_LEFT_SERVO,   Drive[BACK_LEFT].servoPosition);
+	degToCRServo(BACK_RIGHT_SERVO,  Drive[BACK_RIGHT].servoPosition);
 }
 
 

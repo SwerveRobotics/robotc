@@ -23,16 +23,14 @@ task drive()
 		joyX1 = joystick.joy1_x1;
 		joyY2 = joystick.joy1_y2;
 
-		int X_Velocity = JoystickToMetersPerSec(joyX2, joyX1);
-		int Y_Velocity = JoystickToMetersPerSec(joyY2, joyX1);
-		int Z_Velocity = JoystickToRadsPerSec(joyX1);
-
+		float X_Velocity = JoystickToCMPerSec(joyX2, joyX1);
+		float Y_Velocity = JoystickToCMPerSec(joyY2, joyX1);
+		float Z_Velocity = JoystickToRadsPerSec(joyX1);
 
 		for (MotorEnum p; p < BACK_RIGHT; p++)
 		{
-			Drive[p].Zangle = CalculateDriveAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
-			Drive[p].speedXY = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p);
-			SetDriveVelocity(Drive[p].speedXY, Drive[p].Zangle, p);//writing this has redundant properties. needs a redo
+			Drive[p].servoPosition = CalculateDriveAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
+			Drive[p].motorPower = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p);
 		}
 		WriteToDevices();
 	}
