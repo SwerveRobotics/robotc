@@ -9,6 +9,7 @@ tMotor BACK_LEFT_MOTOR;
 tMotor FRONT_RIGHT_MOTOR;
 tMotor BACK_RIGHT_MOTOR;
 
+
 TServoIndex FRONT_LEFT_SERVO;
 TServoIndex BACK_LEFT_SERVO;
 TServoIndex FRONT_RIGHT_SERVO;
@@ -196,8 +197,8 @@ void SetDriveVelocity(float driveSpeed, float driveAngle, MotorEnum driveIdentif
 	Drive[driveIdentifier].servoPosition = SERVO_ANGLE_TO_VAL * SERVO_GEAR_RATIO * driveAngle;
 }
 
-void WriteToDevices(){
-
+void WriteToDevices()
+{
 	motor[FRONT_RIGHT_MOTOR] =  Drive[FRONT_RIGHT].motorPower;
 	motor[FRONT_LEFT_MOTOR]  =  Drive[FRONT_LEFT].motorPower;
 	motor[BACK_LEFT_MOTOR]   =  Drive[BACK_LEFT].motorPower;
