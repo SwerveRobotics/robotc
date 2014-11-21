@@ -4,6 +4,8 @@
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
 
+const float CENTER_RADIUS = 22.86;//centimeters
+
 // these variables will be used to write to the motors and servos
 tMotor FRONT_LEFT_MOTOR;
 tMotor BACK_LEFT_MOTOR;
@@ -30,7 +32,7 @@ typedef enumWord
 //swerve module structure for storing all values specific to any given drive assembly
 typedef struct
 {
-	float offsetAngle;        //in degrees
+	float offsetAngle;        //in radians
 
 	float servoPosition;     	//in degrees (0 - 360)
 	float motorPower;         //in motor power units (0 - 100)
@@ -67,16 +69,16 @@ void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex f
 void initializeDriveAssemblies()
 {
 	//  FRONT_RIGHT Swerve Drive Module   //
-	Drive[FRONT_RIGHT].offsetAngle     = 45.0;
+	Drive[FRONT_RIGHT].offsetAngle     = PI / 4.0;
 
 	//  FRONT_LEFT Swerve Drive Module   //
-	Drive[FRONT_LEFT].offsetAngle      = 135.0;
+	Drive[FRONT_LEFT].offsetAngle      = 3.0 * PI / 4.0;
 
 	//  BACK_RIGHT Swerve Drive Module   //
-	Drive[BACK_LEFT].offsetAngle       = 225.0;
+	Drive[BACK_LEFT].offsetAngle       = 5.0 * PI / 4.0;
 
 	//  BACK_RIGHT Swerve Drive Module   //
-	Drive[BACK_RIGHT].offsetAngle      = 315.0;
+	Drive[BACK_RIGHT].offsetAngle      = 7.0 * PI / 4.0;
 
 }
 
@@ -197,6 +199,5 @@ void WriteToDevices(){
 	degToCRServo(BACK_LEFT_SERVO,   Drive[BACK_LEFT].servoPosition);
 	degToCRServo(BACK_RIGHT_SERVO,  Drive[BACK_RIGHT].servoPosition);
 }
-
 
 #endif

@@ -1,6 +1,14 @@
 #ifndef AUTO_SWIVE_C
 #define AUTO_SWIVE_C
 
+const float CENTER_RADIUS = 22.86;//centimeters
+
+const float MOTOR_GEAR_RATIO = 1.0;
+
+const float SERVO_GEAR_RATIO = 1.0;
+
+const float WHEEL_RADIUS = 10.16;//centimeters
+
 #include "../../Library/drive_modes/swerve_4m.c"
 
 
@@ -31,9 +39,9 @@ void setServos(int direction)			//sets servos to the correct degree setting usin
 {
 	int MsPulse;
 	degreesToMsPulse(direction);		//calculates MS of pulse based on degrees
-writeToServos(1);									//starts pulse
+	writeToServos(1);									//starts pulse
 	wait1Msec(MsPulse);							//waits calculated number of MS.
-writeToServos(0);									//ends pulse
+	writeToServos(0);									//ends pulse
 }
 
 void setMotors(int power)						//allows all motors to have the same value written to them while only typing the value once

@@ -46,7 +46,7 @@ void degToCRServo(TServoIndex servoName, int angle)
 
 void degToServo(TServoIndex servoName, int angle)
 {
-	servo[servoname] = SERVO_GEAR_RATIO * SERVO_TICK_PER_DEGREE * angle;
+	servo[servoName] = SERVO_GEAR_RATIO * SERVO_TICK_PER_DEGREE * angle;
 }
 
 #endif
