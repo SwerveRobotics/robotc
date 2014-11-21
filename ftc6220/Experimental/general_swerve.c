@@ -1,7 +1,7 @@
 #ifndef SIMPLESWERVE_4M_C
 #define SIMPLESWERVE_4M_C
 
-#include "../controllers/controller_defines.h"
+#include "../../library/controllers/controller_defines.h"
 
 // these variables will be used to write to the motors and servos
 tMotor FRONT_LEFT_MOTOR;
@@ -196,8 +196,8 @@ void SetDriveVelocity(float driveSpeed, float driveAngle, MotorEnum driveIdentif
 	Drive[driveIdentifier].servoPosition = SERVO_ANGLE_TO_VAL * Drive[driveIdentifier].servoGearRatio * driveAngle;
 }
 
-void WriteToDevices(){
-
+void WriteToDevices()
+{
 	motor[FRONT_RIGHT_MOTOR] =  drive[FRONT_RIGHT].motorPower;
 	motor[FRONT_LEFT_MOTOR]  =  drive[FRONT_LEFT].motorPower;
 	motor[BACK_LEFT_MOTOR]   =  drive[BACK_LEFT].motorPower;
