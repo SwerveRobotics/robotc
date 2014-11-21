@@ -25,7 +25,7 @@
 
 task main()
 {
-
-	SimpleDriveDirection(0, 75, 1440);
+	setServoEncoders(0);
+	SimpleDriveDirection(0, 75, 25);			//direction in degrees, motor power, centimeters
 
 }
