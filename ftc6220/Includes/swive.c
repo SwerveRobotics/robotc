@@ -4,12 +4,19 @@
 #include "../../library/drive_modes/swerve_4m.c"
 #include "JoystickDriver.c"
 
-// MOVE SWERVE CONSTANTS HERE //
+
+
+
+
 
 
 task drive()
 {
+	MOTOR_GEAR_RATIO = 1.0;
 
+	SERVO_GEAR_RATIO = 1.0;
+
+	float WHEEL_RADIUS = 10.16;//centimeters
 	initializeDriveAssemblies();
 
 	float joyX1;
