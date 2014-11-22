@@ -12,10 +12,10 @@ const int ENCODER_RESOLUTION = 1440;									//shows number of encoder ticks per
 const float ENCODER_TO_CM = (ENCODER_RESOLUTION / MAX_MOTOR_GEAR_RATIO) / (WHEEL_DIAMETER * PI);   		//changes encoder ticks to centimeters so centimeters can be inputed instead. not using this yet. I hope to eventually.
 
 //"motors" are not actually motors. Encoders can only be definded if a motor is added for them.
-tMotor frontLeftServoEncoder;
-tMotor backLeftServoEncoder;
-tMotor backRightServoEncoder ;
-tMotor frontRightServoEncoder;
+tMotor FRONT_LEFT_SERVO_ENCODER;
+tMotor BACK_LEFT_SERVO_ENCODER;
+tMotor BACK_RIGHT_SERVO_ENCODER ;
+tMotor FRONT_RIGHT_SERVO_ENCODER;
 
 // MOVE SWERVE CONSTANTS HERE //
 
@@ -36,15 +36,24 @@ int degreesToTicks(int degrees)
 
 //////////////////////////////////////
 //This function registers servo encoders as motors because RobotC is stupid and won't let encoders be defined without a motor
-void registerServoEncoders(tMotor flServoEncoder, tMotor blServoEncoder, tMotor brServoEncoder, tMotor frServoEncoder)		//have to register encoders as motor encoders instead of servos.
-{
-frontLeftServoEncoder	= flServoEncoder;
-backLeftServoEncoder = blServoEncoder;
-backRightServoEncoder	= brServoEncoder;
-frontRightServoEncoder = frServoEncoder;
-}
+//void registerServoEncoders(tMotor flServoEncoder, tMotor blServoEncoder, tMotor brServoEncoder, tMotor frServoEncoder)		//have to register encoders as motor encoders instead of servos.
+//{
+//	= flServoEncoder;
+// = blServoEncoder;
+//	= brServoEncoder;
+// = frServoEncoder;
+//}
 //This function registers servo encoders as motors because RobotC is stupid and won't let encoders be defined without a motor
 //////////////////////////////////////
+
+
+void registerServoEncoders(tMotor flServoEncoder, tMotor blServoEncoder, tMotor brServoEncoder, tMotor frServoEncoder)
+{
+FRONT_LEFT_SERVO_ENCODER = flServoEncoder;
+BACK_LEFT_SERVO_ENCODER = blServoEncoder;
+BACK_RIGHT_SERVO_ENCODER = brServoEncoder;
+FRONT_RIGHT_SERVO_ENCODER = frServoEncoder;
+}
 
 //////////////////////////////////////
 //allows all servos to be written to while only typing the value once.
@@ -62,13 +71,13 @@ void writeToServos(int servoPower)
 //sets servos to the correct degree setting using the degreesToMsPulse function. I need to add encoders to ensure accuracy.
 void setServos(int degrees)
 {
-		registerServoEncoders(frontLeftServoEncoder, backLeftServoEncoder, backRightServoEncoder, frontRightServoEncoder);		//has to register servos b/c I don't want to have to call this is my other program
+		registerServoEncoders(FRONT_LEFT_SERVO_ENCODER, BACK_LEFT_SERVO_ENCODER, BACK_RIGHT_SERVO_ENCODER, FRONT_RIGHT_SERVO_ENCODER);		//has to register servos b/c I don't want to have to call this is my other program
 
 		int Ticks = degreesToTicks(degrees); //uses function to change degrees to ticks
 		writeToServos(1);									//starts pulse
 		wait1Msec(1);											//waits one MS to use max power. see "http://www.robotc.net/wiki/Tutorials/Arduino_Projects/Mobile_Robotics/BoeBot/Continuous_Rotation_Servo_Intro"
 	  writeToServos(0);									//ends pulse
-	  	while (abs(nMotorEncoder(frontLeftServoEncoder) - Ticks) < 5)		//waits for servo to get close enough
+	  	while (abs(nMotorEncoder(FRONT_LEFT_SERVO_ENCODER) - Ticks) < 5)		//waits for servo to get close enough
 		{
 		}
 		writeToServos(1);																									//starts pulse
@@ -94,11 +103,11 @@ void setMotorEncoders(int motorEncoderValue)
 //sets all servo encoders to the same value in one go
 void setServoEncoders(int servoEncoderValue)
 {
-	registerServoEncoders(frontLeftServoEncoder, backLeftServoEncoder, backRightServoEncoder, frontRightServoEncoder);
-	nMotorEncoder(frontLeftServoEncoder) = 0;
-	nMotorEncoder(backLeftServoEncoder) = 0;
-	nMotorEncoder(backRightServoEncoder) = 0;
-	nMotorEncoder(frontRightServoEncoder) = 0;
+	registerServoEncoders(FRONT_LEFT_SERVO_ENCODER, BACK_LEFT_SERVO_ENCODER, BACK_RIGHT_SERVO_ENCODER, FRONT_RIGHT_SERVO_ENCODER);
+	nMotorEncoder(FRONT_LEFT_SERVO_ENCODER) = 0;
+	nMotorEncoder(BACK_LEFT_SERVO_ENCODER) = 0;
+	nMotorEncoder(BACK_RIGHT_SERVO_ENCODER) = 0;
+	nMotorEncoder(FRONT_RIGHT_SERVO_ENCODER) = 0;
 }
 //sets all servo encoders to the same value in one go
 //////////////////////////////////////
