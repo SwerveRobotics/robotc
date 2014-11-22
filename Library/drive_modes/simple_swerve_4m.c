@@ -101,32 +101,19 @@ float CalculateDriveAngle(float valueX, float valueY)
 
 }
 
-void SimpleWriteToDevicesMode1(float magnitude, int servoPosition){
-
-	int power = magnitude * MAX_MOTOR_POWER;
-	mpsToMotor(  FRONT_RIGHT_MOTOR, power);
-	mpsToMotor(  FRONT_LEFT_MOTOR,  power);
-	mpsToMotor(  BACK_LEFT_MOTOR,   power);
-	mpsToMotor(  BACK_RIGHT_MOTOR,  power);
-
-	degToCRServo(FRONT_RIGHT_SERVO, servoPosition);
-	degToCRServo(FRONT_LEFT_SERVO,  servoPosition);
-	degToCRServo(BACK_LEFT_SERVO,   servoPosition);
-	degToCRServo(BACK_RIGHT_SERVO,  servoPosition);
+void writeToMotors(int power)
+{
+	motor[BACK_LEFT_MOTOR] = power;
+	motor[BACK_RIGHT_MOTOR] = power;
+	motor[FRONT_LEFT_MOTOR] = power;
+	motor[FRONT_RIGHT_MOTOR] = power;
 }
-
-void SimpleWriteToDevicesMode2(float magnitude, int servoPosition){
-
-	int power = magnitude * MAX_MOTOR_POWER;
-	mpsToMotor(  FRONT_RIGHT_MOTOR, power);
-	mpsToMotor(  FRONT_LEFT_MOTOR,  power);
-	mpsToMotor(  BACK_LEFT_MOTOR,   power);
-	mpsToMotor(  BACK_RIGHT_MOTOR,  power);
-
-	degToCRServo(FRONT_RIGHT_SERVO, servoPosition);
-	degToCRServo(FRONT_LEFT_SERVO,  servoPosition + 90);
-	degToCRServo(BACK_LEFT_SERVO,   servoPosition + 180);
-	degToCRServo(BACK_RIGHT_SERVO,  servoPosition + 270);
+	void writeToServos(int servoPower)
+{
+	servo[BACK_LEFT_SERVO] = servoPower;
+	servo[BACK_RIGHT_SERVO] = servoPower;
+	servo[FRONT_LEFT_SERVO] = servoPower;
+	servo[FRONT_RIGHT_SERVO] = servoPower;
 }
 
 #endif
