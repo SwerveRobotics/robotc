@@ -188,17 +188,21 @@ float CalculateDriveSpeed(float velocityX,float velocityY,float velocityZ, Motor
 //Convert from SI units to MotorPower and Servo Position units, then set the motorPower and servoPosition
 //arguments of the motor in question accordingly.
 
-void WriteToDevices()
+	void writeToServos(int servoPower)
 {
-	mpsToMotor(  FRONT_RIGHT_MOTOR, Drive[FRONT_RIGHT].motorPower);
-	mpsToMotor(  FRONT_LEFT_MOTOR,  Drive[FRONT_LEFT].motorPower);
-	mpsToMotor(  BACK_LEFT_MOTOR,   Drive[BACK_LEFT].motorPower);
-	mpsToMotor(  BACK_RIGHT_MOTOR,  Drive[BACK_RIGHT].motorPower);
-
-	degToCRServo(FRONT_RIGHT_SERVO, Drive[FRONT_RIGHT].servoPosition);
-	degToCRServo(FRONT_LEFT_SERVO,  Drive[FRONT_RIGHT].servoPosition);
-	degToCRServo(BACK_LEFT_SERVO,   Drive[BACK_LEFT].servoPosition);
-	degToCRServo(BACK_RIGHT_SERVO,  Drive[BACK_RIGHT].servoPosition);
+	servo[BACK_LEFT_SERVO] = servoPower;
+	servo[BACK_RIGHT_SERVO] = servoPower;
+	servo[FRONT_LEFT_SERVO] = servoPower;
+	servo[FRONT_RIGHT_SERVO] = servoPower;
 }
+
+void WriteToMotors(int power)
+{
+	motor[BACK_LEFT_MOTOR] = power;
+	motor[BACK_RIGHT_MOTOR] = power;
+	motor[FRONT_LEFT_MOTOR] = power;
+	motor[FRONT_RIGHT_MOTOR] = power;
+}
+
 
 #endif

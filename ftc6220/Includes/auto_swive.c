@@ -34,18 +34,6 @@ int degreesToTicks(int degrees)
 //Changes Degrees to Ticks
 //////////////////////////////////////
 
-//////////////////////////////////////
-//This function registers servo encoders as motors because RobotC is stupid and won't let encoders be defined without a motor
-//void registerServoEncoders(tMotor flServoEncoder, tMotor blServoEncoder, tMotor brServoEncoder, tMotor frServoEncoder)		//have to register encoders as motor encoders instead of servos.
-//{
-//	= flServoEncoder;
-// = blServoEncoder;
-//	= brServoEncoder;
-// = frServoEncoder;
-//}
-//This function registers servo encoders as motors because RobotC is stupid and won't let encoders be defined without a motor
-//////////////////////////////////////
-
 
 void registerServoEncoders(tMotor flServoEncoder, tMotor blServoEncoder, tMotor brServoEncoder, tMotor frServoEncoder)
 {
