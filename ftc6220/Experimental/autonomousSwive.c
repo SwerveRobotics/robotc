@@ -1,4 +1,4 @@
-#pragma config(Hubs,  S1, HTMotor,  HTMotor,  none,     none)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  HTMotor)
 #pragma config(Hubs,  S2, HTServo,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
@@ -6,6 +6,10 @@
 #pragma config(Motor,  mtr_S1_C1_2,     backLeftM,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     backRightM,    tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     frontRightM,   tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C3_1,     frontLeftServoEncoder, tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C3_2,     backLeftServoEncoder, tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C4_1,     backRightServoEncoder, tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C4_2,     frontRightServoEncoder, tmotorTetrix, openLoop, encoder)
 #pragma config(Servo,  srvo_S2_C1_1,    frontLeftS,           tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C1_2,    backLeftS,            tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C1_3,    backRightS,           tServoContinuousRotation)
@@ -21,7 +25,7 @@
 
 task main()
 {
-
-	SimpleDriveDirection(0, 75, 1440);
+	setServoEncoders(0);
+	SimpleDriveDirection(0, 75, 25);			//direction in degrees, motor power, centimeters
 
 }

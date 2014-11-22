@@ -1,68 +1,135 @@
 #ifndef AUTO_SWIVE_C
 #define AUTO_SWIVE_C
 
-const float CENTER_RADIUS = 22.86;//centimeters
-
-const float MOTOR_GEAR_RATIO = 1.0;
-
-const float SERVO_GEAR_RATIO = 1.0;
-
-const float WHEEL_RADIUS = 10.16;//centimeters
-
 #include "../../Library/drive_modes/swerve_4m.c"
 
 
 int MAX_MOTOR_GEAR_RATIO = 1;   //just added that for testing purposes
 int WHEEL_DIAMETER = 1; //ditto
+int WHEEL_RADIUS = 1; //ditto
 const float WHEEL_CIRCUM = WHEEL_RADIUS * 2.0 *PI;			//calculates wheel circumfrence so that CM can be inputed instead of encoder ticks
-const int ENCODER_RESOLUTION = 1024;									//shows number of encoder ticks per rotation. I think this is wrong, and actually should be 1440
+const int ENCODER_RESOLUTION = 1440;									//shows number of encoder ticks per rotation.
 const float ENCODER_TO_CM = (ENCODER_RESOLUTION / MAX_MOTOR_GEAR_RATIO) / (WHEEL_DIAMETER * PI);   		//changes encoder ticks to centimeters so centimeters can be inputed instead. not using this yet. I hope to eventually.
 
+//"motors" are not actually motors. Encoders can only be definded if a motor is added for them.
+tMotor frontLeftServoEncoder;
+tMotor backLeftServoEncoder;
+tMotor backRightServoEncoder ;
+tMotor frontRightServoEncoder;
 
 // MOVE SWERVE CONSTANTS HERE //
 
-void writeToServos(int value)				//allows all servos to be written to while only typing the value once.
-{
-	servo[BACK_LEFT_SERVO] = value;
-	servo[BACK_RIGHT_SERVO] = value;
-	servo[FRONT_LEFT_SERVO] = value;
-	servo[FRONT_RIGHT_SERVO] = value;
-}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////Defining Functions Section//////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void degreesToMsPulse(int degrees)		//changes degree position of servo to how many MS a pulse needs to be given for
-{
-	int	MsPulse;
-	MsPulse = degrees; //times something to make it work that I haven't figured out yet.
-}
 
-void setServos(int direction)			//sets servos to the correct degree setting using the degreesToMsPulse function. I need to add encoders to ensure accuracy.
+//////////////////////////////////////
+//Changes Degrees to Ticks
+int degreesToTicks(int degrees)
 {
-	int MsPulse;
-	degreesToMsPulse(direction);		//calculates MS of pulse based on degrees
-	writeToServos(1);									//starts pulse
-	wait1Msec(MsPulse);							//waits calculated number of MS.
-	writeToServos(0);									//ends pulse
+	int Ticks = degrees * 4;
+	return(Ticks);
 }
+//Changes Degrees to Ticks
+//////////////////////////////////////
 
-void setMotors(int power)						//allows all motors to have the same value written to them while only typing the value once
+//////////////////////////////////////
+//This function registers servo encoders as motors because RobotC is stupid and won't let encoders be defined without a motor
+void registerServoEncoders(tMotor flServoEncoder, tMotor blServoEncoder, tMotor brServoEncoder, tMotor frServoEncoder)		//have to register encoders as motor encoders instead of servos.
+{
+frontLeftServoEncoder	= flServoEncoder;
+backLeftServoEncoder = blServoEncoder;
+backRightServoEncoder	= brServoEncoder;
+frontRightServoEncoder = frServoEncoder;
+}
+//This function registers servo encoders as motors because RobotC is stupid and won't let encoders be defined without a motor
+//////////////////////////////////////
+
+//////////////////////////////////////
+//allows all servos to be written to while only typing the value once.
+void writeToServos(int servoPower)
+{
+	servo[BACK_LEFT_SERVO] = servoPower;
+	servo[BACK_RIGHT_SERVO] = servoPower;
+	servo[FRONT_LEFT_SERVO] = servoPower;
+	servo[FRONT_RIGHT_SERVO] = servoPower;
+}
+//allows all servos to be written to while only typing the value once.
+//////////////////////////////////////
+
+//////////////////////////////////////
+//sets servos to the correct degree setting using the degreesToMsPulse function. I need to add encoders to ensure accuracy.
+void setServos(int degrees)
+{
+		registerServoEncoders(frontLeftServoEncoder, backLeftServoEncoder, backRightServoEncoder, frontRightServoEncoder);		//has to register servos b/c I don't want to have to call this is my other program
+
+		int Ticks = degreesToTicks(degrees); //uses function to change degrees to ticks
+		writeToServos(1);									//starts pulse
+		wait1Msec(1);											//waits one MS to use max power. see "http://www.robotc.net/wiki/Tutorials/Arduino_Projects/Mobile_Robotics/BoeBot/Continuous_Rotation_Servo_Intro"
+	  writeToServos(0);									//ends pulse
+	  	while (abs(nMotorEncoder(frontLeftServoEncoder) - Ticks) < 5)		//waits for servo to get close enough
+		{
+		}
+		writeToServos(1);																									//starts pulse
+		wait1Msec(1.5);																										//makes the pulse long enough to stop the servo
+		writeToServos(0);																									//stops pulse
+}
+//sets servos to the correct degree setting using the degreesToMsPulse function. I need to add encoders to ensure accuracy.
+//////////////////////////////////////
+
+//////////////////////////////////////
+//sets all motor encoders to the same value in one go
+void setMotorEncoders(int motorEncoderValue)
+{
+	nMotorEncoder(FRONT_LEFT_MOTOR) = 0;
+	nMotorEncoder(BACK_LEFT_MOTOR) = 0;
+	nMotorEncoder(BACK_RIGHT_MOTOR) = 0;
+	nMotorEncoder(FRONT_RIGHT_MOTOR) = 0;
+}
+//sets all motor encoders to the same value in one go
+//////////////////////////////////////
+
+//////////////////////////////////////
+//sets all servo encoders to the same value in one go
+void setServoEncoders(int servoEncoderValue)
+{
+	registerServoEncoders(frontLeftServoEncoder, backLeftServoEncoder, backRightServoEncoder, frontRightServoEncoder);
+	nMotorEncoder(frontLeftServoEncoder) = 0;
+	nMotorEncoder(backLeftServoEncoder) = 0;
+	nMotorEncoder(backRightServoEncoder) = 0;
+	nMotorEncoder(frontRightServoEncoder) = 0;
+}
+//sets all servo encoders to the same value in one go
+//////////////////////////////////////
+
+//////////////////////////////////////
+//allows all motors to have the same value written to them while only typing the value once
+void setMotors(int power)
 {
 	motor[BACK_LEFT_MOTOR] = power;
 	motor[BACK_RIGHT_MOTOR] = power;
 	motor[FRONT_LEFT_MOTOR] = power;
 	motor[FRONT_RIGHT_MOTOR] = power;
 }
+//allows all motors to have the same value written to them while only typing the value once
+//////////////////////////////////////
 
+//////////////////////////////////////
+//makes it easy to drive straight in one direction
 void SimpleDriveDirection(int direction, int power, int distance)
 {
-	nmotorencoder(FRONT_LEFT_MOTOR) = 0; //set motor encoder to zero
+	setMotorEncoders(0);  								//set servo encoders to zero
 	int distanceDriven = 0;								//set distance driven to 0
 	setServos(direction);									//turn servos to the correct direction
 	while(distanceDriven < distance)			//while distance driven is less than target distance, set motors to the set power and update distance driven
 	{
 		setMotors(power);
-		distanceDriven = ENCODER_TO_CM; // times encoder value
+		distanceDriven = ENCODER_TO_CM * nMotorEncoder(FRONT_LEFT_MOTOR);
 	}
 	setMotors(0);													//stop motors
 }
+//makes it easy to drive in a direction
+//////////////////////////////////////
 
 #endif
