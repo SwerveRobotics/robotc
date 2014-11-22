@@ -5,7 +5,7 @@ void InitializeTeleop()
 {
 	ASSUME_CONTROLLER_INPUT = true;
 	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
-	servo[irRotator] = 128;
+	servo[irRotator] = 256;
 	servo[goalGrabber] = 160;
 }
 #endif
