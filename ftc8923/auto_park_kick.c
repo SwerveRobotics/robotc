@@ -1,7 +1,9 @@
 #pragma config(Hubs,  S1, HTMotor,  HTServo,  none,     none)
 #pragma config(Hubs,  S4, HTMotor,  none,     none,     none)
-#pragma config(Sensor, S2,     gyro,           sensorI2CHiTechnicGyro)
+#pragma config(Sensor, S1,     ,               sensorI2CMuxController)
+#pragma config(Sensor, S2,     gyroSensor,           sensorI2CHiTechnicGyro)
 #pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker600)
+#pragma config(Sensor, S4,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFL,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBL,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S4_C1_1,     mtrBR,         tmotorTetrix, openLoop, reversed)
@@ -24,13 +26,17 @@ task main()
 
 	waitForStart();
 
-	TurnLeftDegrees(90, 20);
+	DriveBackwardDistance(6000, 40);
+	//DriveForwardDistanceGyro(100,20);
+
+
+/*	TurnLeftDegrees(90, 50);
 	wait1Msec(250);
-	TurnRightDegrees(180, 20);
+	TurnRightDegrees(180, 50);
 	wait1Msec(250);
-	TurnLeftDegrees(180, 20);
+	TurnLeftDegrees(180, 50);
 	wait1Msec(250);
-	TurnRightDegrees(90, 20);
+	TurnRightDegrees(90, 50);*/
 
 
 }
