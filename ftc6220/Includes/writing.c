@@ -94,24 +94,6 @@ void PulseCRServo(TServoIndex servoName, float length)
 	wait1Msec(1);
 }
 
-void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
-{
-	while (GetCRServoPosition(servoEnc) >= 360)
-	{
-		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) - 360)
-	}
-	while (GetCRServoPosition(servoEnc) < 0)
-	{
-		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) + 360)
-	}
-	int dAngle = angle - GetCRServoPosition;
-	while (abs(dAngle) = 2)
-	{
-		pulseCRServo(servoEnc, sgn(dAngle) + 1.5);
-		dAngle = angle - GetCRServoPosition;
-	}
-}
-
 int GetCRServoPosition(tMotor servoEnc)
 {
 	return nMotorEncoder[servoEnc] * ENCODER_TO_DEG;
@@ -121,5 +103,25 @@ void SetCRServoEncoder(tMotor servoEnc, int deg)
 {
 	nMotorEncoder[servoEnc] = deg	 * DEG_TO_ENCODER;
 }
+
+void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
+{
+	while (GetCRServoPosition(servoEnc) > 359)
+	{
+		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) - 360);
+	}
+	while (GetCRServoPosition(servoEnc) < 0)
+	{
+		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) + 360);
+	}
+	int dAngle = angle - GetCRServoPosition(servoEnc);
+	while (abs(dAngle) <= 2)
+	{
+		PulseCRServo(servoName, sgn(dAngle) + 1.5);
+		dAngle = angle - GetCRServoPosition(servoEnc);
+	}
+}
+
+
 
 #endif
