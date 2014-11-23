@@ -3,22 +3,9 @@
 
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
-
-const float CENTER_RADIUS = 22.86;//centimeters
-
-// these variables will be used to write to the motors and servos
-tMotor FRONT_LEFT_MOTOR;
-tMotor BACK_LEFT_MOTOR;
-tMotor FRONT_RIGHT_MOTOR;
-tMotor BACK_RIGHT_MOTOR;
+#include "../../ftc6220/includes/writing.c"
 
 
-TServoIndex FRONT_LEFT_SERVO;
-TServoIndex BACK_LEFT_SERVO;
-TServoIndex FRONT_RIGHT_SERVO;
-TServoIndex BACK_RIGHT_SERVO;
-
-int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
 
 //MotorEnum datatype used to refer to each of the four drive modules
 typedef enumWord
@@ -45,26 +32,8 @@ DriveAssemblyState Drive[4];
 
 
 //-------------------------------------------------------------------------------------------------//
-// !!! IMPORTANT - The following three functions MUST be called, else the drive will not work. !!! //
+// !!! IMPORTANT - The following function MUST be called, else the drive will not work. !!! //
 //-------------------------------------------------------------------------------------------------//
-
-//register the motors clockwise
-void RegisterMotors(tMotor frontLeftM, tMotor backLeftM, tMotor frontRightM, tMotor backRightM)
-{
-	FRONT_LEFT_MOTOR = frontLeftM;
-	BACK_LEFT_MOTOR = backLeftM;
-	FRONT_RIGHT_MOTOR = frontRightM;
-	BACK_RIGHT_MOTOR = backRightM;
-}
-
-//register the servos clockwise
-void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex frontRightS, TServoIndex backRightS)
-{
-	FRONT_LEFT_SERVO = frontLeftS;
-	BACK_LEFT_SERVO = backLeftS;
-	FRONT_RIGHT_SERVO = frontRightS;
-	BACK_RIGHT_SERVO = backRightS;
-}
 
 //initializes the drive assembly by setting all the values in the drive assembly structures
 void initializeDriveAssemblies()
@@ -82,15 +51,9 @@ void initializeDriveAssemblies()
 	Drive[BACK_RIGHT].offsetAngle      = 7.0 * PI / 4.0;
 
 }
-
-
-
 //--------------------------------------//
 //   !!! End of required funtions !!!   //
 //--------------------------------------//
-
-
-
 
 //Attenuate the joystick used for rotation based on the maximum angular speed possible
 //and find the "desired" angular velocity.

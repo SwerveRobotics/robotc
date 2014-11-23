@@ -3,20 +3,11 @@
 
 #include "../../library/drive_modes/swerve_4m.c"
 #include "JoystickDriver.c"
-
-
-
-
-
-
+#include "writing.c"
 
 task drive()
 {
-	MOTOR_GEAR_RATIO = 1.0;
 
-	SERVO_GEAR_RATIO = 1.0;
-
-	float WHEEL_RADIUS = 10.16;//centimeters
 	initializeDriveAssemblies();
 
 	float joyX1;
@@ -39,7 +30,7 @@ task drive()
 			Drive[p].servoPosition = CalculateDriveAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
 			Drive[p].motorPower = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p);
 		}
-		WriteToDevices();
+
 	}
 }
 #endif

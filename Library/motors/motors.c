@@ -4,13 +4,7 @@
 #include "motor_defines.h"
 #include "../controllers/controller_defines.h"
 
-float MOTOR_GEAR_RATIO;
-float SERVO_GEAR_RATIO;
 
-const float MOTOR_POWER_PER_CMPS = 1.207671; //theoretical motor power nessesary to move at 1 m/s with 4in wheels
-const float MAX_MOTOR_SPEED_CMPS = 81.93;//theoretical max based on 154rpm motor and 4in diameter wheel // gear ratio?
-
-const float SERVO_TICK_PER_DEGREE = 1.4118;//number of servo ticks nessesary to rotate 1 degree
 
 // Assuming a linear relationship between these values, we can solve for the slope //
 const float LINEAR_MOTOR_CONTROL_SLOPE = (MAX_MOTOR_POWER-MIN_MOTOR_POWER)/(MAX_ANALOG-ANALOG_DEAD_ZONE);
@@ -33,21 +27,5 @@ void SetMotorPower(tMotor motorName, int power)
 		motor[motorName] = power;
 }
 
-//Set Motor Power from a CM/S value
-void mpsToMotor(tMotor motorName, float cmps)
-{
-	motor[motorName] = 	MOTOR_POWER_PER_CMPS * MOTOR_GEAR_RATIO * cmps;
-}
-
-int degreesToTicks(int degrees)
-{
-	int Ticks = degrees * 4;
-	return(Ticks);
-}
-
-void degToServo(TServoIndex servoName, int angle)
-{
-	servo[servoName] = SERVO_GEAR_RATIO * SERVO_TICK_PER_DEGREE * angle;
-}
 
 #endif
