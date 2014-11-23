@@ -3,52 +3,7 @@
 
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
-
-// these variables will be used to write to the motors and servos
-tMotor FRONT_LEFT_MOTOR;
-tMotor BACK_LEFT_MOTOR;
-tMotor FRONT_RIGHT_MOTOR;
-tMotor BACK_RIGHT_MOTOR;
-
-TServoIndex FRONT_LEFT_SERVO;
-TServoIndex BACK_LEFT_SERVO;
-TServoIndex FRONT_RIGHT_SERVO;
-TServoIndex BACK_RIGHT_SERVO;
-
-int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
-
-
-//-------------------------------------------------------------------------------------------------//
-// !!! IMPORTANT - The following three functions MUST be called, else the drive will not work. !!! //
-//-------------------------------------------------------------------------------------------------//
-
-//register the motors clockwise
-void RegisterMotors(tMotor frontLeftM, tMotor backLeftM, tMotor frontRightM, tMotor backRightM)
-{
-	FRONT_LEFT_MOTOR = frontLeftM;
-	BACK_LEFT_MOTOR = backLeftM;
-	FRONT_RIGHT_MOTOR = frontRightM;
-	BACK_RIGHT_MOTOR = backRightM;
-}
-
-//register the servos clockwise
-void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex frontRightS, TServoIndex backRightS)
-{
-	FRONT_LEFT_SERVO = frontLeftS;
-	BACK_LEFT_SERVO = backLeftS;
-	FRONT_RIGHT_SERVO = frontRightS;
-	BACK_RIGHT_SERVO = backRightS;
-}
-
-
-
-//--------------------------------------//
-//   !!! End of required funtions !!!   //
-//--------------------------------------//
-
-
-
-
+#include "../../ftc6220/includes/writing.c"
 //Attenuate the joystick used for rotation based on the maximum angular speed possible
 //and find the "desired" angular velocity.
 float JoystickToRotRate(float joystickZ)
@@ -75,7 +30,7 @@ float JoystickToMagnitude(float joystickXorY) // return a -1 to 1 value for moto
 {
 	float attenuationSlope = joystickRange / MAX_MOTOR_POWER;
 
-	float attenuationIntercept = -1 * sgn(joystickXorY) * attenuationSlope
+	float attenuationIntercept = -1 * sgn(joystickXorY) * attenuationSlope;
 
 	if (abs(joystickXorY) < ANALOG_DEAD_ZONE)
 	{
@@ -98,22 +53,30 @@ float CalculateDriveAngle(float valueX, float valueY)
 	{
 		return tangent;
 	}
-
 }
 
-void writeToMotors(int power)
+void SimpleWriteToMotors(float cmps)
 {
-	motor[BACK_LEFT_MOTOR] = power;
-	motor[BACK_RIGHT_MOTOR] = power;
-	motor[FRONT_LEFT_MOTOR] = power;
-	motor[FRONT_RIGHT_MOTOR] = power;
+	CMPSToMotor(FRONT_LEFT_MOTOR,  cmps);
+	CMPSToMotor(BACK_LEFT_MOTOR,   cmps);
+	CMPSToMotor(BACK_RIGHT_MOTOR,  cmps);
+	CMPSToMotor(FRONT_RIGHT_MOTOR, cmps);
 }
-	void writeToServos(int servoPower)
+
+void SimpleWriteToServos(int angle)
 {
-	servo[BACK_LEFT_SERVO] = servoPower;
-	servo[BACK_RIGHT_SERVO] = servoPower;
-	servo[FRONT_LEFT_SERVO] = servoPower;
-	servo[FRONT_RIGHT_SERVO] = servoPower;
+	DegToCRServo(FRONT_LEFT_SERVO,  FRONT_LEFT_SERVO_ENC,  angle);
+	DegToCRServo(BACK_LEFT_SERVO,   BACK_LEFT_SERVO_ENC,   angle);
+	DegToCRServo(BACK_RIGHT_SERVO,  BACK_RIGHT_SERVO_ENC,  angle);
+	DegToCRServo(FRONT_RIGHT_SERVO, FRONT_RIGHT_SERVO_ENC, angle);
+}
+
+void SetServosRotateMode()
+{
+	DegToCRServo(FRONT_LEFT_SERVO,  FRONT_LEFT_SERVO_ENC,  0  );
+	DegToCRServo(BACK_LEFT_SERVO,   BACK_LEFT_SERVO_ENC,   90 );
+	DegToCRServo(BACK_RIGHT_SERVO,  BACK_RIGHT_SERVO_ENC,  180);
+	DegToCRServo(FRONT_RIGHT_SERVO, FRONT_RIGHT_SERVO_ENC, 270);
 }
 
 #endif
