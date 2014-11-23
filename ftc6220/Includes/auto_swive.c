@@ -4,11 +4,6 @@
 #include "../../Library/drive_modes/simple_swerve_4m.c"
 #include "writing.c"
 
-const int ENCODER_RESOLUTION = 1440;
-//changes encoder ticks to centimeters so centimeters can be inputed instead
-const float ENCODER_TO_CM = (ENCODER_RESOLUTION / MAX_MOTOR_SPEED_CMPS) / (WHEEL_RADIUS * 2 * PI);
-
-const float ENCODER_TO_DEG = 360 / ENCODER_RESOLUTION;
 
 // zero encoders by type
 void ZeroMotorEncoders()
