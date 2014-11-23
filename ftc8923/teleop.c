@@ -20,6 +20,7 @@
 
 #include "../Library/controllers/tank_controller.c"
 #include "init_teleop.c"
+#include "ftc8923_functions.c"
 
 task main()
 {
@@ -32,14 +33,14 @@ task main()
 	{
 		getJoystickSettings(joystick);
 
-		if(joy2Btn(1) == 1)
+		if(joy1Btn(8) == 1)
 		{
-			servo[goalGrabber] = 100;
+			GrabGoal();
 		}
 
-		if(joy2Btn(3) == 1)
+		if(joy1Btn(7) == 1)
 		{
-			servo[goalGrabber] = 160;
+			ReleaseGoal();
 		}
 	}
 }
