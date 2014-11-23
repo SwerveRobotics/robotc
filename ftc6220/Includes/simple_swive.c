@@ -3,13 +3,10 @@
 
 #include "../../library/drive_modes/simple_swerve_4m.c"
 #include "JoystickDriver.c"
+#include "writing.c"
 
 task drive()
 {
-	MOTOR_GEAR_RATIO = 1.0;
-
-	SERVO_GEAR_RATIO = 1.0;
-
 	float joyDistance;
 
 	while(true)
@@ -20,15 +17,18 @@ task drive()
 
 		if (JoystickToRotRate(joystick.joy1_x1) == 0)
 		{
-		int driveDirection = CalculateDriveAngle(joystick.joy1_x2, joystick.joy1_y2);
-		int driveMagnitude = JoystickToMagnitude(joyDistance);
-		SimpleWriteToDevicesMode1(driveMagnitude, driveDirection);
+			int driveDirection = CalculateDriveAngle(joystick.joy1_x2, joystick.joy1_y2);
+			int driveMagnitude = JoystickToMagnitude(joyDistance);
+			SimpleWriteToMotors(driveMagnitude * MAX_MOTOR_SPEED_CMPS);
+			SimpleWriteToServos(driveDirection);
+
 		}
 		else
 		{
 			int driveMagnitude = JoystickToRotRate(joystick.joy1_x1);
 			int driveDirection = 45;
-			SimpleWriteToDevicesMode2(driveMagnitude, driveDirection);
+			SimpleWriteToMotors(driveMagnitude * MAX_MOTOR_SPEED_CMPS);
+			SetServosRotateMode();
 		}
 	}
 }

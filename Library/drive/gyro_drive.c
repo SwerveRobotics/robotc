@@ -10,7 +10,7 @@
 #include "../sensors/gyro.c"
 
 // May need to calibrate to specific robots
-int MOTOR_POWER_SHAVE = 1;
+int MOTOR_POWER_SHAVE = 3;
 
 typedef enum
 {
@@ -26,6 +26,7 @@ typedef enum
 void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 {
 	StopAllDriveMotors();
+	ResetEncoderValue();
 	wait1Msec(250); //The wait is here to ensure the robot comes to a stop before calibrating the gyro
 	startGyro();
 	wait1Msec(200);
@@ -38,6 +39,12 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	bool wasTurningRight = false;
 	bool wasTurningLeft = false;
 	int shavedPower = drivePower;
+	if(driveAction == DriveActionBackward)
+	{
+		drivePower *= -1; // @todo test this
+		shavedPower *= -1;
+		MOTOR_POWER_SHAVE *= -1;
+	}
 	// Action loop
 	while(true)
 	{
@@ -54,10 +61,10 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 			// Drive Forward and Drive Backward with the gyro shaves power off of one motor
 			// when the Gyro detects any turn degrees.
 			case DriveActionBackward:
-				drivePower = drivePower*-1; // @todo test this
 			case DriveActionForward:
 				if(EncoderDistance(abs(ReadEncoderValue())) > abs(driveArg)) // hopefully you have configured your encoder!
 				{
+					stopAction = true;
 					break;
 				}
 				if(readGyro() > 0) // turning right
@@ -69,7 +76,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 						wasTurningRight = false;
 						shavedPower = drivePower;
 					}
-					shavedPower = shavedPower - MOTOR_POWER_SHAVE;
+					shavedPower = shavedPower - (MOTOR_POWER_SHAVE);
 					DriveLeftMotors(shavedPower);
 					DriveRightMotors(drivePower);
 				}
@@ -82,7 +89,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 						wasTurningLeft = false;
 						shavedPower = drivePower;
 					}
-					shavedPower = shavedPower - MOTOR_POWER_SHAVE;
+					shavedPower = shavedPower - (MOTOR_POWER_SHAVE);
 					DriveRightMotors(shavedPower);
 					DriveLeftMotors(drivePower);
 				}
