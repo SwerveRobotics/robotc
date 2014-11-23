@@ -28,7 +28,7 @@ task main()
 	RegisterMotors(frontLeftM, backLeftM, backRightM, frontRightM);
 	registerServoEncoders(frontLeftServoEncoder, backLeftServoEncoder, backRightServoEncoder, frontRightServoEncoder);
 	setServoEncoders(0);
-	SimpleDriveDirection(0, 75, 160);			//direction in degrees, motor power, centimeters
+	SimpleDriveDirection(0, 75, 160);			//direction in degrees, motor power, centimeters.
 
 
 }
