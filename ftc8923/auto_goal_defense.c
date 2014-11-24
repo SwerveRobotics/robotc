@@ -24,52 +24,7 @@ task main()
 {
 	InitializeAuto();
 	waitForStart();
-	DriveForward(100);
-	wait1Msec(2000);
-	StopAllDriveMotors();
-/*
-	//Goto and grab medium goal
-	DriveBackwardDistance(60, 20);
-	//wait1Msec(250);
-	//TurnLeftDegrees(9, 50);
-	wait1Msec(250);
-	DriveBackwardDistance(27, 20);
-	GrabGoal();
-	DriveBackwardDistance(8, 20);
 
-	//Place goal in parking zone
-	wait1Msec(250);
-	TurnRightDegrees(19, 50);
-	wait1Msec(250);
-	DriveForwardDistance(93, 60);
-	wait1Msec(250);
-	TurnRightDegrees(80, 50);
-	wait1Msec(250);
-	TurnRightDegrees(80, 50);
-	wait1Msec(250);
-	DriveBackwardDistance(20, 20);
-	//ReleaseGoal();
+	DriveForwardDistance(50, 100);
 
-	//Go back for small goal
-	wait1Msec(250);
-	/*DriveForwardDistance(70, 60);
-	wait1Msec(250);
-	TurnRightDegrees(120, 50);
-	wait1Msec(250);
-	DriveBackwardDistance(53, 20);
-	wait1Msec(250);
-	GrabGoal();
-	//DriveBackwardDistance(8, 20);
-
-	//Place goal in parking zone
-	wait1Msec(250);
-	DriveForwardDistance(48, 20);
-	wait1Msec(250);
-	TurnRightDegrees(10, 50);
-	wait1Msec(250);
-	DriveForwardDistance(45, 60);
-	wait1Msec(250);
-	TurnLeftDegrees(135, 50);
-	wait1Msec(250);
-	DriveBackwardDistance(17, 20);*/
 }
