@@ -13,6 +13,10 @@ task drive()
 	float joyX1;
 	float joyX2;
 	float joyY2;
+
+	bool rotTrans = true;
+	float slowModeFactor = 1.0;
+	float radius = 35;
 	while(true)
 	{
 		getJoystickSettings(joystick);
@@ -25,10 +29,49 @@ task drive()
 		float Y_Velocity = JoystickToCMPerSec(joyY2, joyX1);
 		float Z_Velocity = JoystickToRadsPerSec(joyX1);
 
-		for (MotorEnum p; p < BACK_RIGHT; p++)
+		if (joystick.joy1_Buttons == 7)
 		{
-			Drive[p].servoPosition = CalculateDriveAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
-			Drive[p].motorPower = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p);
+			slowModeFactor = 0.4;
+		}
+		else
+		{
+			slowModeFactor = 1.0;
+		}
+
+		if (rotTrans == true)
+		{
+			for (MotorEnum p; p < BACK_RIGHT; p++)
+			{
+				Drive[p].servoPosition = CalculateDriveAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
+				Drive[p].motorPower = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p) * slowModeFactor;
+			}
+			WriteToMotorsInd();
+			WriteToServosInd();
+		}
+		if (joystick.joy1_Buttons == 5)
+		{
+
+			rotTrans = false;
+			if (abs(joystick.joy1_y2) > 20)
+			{
+				radius = radius + joystick.joy1_y2 * 0.01;
+			}
+			RadialDrive(MAX_MOTOR_SPEED_CMPS * slowModeFactor, radius);
+		}
+		else if (joystick.joy1_Buttons == 6)
+		{
+
+			rotTrans = false;
+			if (abs(joystick.joy1_y2) > 20)
+			{
+				radius = radius + joystick.joy1_y2 * 0.01;
+			}
+			RadialDrive(-1 * MAX_MOTOR_SPEED_CMPS * slowModeFactor, radius);
+		}
+		else
+		{
+			rotTrans = true;
+			radius = 35;
 		}
 
 	}

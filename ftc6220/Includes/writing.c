@@ -20,6 +20,9 @@ const float ENCODER_TO_CM = (ENCODER_RESOLUTION / MAX_MOTOR_SPEED_CMPS) / (WHEEL
 
 const float ENCODER_TO_DEG = 360 / ENCODER_RESOLUTION;
 const float DEG_TO_ENCODER = ENCODER_RESOLUTION / 360;
+const float DEG_TO_WINCH_TICK = 1.0;
+
+int currentWinchAngle[4] = { 180 , 180 , 180 , 180 };
 
 /// -           END OF PARAMETERS           - ///
 
@@ -33,12 +36,7 @@ TServoIndex FRONT_LEFT_SERVO;
 TServoIndex BACK_LEFT_SERVO;
 TServoIndex FRONT_RIGHT_SERVO;
 TServoIndex BACK_RIGHT_SERVO;
-
-tMotor FRONT_LEFT_SERVO_ENC;
-tMotor BACK_LEFT_SERVO_ENC;
-tMotor FRONT_RIGHT_SERVO_ENC;
-tMotor BACK_RIGHT_SERVO_ENC;
-
+TServoIndex GRABBER_SERVO;
 
 //-------------------------------------------------------------------------------------------------//
 // !!! IMPORTANT - The following three functions MUST be called, else the drive will not work. !!! //
@@ -54,22 +52,16 @@ void RegisterMotors(tMotor frontLeftM, tMotor backLeftM, tMotor backRightM, tMot
 }
 
 //register the servos clockwise
-void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex backRightS, TServoIndex frontRightS)
+void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex backRightS, TServoIndex frontRightS, TServoIndex grabberS)
 {
 	FRONT_LEFT_SERVO  = frontLeftS;
 	BACK_LEFT_SERVO   = backLeftS;
 	FRONT_RIGHT_SERVO = frontRightS;
 	BACK_RIGHT_SERVO  = backRightS;
+	GRABBER_SERVO = grabberS;
+
 }
 
-//register psuedo motors for servo encoders
-void RegisterServoEncoders(tMotor flEncoder, tMotor blEncoder, tMotor brEncoder, tMotor frEncoder)
-{
-	FRONT_LEFT_SERVO_ENC  = flEncoder;
-	BACK_LEFT_SERVO_ENC   = flEncoder;
-	BACK_RIGHT_SERVO_ENC  = flEncoder;
-	FRONT_RIGHT_SERVO_ENC = flEncoder;
-}
 
 //--------------------------------------//
 //   !!! End of required funtions !!!   //
@@ -104,6 +96,7 @@ void SetCRServoEncoder(tMotor servoEnc, int deg)
 	nMotorEncoder[servoEnc] = deg	 * DEG_TO_ENCODER;
 }
 
+//flawed
 void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
 {
 	while (GetCRServoPosition(servoEnc) > 359)
@@ -119,6 +112,79 @@ void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
 	{
 		PulseCRServo(servoName, sgn(dAngle) + 1.5);
 		dAngle = angle - GetCRServoPosition(servoEnc);
+	}
+}
+
+void DegToWinchServo(TServoIndex servoName, int angle)//set a winch servo to a position between -360 and 720
+{
+	servo[servoName] = (angle + 360) * DEG_TO_WINCH_TICK;
+
+	if (servoName == FRONT_LEFT_SERVO)
+	{
+		currentWinchAngle[0] = angle;
+	}
+	else if (servoName == BACK_LEFT_SERVO)
+	{
+		currentWinchAngle[1] = angle;
+	}
+	else if (servoName == BACK_RIGHT_SERVO)
+	{
+		currentWinchAngle[2] = angle;
+	}
+	else if (servoName == FRONT_RIGHT_SERVO)
+	{
+		currentWinchAngle[3] = angle;
+	}
+}
+
+void ClosestDegToWinchServo(TServoIndex servoName, int angle)//set a winch servo to a position between -360 and 720, but perfers the closest value
+{
+	int w;
+	if (servoName == FRONT_LEFT_SERVO)
+	{
+		w = 0;
+	}
+	else if (servoName == BACK_LEFT_SERVO)
+	{
+		w = 1;
+	}
+	else if (servoName == BACK_RIGHT_SERVO)
+	{
+		w = 2;
+	}
+	else if (servoName == FRONT_RIGHT_SERVO)
+	{
+		w = 3;
+	}
+	int dAngle = currentWinchAngle[w] - angle;
+	else if (dAngle < -360)
+	{
+		angle = angle - 360;
+	}
+	else if (dAngle > 360)
+	{
+		angle = angle + 360;
+	}
+	if (angle > 720)
+	{
+		angle = angle - 360;
+	}
+	else if (angle < -360)
+	{
+		angle = angle + 360;
+	}
+	servo[servoName] = (angle + 360) * DEG_TO_WINCH_TICK;
+}
+
+void EnableGoalGrabber(bool state)
+{
+	if (state == true)
+	{
+		servo[GRABBER_SERVO] = 90;
+	}
+	else
+	{
+		servo[GRABBER_SERVO] = 0;
 	}
 }
 

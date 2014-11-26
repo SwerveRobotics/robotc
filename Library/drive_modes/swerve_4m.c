@@ -15,7 +15,7 @@ typedef enumWord
 	BACK_LEFT,
 	BACK_RIGHT,
 }
-	MotorEnum;
+MotorEnum;
 
 //swerve module structure for storing all values specific to any given drive assembly
 typedef struct
@@ -151,21 +151,47 @@ float CalculateDriveSpeed(float velocityX,float velocityY,float velocityZ, Motor
 //Convert from SI units to MotorPower and Servo Position units, then set the motorPower and servoPosition
 //arguments of the motor in question accordingly.
 
-	void writeToServos(int servoPower)
+void WriteToServosInd()
 {
-	servo[BACK_LEFT_SERVO] = servoPower;
-	servo[BACK_RIGHT_SERVO] = servoPower;
-	servo[FRONT_LEFT_SERVO] = servoPower;
-	servo[FRONT_RIGHT_SERVO] = servoPower;
+	ClosestDegToWinchServo(FRONT_RIGHT_SERVO, Drive[FRONT_RIGHT].servoPosition);
+	ClosestDegToWinchServo(FRONT_LEFT_SERVO,  Drive[FRONT_LEFT].servoPosition);
+	ClosestDegToWinchServo(BACK_RIGHT_SERVO,  Drive[BACK_RIGHT].servoPosition);
+	ClosestDegToWinchServo(BACK_LEFT_SERVO,   Drive[BACK_LEFT].servoPosition);
 }
 
-void WriteToMotors(int power)
+void WriteToMotorsInd()
 {
-	motor[BACK_LEFT_MOTOR] = power;
-	motor[BACK_RIGHT_MOTOR] = power;
-	motor[FRONT_LEFT_MOTOR] = power;
-	motor[FRONT_RIGHT_MOTOR] = power;
+	CMPSToMotor(BACK_LEFT_MOTOR,   Drive[BACK_LEFT].motorPower);
+	CMPSToMotor(BACK_RIGHT_MOTOR,  Drive[BACK_RIGHT].motorPower);
+	CMPSToMotor(FRONT_LEFT_MOTOR,  Drive[FRONT_LEFT].motorPower);
+	CMPSToMotor(FRONT_RIGHT_MOTOR, Drive[FRONT_RIGHT].motorPower);
 }
 
+void RadialDrive(int speed, float radius)
+{
+	if (radius < 25){
+		radius = 25;
+	}
+	else if (radius > 150)
+	{
+		radius = 150;
+	}
+	int forwardRightAngle = atan2(15.875,  radius - 15.875);
+	int forwardLeftAngle =  atan2(-15.875, radius - 15.875);
+	int rearRightAngle =    atan2(15.875,  radius + 15.875);
+	int rearLeftAngle =     atan2(-15.875, radius + 15.875);
+
+	Drive[BACK_RIGHT].servoPosition =  forwardRightAngle + 90;
+	Drive[BACK_LEFT].servoPosition =   forwardLeftAngle + 90;
+	Drive[FRONT_RIGHT].servoPosition = rearRightAngle + 90;
+	Drive[FRONT_RIGHT].servoPosition = rearLeftAngle + 90;
+
+	Drive[FRONT_LEFT].motorPower = speed;
+	Drive[FRONT_RIGHT].motorPower = speed;
+
+	Drive[BACK_LEFT].motorPower = speed * (2 * PI * (radius - 15.875)) / (2 * PI * (radius + 15.875));
+	Drive[BACK_RIGHT].motorPower = speed * (2 * PI * (radius - 15.875)) / (2 * PI * (radius + 15.875));
+
+}
 
 #endif
