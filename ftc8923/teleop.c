@@ -21,8 +21,8 @@
 #define TANK_4M
 
 #include "../Library/controllers/tank_controller.c"
-#include "init_teleop.c"
-#include "ftc8923_functions.c"
+#include "include_files/init_teleop.c"
+#include "include_files/functions.c"
 
 task main()
 {
