@@ -28,105 +28,101 @@ void StopCollector()
 	motor[collector] = 0;
 }
 
+//Container functoins
+void HoldBalls()
+{
+	servo[container] = 0;
+}
+
+void DumpBalls()
+{
+	servo[container] = 100;
+}
+
 //Lift functions
 
 //Commented out as the motors haven't yet been declared. We can't declare them yet as we don't know how they will be wired
-/*
+
 void LowerLift()
 {
-	motor[lifter] = -100;
+	motor[mtrLifterL] = -100;
+	motor[mtrLifterR] = -100;
 }
-
 void RaiseLift()
 {
-	motor[lifter] = 100;
+	motor[mtrLifterL] = 100;
+	motor[mtrLifterR] = 100;
 }
-
 void StopLift()
 {
-	motor[lifter] = 0;
+	motor[mtrLifterL] = 0;
+	motor[mtrLifterR] = 0;
+}
+
+bool LiftAboveDetect(int pos)
+{
+	if(nMotorEncoder[mtrLifterL] > pos)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool LiftBelowDetect(int pos)
+{
+	if(nMotorEncoder[mtrLifterL] < pos)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void MoveLifter(int pos)
+{
+	while(LiftAboveDetect(pos))
+	{
+		LowerLift();
+	}
+	while(LiftBelowDetect(pos))
+	{
+		RaiseLift();
+	}
 }
 
 //Lift position functions
 void LiftDownPos()
 {
-	if(above)
-	{
-		while(above)
-		{
-			LowerLift();
-		}
-	}
+	const int downPos = 0;
+	MoveLifter(downPos);
 	StopLift();
 }
-
-void LiftSmallPos()
+void LiftLowPos()
 {
-	if(above)
-	{
-		while(above)
-		{
-			LowerLift();
-		}
-	}
-	if(below)
-	{
-		while(below)
-		{
-			RaiseLift();
-		}
-	}
+	const int lowPos = 5000;
+	MoveLifter(lowPos);
 	StopLift();
 }
-
 void LiftMediumPos()
 {
-	if(above)
-	{
-		while(above)
-		{
-			LowerLift();
-		}
-	}
-	if(below)
-	{
-		while(below)
-		{
-			RaiseLift();
-		}
-	}
+	const int mediumPos = 10000;
+	MoveLifter(mediumPos);
 	StopLift();
 }
-
 void LiftHighPos()
 {
-	if(above)
-	{
-		while(above)
-		{
-			LowerLift();
-		}
-	}
-	if(below)
-	{
-		while(below)
-		{
-			RaiseLift();
-		}
-	}
+	const int highPos = 15000;
+	MoveLifter(highPos);
 	StopLift();
 }
-
 void LiftCenterPos()
 {
-	if(below)
-	{
-		while(below)
-		{
-			RaiseLift();
-		}
-	}
+	const int centerPos = 20000;
+	MoveLifter(centerPos);
 	StopLift();
 }
-*/
 #endif
