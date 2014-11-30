@@ -3,6 +3,8 @@
 
 /// - SERVE DRIVE AND CONVERSION PARAMETERS - ///
 
+int reverseMotorFactor = 1;
+
 const float	MOTOR_GEAR_RATIO      = 1.206;
 const float	SERVO_GEAR_RATIO      = 1.0;
 
@@ -20,7 +22,7 @@ const float ENCODER_TO_CM = (ENCODER_RESOLUTION / MAX_MOTOR_SPEED_CMPS) / (WHEEL
 
 const float ENCODER_TO_DEG = 360 / ENCODER_RESOLUTION;
 const float DEG_TO_ENCODER = ENCODER_RESOLUTION / 360;
-const float DEG_TO_WINCH_TICK = 1.0;
+const float DEG_TO_WINCH_TICK = 4.235;
 
 int currentWinchAngle[4] = { 180 , 180 , 180 , 180 };
 
@@ -157,13 +159,21 @@ void ClosestDegToWinchServo(TServoIndex servoName, int angle)//set a winch servo
 		w = 3;
 	}
 	int dAngle = currentWinchAngle[w] - angle;
-	else if (dAngle < -360)
+	if (abs(dAngle) > 180)
 	{
-		angle = angle - 360;
+		angle = angle + (180 * sgn(dAngle));
+		if (reverseMotorFactor == 1)
+		{
+			reverseMotorFactor = -1;
+		}
+		else
+		{
+			reverseMotorFactor = 1;
+		}
 	}
-	else if (dAngle > 360)
+	if (abs(dAngle) > 360)
 	{
-		angle = angle + 360;
+		angle = angle + (360 * sgn(dAngle));
 	}
 	if (angle > 720)
 	{

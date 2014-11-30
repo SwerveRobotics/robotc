@@ -65,18 +65,18 @@ void SimpleWriteToMotors(float cmps)
 
 void SimpleWriteToServos(int angle)
 {
-	DegToCRServo(FRONT_LEFT_SERVO,  FRONT_LEFT_SERVO_ENC,  angle);
-	DegToCRServo(BACK_LEFT_SERVO,   BACK_LEFT_SERVO_ENC,   angle);
-	DegToCRServo(BACK_RIGHT_SERVO,  BACK_RIGHT_SERVO_ENC,  angle);
-	DegToCRServo(FRONT_RIGHT_SERVO, FRONT_RIGHT_SERVO_ENC, angle);
+	DegToWinchServo(FRONT_LEFT_SERVO,  angle);
+	DegToWinchServo(BACK_LEFT_SERVO,   angle);
+	DegToWinchServo(BACK_RIGHT_SERVO,  angle);
+	DegToWinchServo(FRONT_RIGHT_SERVO, angle);
 }
 
 void SetServosRotateMode()
 {
-	DegToCRServo(FRONT_LEFT_SERVO,  FRONT_LEFT_SERVO_ENC,  0  );
-	DegToCRServo(BACK_LEFT_SERVO,   BACK_LEFT_SERVO_ENC,   90 );
-	DegToCRServo(BACK_RIGHT_SERVO,  BACK_RIGHT_SERVO_ENC,  180);
-	DegToCRServo(FRONT_RIGHT_SERVO, FRONT_RIGHT_SERVO_ENC, 270);
+	ClosestDegToWinchServo(FRONT_LEFT_SERVO,  0  );
+	ClosestDegToWinchServo(BACK_LEFT_SERVO,   90 );
+	ClosestDegToWinchServo(BACK_RIGHT_SERVO,  180);
+	ClosestDegToWinchServo(FRONT_RIGHT_SERVO, 270);
 }
 
 #endif
