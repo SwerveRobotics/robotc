@@ -43,7 +43,7 @@ task drive()
 			for (MotorEnum p; p < BACK_RIGHT; p++)
 			{
 				Drive[p].servoPosition = CalculateDriveAngle(X_Velocity, Y_Velocity, Z_Velocity, p);
-				Drive[p].motorPower = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p) * slowModeFactor;
+				Drive[p].motorPower = CalculateDriveSpeed(X_Velocity, Y_Velocity, Z_Velocity, p) * slowModeFactor * reverseMotorFactor;
 			}
 			WriteToMotorsInd();
 			WriteToServosInd();
