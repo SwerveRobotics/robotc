@@ -27,7 +27,16 @@ task main()
 {
 	InitializeAuto();
 	waitForStart();
+	//Go and grab small goal
+	DriveBackwardDistance(20, 20);
+	TurnRightDegrees(35, 50);
+	DriveBackwardDistance(33, 20);
+	TurnLeftDegrees(48, 50);
+	DriveBackwardDistance(72, 20);
+	GrabGoal();
 
+
+	/*
 	//Goto and grab medium goal
 	DriveBackwardDistance(87, 20);
 	GrabGoal();
@@ -37,5 +46,5 @@ task main()
 	TurnRightDegrees(19, 50);
 	DriveForwardDistance(93, 60);
 	TurnRightDegrees(160, 50);
-	DriveBackwardDistance(20, 20);
+	DriveBackwardDistance(20, 20);*/
 }
