@@ -16,6 +16,8 @@ typedef enum
 {
 	DriveActionForward,
 	DriveActionBackward,
+	DriveActionForwardForever,
+	DriveActionBackwardForever,
 	DriveActionTurnLeft,
 	DriveActionTurnRight
 } DriveActionEnum;
@@ -29,8 +31,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	wait1Msec(250); //The wait is here to ensure the robot comes to a stop before calibrating the gyro
 	ResetEncoderValue();
 	startGyro();
-	wait1Msec(200);
-	// @todo use gyroValid() functionality somehow
+	while(!gyroValid()) {} // @todo should have a timeout here
 	resetGyro();
 	ClearTimer(T4);
 	bool failed = false;
@@ -138,4 +139,83 @@ void DriveBackwardDistanceGyro(int distance, int power)
 {
 	GyroDrive(DriveActionBackward, distance, power);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+bool wasTurningRight = false;
+bool wasTurningLeft = false;
+int shavedPower = 0;
+
+void InitSpecialGyroDrive(DriveActionEnum driveAction, int drivePower)
+{
+	wasTurningRight = false;
+	wasTurningLeft = false;
+	shavedPower = drivePower;
+	if(driveAction == DriveActionBackward)
+	{
+		drivePower *= -1;
+		shavedPower *= -1;
+		MOTOR_POWER_SHAVE *= -1;
+	}
+}
+
+bool SpecialGyroDrive(DriveActionEnum driveAction, int drivePower)
+{
+	// Stop if the gyro reading is invalid
+	if (!gyroValid() || shavedPower == 0)
+	{
+		return false;
+	}
+	if(readGyro() > 0) // turning right
+	{
+		// Reset shavedPower if we just switched turn directions //
+		wasTurningLeft = true;
+		if(wasTurningRight == true)
+		{
+			wasTurningRight = false;
+			shavedPower = drivePower;
+		}
+		shavedPower = shavedPower - (MOTOR_POWER_SHAVE);
+		DriveLeftMotors(shavedPower);
+		DriveRightMotors(drivePower);
+	}
+	else if(readGyro() < 0) // turning left
+	{
+		// Reset shavedPower if we just switched turn directions //
+		wasTurningRight = true;
+		if(wasTurningLeft == true)
+		{
+			wasTurningLeft = false;
+			shavedPower = drivePower;
+		}
+		shavedPower = shavedPower - (MOTOR_POWER_SHAVE);
+		DriveRightMotors(shavedPower);
+		DriveLeftMotors(drivePower);
+	}
+	else
+	{
+		DriveForward(drivePower);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 #endif

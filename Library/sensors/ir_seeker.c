@@ -1,4 +1,4 @@
-#ifndef IR_SEKKER_C
+#ifndef IR_SEEKER_C
 #define IR_SEEKER_C
 
 typedef enum
@@ -11,7 +11,7 @@ typedef enum
 const int SEEKER_COUNT = 4;
 tSensors IR_SEEKER[SEEKER_COUNT];
 
-void RegisterIRSeeker(SeekerEnum seekerNum = 0, tSensors IRSeekerName)
+void RegisterIRSeeker(tSensors IRSeekerName, SeekerEnum seekerNum = 0)
 {
 	switch(seekerNum)
 	{
