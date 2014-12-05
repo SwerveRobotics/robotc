@@ -61,6 +61,8 @@ task gyro() {
 		GYRO_ANGLE += speed * ((float)GYRO_PERIOD / 1000.0);
 		GYRO_READY = true;
 	}
+	// only runs when you stop the gyro task
+	GYRO_READY = false;
 }
 
 // Reset the accumulated angle
