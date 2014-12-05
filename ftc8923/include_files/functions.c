@@ -12,7 +12,7 @@ void ReleaseGoal()
 	servo[goalGrabber] = 100;
 }
 
-/*//Collector functions
+//Collector functions
 void CollectBalls()
 {
 	motor[collector] = -100;
@@ -124,5 +124,5 @@ void LiftCenterPos()
 	const int centerPos = 20000;
 	MoveLifter(centerPos);
 	StopLift();
-}*/
+}
 #endif

@@ -26,8 +26,8 @@ typedef enum
 void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 {
 	StopAllDriveMotors();
-	ResetEncoderValue();
 	wait1Msec(250); //The wait is here to ensure the robot comes to a stop before calibrating the gyro
+	ResetEncoderValue();
 	startGyro();
 	wait1Msec(200);
 	// @todo use gyroValid() functionality somehow
