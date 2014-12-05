@@ -28,22 +28,6 @@ task main()
 	InitializeAuto();
 	waitForStart();
 
-	//Detects IR position
-	//Runs corresponding function
-
-	DetectRampIR();
-
-	if(CENTER_GOAL_POSITION == 1)
-	{
-		RampKickPos1();
-	}
-	else if(CENTER_GOAL_POSITION == 2)
-	{
-		RampKickPos2();
-	}
-	else if(CENTER_GOAL_POSITION == 3)
-	{
-		RampKickPos3();
-	}
+	DriveForwardDistance(50, 100);
 
 }
