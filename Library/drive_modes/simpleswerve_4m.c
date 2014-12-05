@@ -1,122 +1,117 @@
-#ifndef SIMPLESWERVE_4M_C
-#define SIMPLESWERVE_4M_C
+#ifndef SWERVE_4M_C
+#define SWERVE_4M_C
 
 #include "../controllers/controller_defines.h"
+#include "../motors/motors.c"
 
-typedef enumWord{FRONT_RIGHT,FRONT_LEFT,BACK_LEFT,BACK_RIGHT}POS;
+// these variables will be used to write to the motors and servos
+tMotor FRONT_LEFT_MOTOR;
+tMotor BACK_LEFT_MOTOR;
+tMotor FRONT_RIGHT_MOTOR;
+tMotor BACK_RIGHT_MOTOR;
 
-typedef struct //define swerve drive module data type
+TServoIndex FRONT_LEFT_SERVO;
+TServoIndex BACK_LEFT_SERVO;
+TServoIndex FRONT_RIGHT_SERVO;
+TServoIndex BACK_RIGHT_SERVO;
+
+int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
+
+
+//-------------------------------------------------------------------------------------------------//
+// !!! IMPORTANT - The following three functions MUST be called, else the drive will not work. !!! //
+//-------------------------------------------------------------------------------------------------//
+
+//register the motors clockwise
+void RegisterMotors(tMotor frontLeftM, tMotor backLeftM, tMotor frontRightM, tMotor backRightM)
 {
-	int position;
-	int power;
-	int offsetAngle;
-	float radius;
-	float motorRatio;
-	float servoRatio;
-}SWIVE;
+	FRONT_LEFT_MOTOR = frontLeftM;
+	BACK_LEFT_MOTOR = backLeftM;
+	FRONT_RIGHT_MOTOR = frontRightM;
+	BACK_RIGHT_MOTOR = backRightM;
+}
 
-SWIVE Swive[4];
-//These describe the geometry of the robot.
-//Both are 4 item arrays storing independent values for the four different drive assemblies which can be placed anywhere.
-//basically these hold the placement vectors of the drive assemblies from the robot center (or center of driving)
-
-//The RADIUS is the distance from the motor assemblies to the robot center (or center of driving) in meters. This array holds four different values for four different drive assemblies (general case is good).
-//e.g RADIUS would have some values close to [0.2286, 0.2286, 0.2286, 0.2286] for most robots, but you could have differing values if you want.
-float RADIUS[4] = {0.2286, 0.2286, 0.2286, 0.2286};
-//The offsetangle is the angle of the placement of the drive assemblies from the "front" in radians. This array holds four different values for four different drive assemblies (general case is good).
-//e.g, OFFSETANGLE would have values [PI/4, 3*PI/4, 5*PI/4, 7*PI/4] for most robots, but you could have differing values if you want
-float OFFSET_ANGLE[4] = {PI/4, 3 * PI/4, 5 * PI/4, 7 * PI/4};
-// for use in some of the joystick scaling, we need the largest radius value.
-#define LARGEST_RADIUS (0.2286) //change this to find the largest number in RADIUS
-
-//The motorgearratio is the gear ratio between the motor and the wheel
-float MOTOR_GEAR_RATIO = 1.206;
-//The servogearratio is the gear ratio between the servo and the turntable
-float SERVO_GEAR_RATIO[4] = {1, 1, 1, 1};
-//maximum value the servo can be sent to
-int MAX_SERVO_VAL = 255;
-//minimum value the servo can be sent to
-int MIN_SERVO_VAL = 0;
-//maximum angle the servo can go to
-int MAX_SERVO_ANGLE = PI/2;
-//minimum angle the servo can go to
-int MIN_SERVO_ANGLE = -PI/2;
-///wheel radius (in meters in this set up)
-int WHEEL_RADIUS = 0.0508 ;
-
-
-void initializeSwiveGeometry()//sets drive geometry the swive struct
+//register the servos clockwise
+void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex frontRightS, TServoIndex backRightS)
 {
-	for (POS p; p < 4; p++)
+	FRONT_LEFT_SERVO = frontLeftS;
+	BACK_LEFT_SERVO = backLeftS;
+	FRONT_RIGHT_SERVO = frontRightS;
+	BACK_RIGHT_SERVO = backRightS;
+}
+
+
+
+//--------------------------------------//
+//   !!! End of required funtions !!!   //
+//--------------------------------------//
+
+
+
+
+//Attenuate the joystick used for rotation based on the maximum angular speed possible
+//and find the "desired" angular velocity.
+float JoystickToRotRate(float joystickZ)
+{
+
+	float attenuationSlope =  1 / joystickRange;
+	//mapping maximum rotational speed to the allowed joystick input range, aka. finding the slope.
+
+	float attenuationIntercept = -1 * ANALOG_DEAD_ZONE * sgn(joystickZ) * attenuationSlope;
+	//finding the range taken up by the dead zone, aka. finding the intercept.
+
+	if (abs(joystickZ) < ANALOG_DEAD_ZONE)
 	{
-		Swive[p].radius = RADIUS[p];
-		Swive[p].offsetAngle = OFFSET_ANGLE[p];
-		Swive[p].motorRatio = MOTOR_GEAR_RATIO;
-		Swive[p].servoRatio = SERVO_GEAR_RATIO[p];
+		return 0;
+	}
+	else
+	{
+		return attenuationSlope * joystickZ + attenuationIntercept;
 	}
 
 }
 
-
-const int MAX_MOTOR_SPEED_MPS = 0.8193; // it might make sense to make a library file for a bunch of constants like this, and unit conversions, this is with a 4in diameter wheel btw
-
-const int MOTOR_POWER_PER_MPS = 120.7671; //we really should just make a bunch of these
-
-//Attenuate the joystick input being used for angular velocity based on the maximum radius and the maximum motor speed, then convert to radians per second
-int JoystickToRadiansPerSecond(int joystickZPosition)
+float JoystickToCMPerSec(float joystickXorY)
 {
-	int angularSpeed = ((MAX_MOTOR_SPEED_MPS * MOTOR_GEAR_RATIO / LARGEST_RADIUS) / (MAX_ANALOG - ANALOG_DEAD_ZONE)) * joystickZPosition + sgn(joystickZPosition) * ((MAX_MOTOR_SPEED_MPS * MOTOR_GEAR_RATIO / LARGEST_RADIUS) / (MAX_ANALOG - ANALOG_DEAD_ZONE)) * ANALOG_DEAD_ZONE;
-	return angularSpeed;
+	float attenuationSlope = joystickRange / MAX_MOTOR_POWER;
+
+	float attenuationIntercept = -1 * sgn(joystickXorY) * attenuationSlope
+
+	if (abs(joystickXorY) < ANALOG_DEAD_ZONE)
+	{
+		return 0;
+	}
+	else
+	{
+		return (joystickXorY * attenuationSlope) + attenuationIntercept;
+	}
 }
 
-//Attenuate the joystick inputs being used for planar motion based on the maximum linear speed possible at an instant
-//(which is in turn scaled off of the current angular speed)
-int JoystickToMetersPerSecond(int joystickXorYPosition, int joystickZPosition)
+float CalculateDriveAngle(float valueX, float valueY)
 {
-	int maximumLinearSpeed = sqrt( pow(MAX_MOTOR_SPEED_MPS, 2) - pow(JoystickToRadiansPerSecond(joystickZPosition) * LARGEST_RADIUS, 2));
-	int metersPerSecond = ((maximumLinearSpeed/(MAX_ANALOG - ANALOG_DEAD_ZONE)) * joystickXorYPosition + sgn(joystickXorYPosition) * (maximumLinearSpeed/(MAX_ANALOG - ANALOG_DEAD_ZONE)))* ANALOG_DEAD_ZONE;
-	return metersPerSecond;
+	int tangent = 57.3 * atan2(valueX, valueY); //drive angle
+	if (tangent < 0)
+	{
+		return tangent + 360;
+	}
+	else
+	{
+		return tangent;
+	}
+
 }
 
-//Calculate the angular component of the motor velocity vector based on the inputs for the desired motion of the center of the robot:
-//velocityX is the horizontal (Side-to-side) component of the desired robot motion in m/s
-//velocityY is the vertical (Front-to-back) component in m/s
-//velocityZ is the angular (Round and round) component in rad/s
-//This reference frame is relative to the robot in all instances.
-//So, the angular argument turns it like a car, while the x and y arguments strafe it around the field
-float CalculateMotorAngle(int velocityX, int velocityY, int velocityZ,POS driveID)
-{
-	//used the arctangent function to find the angular component of the velocity vector for the chosen motor
-	int motorAngle = atan((velocityX + velocityZ * Swive[driveID].radius * cos(Swive[driveID].offsetAngle)) / (velocityY - velocityZ * Swive[driveID].radius * sin(Swive[driveID].offsetAngle)));
-	return motorAngle;
-}
+void SimpleWriteToDevices(int magnitude, int servoPosition){
 
-//Calculate the magnitude (speed) component of the motor velocity vector base on the inputs for the desited motion of the center of the robot:
-//velocityX is the horizontal (Side-to-side) component of the desired robot motion in m/s
-//velocityY is the vertical (Front-to-back) component in m/s
-//velocityZ is the angular (Round and round) component in rad/s
-//This reference frame is relative to the robot in all instances.
-//So, the angular argument turns it like a car, while the x and y arguments strafe it around the field
-int CalculateMotorSpeed(int velocityX,int velocityY,int velocityZ,POS driveID)
-{
-	// uses the pythagorean theorem to find the magnitude of the velocity vector for the chosen motor
-	int motorSpeed = sqrt(pow((velocityX + velocityZ * Swive[driveID].radius * cos(Swive[driveID].offsetAngle)), 2) + pow((velocityY - velocityZ * Swive[driveID].radius * sin(Swive[driveID].offsetAngle)), 2));
-	return motorSpeed;
-}
+	mpsToMotor(  FRONT_RIGHT_MOTOR, magnitude);
+	mpsToMotor(  FRONT_LEFT_MOTOR,  magnitude);
+	mpsToMotor(  BACK_LEFT_MOTOR,   magnitude);
+	mpsToMotor(  BACK_RIGHT_MOTOR,  magnitude);
 
-//Convert the calculated units to the units for our servos and motors, then send to the drive assemblies
-//this will need to be rewritten with more thought as to the particulars of limited servo ranges...
-void SetDriveVelocity(int speed, int angle,POS driveID)
-{
-	//convert radians to servo positions
-	//the way this is set up is the reason that the servos should be set to the center position facing forwards
-	//it also assumes at least 360 deg motion for the angle in order to work, so this will probably need to be more advanced at some point.
-	int position = ((MAX_SERVO_VAL - MIN_SERVO_VAL) / (MAX_SERVO_ANGLE - MIN_SERVO_ANGLE)) * SERVO_GEAR_RATIO * angle;
-	//convert m/s to motor power
-	int power = MOTOR_POWER_PER_MPS * speed * MOTOR_GEAR_RATIO ;
-	//send the values to the corresponding motor and servo
-	Swive[driveID].power = power;
-	Swive[driveID].position = position;
+	degToCRServo(FRONT_RIGHT_SERVO, servoPosition);
+	degToCRServo(FRONT_LEFT_SERVO,  servoPosition);
+	degToCRServo(BACK_LEFT_SERVO,   servoPosition);
+	degToCRServo(BACK_RIGHT_SERVO,  servoPosition);
 }
 
 #endif

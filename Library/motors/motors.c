@@ -5,6 +5,7 @@
 #include "../controllers/controller_defines.h"
 
 
+
 // Assuming a linear relationship between these values, we can solve for the slope //
 const float LINEAR_MOTOR_CONTROL_SLOPE = (MAX_MOTOR_POWER-MIN_MOTOR_POWER)/(MAX_ANALOG-ANALOG_DEAD_ZONE);
 // Solve for the Y-intercept (equation was sovled for with a simple system of two equations assuming a linear relationship)
@@ -25,5 +26,6 @@ void SetMotorPower(tMotor motorName, int power)
 	else
 		motor[motorName] = power;
 }
+
 
 #endif
