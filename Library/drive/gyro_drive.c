@@ -175,7 +175,7 @@ bool SpecialGyroDrive(DriveActionEnum driveAction, int drivePower)
 	{
 		return false;
 	}
-	if(readGyro() > 0) // turning right
+	if(readGyro() > 1) // turning right
 	{
 		// Reset shavedPower if we just switched turn directions //
 		wasTurningLeft = true;
@@ -188,7 +188,7 @@ bool SpecialGyroDrive(DriveActionEnum driveAction, int drivePower)
 		DriveLeftMotors(shavedPower);
 		DriveRightMotors(drivePower);
 	}
-	else if(readGyro() < 0) // turning left
+	else if(readGyro() < -1) // turning left
 	{
 		// Reset shavedPower if we just switched turn directions //
 		wasTurningRight = true;
@@ -205,6 +205,7 @@ bool SpecialGyroDrive(DriveActionEnum driveAction, int drivePower)
 	{
 		DriveForward(drivePower);
 	}
+	return true;
 }
 
 
