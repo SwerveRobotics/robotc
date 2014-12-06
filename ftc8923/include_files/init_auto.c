@@ -6,7 +6,7 @@ void InitializeAuto()
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
 	RegisterEncoderMotor(mtrFR);
-	RegisterIRSeeker(1,IRSensor);
+	RegisterIRSeeker(IRSensor,1);
 	RegisterGyroSensor(gyroSensor);
 	WHEEL_DIAMETER = 4;
 	GEAR_RATIO = 1.5;
