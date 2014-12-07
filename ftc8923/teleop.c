@@ -42,7 +42,7 @@ task main()
 		{
 			GrabGoal();
 		}
-		if(joy1Btn(7) == 1)
+		if(joy1Btn(2) == 1)
 		{
 			ReleaseGoal();
 		}

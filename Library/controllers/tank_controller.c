@@ -8,21 +8,46 @@
 #include "../drive_modes/drive_modes.h"
 #include "../controllers/controller_defines.h"
 
+int BACKWARD_BUTTON = 0;
+
+void RegisterBackwardButton(int button)
+{
+	BACKWARD_BUTTON = button;
+}
+
 task DriveTank()
 {
 	while(true)
 	{
 		getJoystickSettings(joystick);
 
-		if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
-			DriveLeftMotors(joystick.joy1_y1);
-		else
-			StopLeftDriveMotors();
+		//Drive forward
+		if(joy1Btn(BACKWARD_BUTTON) == 0)
+		{
+			if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
+				DriveLeftMotors(joystick.joy1_y1);
+			else
+				StopLeftDriveMotors();
 
-		if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
-			DriveRightMotors(joystick.joy1_y2);
+			if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
+				DriveRightMotors(joystick.joy1_y2);
+			else
+				StopRightDriveMotors();
+		}
+
+		//Drive Backward
 		else
-			StopRightDriveMotors();
+		{
+			if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
+				DriveRightMotors(-1*joystick.joy1_y1);
+			else
+				StopLeftDriveMotors();
+
+			if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
+				DriveLeftMotors(-1*joystick.joy1_y2);
+			else
+				StopRightDriveMotors();
+		}
 	}
 }
 
