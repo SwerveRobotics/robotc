@@ -1,6 +1,8 @@
 #ifndef AUTO_DRIVE_FUNCTIONS_C
 #define AUTO_DRIVE_FUNCTIONS_C
 
+#include "../drive_modes/drive_modes.h"
+
 int WHEEL_DIAMETER = 4;
 float GEAR_RATIO = 1.0;
 
