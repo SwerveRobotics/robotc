@@ -13,7 +13,7 @@ void InitializeAuto()
 	ReleaseGoal();
 	servo[irRotator] = 255;
 
-	LEFT_TURN_GYRO_OVERRUN = 20;
-	RIGHT_TURN_GYRO_OVERRUN = 25;
+	LEFT_TURN_GYRO_OVERRUN = 15;
+	RIGHT_TURN_GYRO_OVERRUN = 20;
 }
 #endif
