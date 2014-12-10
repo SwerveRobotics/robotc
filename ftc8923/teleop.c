@@ -74,23 +74,23 @@ task main()
 		//Lift Commands
 		if(joy2Btn(1) == 1)
 		{
-			LiftLowPos();
+			MoveLifter(DownPos);
 		}
 		else if(joy2Btn(2) == 1)
 		{
-			LiftMediumPos();
+			MoveLifter(LowGoalPos);
 		}
 		else if(joy2Btn(3) == 1)
 		{
-			LiftHighPos();
+			MoveLifter(MediumGoalPos);
 		}
 		else if(joy2Btn(4) == 1)
 		{
-			LiftCenterPos();
+			MoveLifter(HighGoalPos);
 		}
 		else if(joy2Btn(10) == 1)
 		{
-			LiftDownPos();
+			MoveLifter(CenterGoalPos);
 		}
 	}
 }
