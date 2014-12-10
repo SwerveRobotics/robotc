@@ -30,8 +30,15 @@ task main()
 	InitializeAuto();
 	waitForStart();
 
+	/*
 	TurnLeftDegrees(90, 50);
+	wait1Msec(1000);
 	TurnRightDegrees(180, 50);
+	wait1Msec(1000);
 	TurnLeftDegrees(180, 50);
+	wait1Msec(1000);
 	TurnRightDegrees(90, 50);
+	*/
+
+	DriveForwardDistance(80,50);
 }
