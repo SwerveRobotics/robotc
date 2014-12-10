@@ -1,6 +1,17 @@
 #ifndef FTC8923_FUNCTIONS
 #define FTC8923_FUNCTIONS
 
+//Positions of lift
+typedef enum
+{
+	DownPos = 0,
+	LowGoalPos = 5000,
+	MediumGoalPos = 10000,
+	HighGoalPos = 15000,
+	CenterGoalPos = 20000
+}
+LiftPositionsEnum;
+
 //Goal grabber functions
 void GrabGoal()
 {
@@ -40,9 +51,6 @@ void DumpBalls()
 }
 
 //Lift functions
-
-//Commented out as the motors haven't yet been declared. We can't declare them yet as we don't know how they will be wired
-
 void LowerLift()
 {
 	motor[mtrLifterL] = -100;
@@ -92,37 +100,6 @@ void MoveLifter(int pos)
 	{
 		RaiseLift();
 	}
-}
-
-//Lift position functions
-void LiftDownPos()
-{
-	const int downPos = 0;
-	MoveLifter(downPos);
-	StopLift();
-}
-void LiftLowPos()
-{
-	const int lowPos = 5000;
-	MoveLifter(lowPos);
-	StopLift();
-}
-void LiftMediumPos()
-{
-	const int mediumPos = 10000;
-	MoveLifter(mediumPos);
-	StopLift();
-}
-void LiftHighPos()
-{
-	const int highPos = 15000;
-	MoveLifter(highPos);
-	StopLift();
-}
-void LiftCenterPos()
-{
-	const int centerPos = 20000;
-	MoveLifter(centerPos);
 	StopLift();
 }
 #endif

@@ -1,8 +1,5 @@
-#include "../../Library/drive_modes/drive_modes.h"
 #include "../../Library/sensors/ir_seeker.c"
-#include "../../Library/sensors/gyro.c"
 #include "../../Library/drive/gyro_drive.c"
-#include "../../Library/autonomous/auto_drive.c"
 #include "functions.c"
 #include "init_auto.c"
 #include "center_objectives.c"
