@@ -40,5 +40,5 @@ task main()
 	TurnRightDegrees(90, 50);
 	*/
 
-	DriveForwardDistance(80,50);
+	DriveForwardDistanceGyro(110,50);
 }

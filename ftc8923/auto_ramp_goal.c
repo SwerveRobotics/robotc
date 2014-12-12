@@ -30,13 +30,13 @@ task main()
 	waitForStart();
 
 	//Goto and grab medium goal
-	DriveBackwardDistanceGyro(87, 20);
+	DriveBackwardDistanceGyro(90, 20);
 	GrabGoal();
-	DriveBackwardDistance(8, 20);
+	DriveBackwardDistance(5, 20);
 
 	//Place goal in parking zone
-	TurnRightDegrees(25, 50);
+	TurnRightDegrees(35, 50);
 	DriveForwardDistanceGyro(93, 60);
-	TurnRightDegrees(160, 50);
-	DriveBackwardDistanceGyro(20, 20);
+	TurnRightDegrees(180, 50);
+	DriveBackwardDistanceGyro(10, 20);
 }
