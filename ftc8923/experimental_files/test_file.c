@@ -40,5 +40,10 @@ task main()
 	TurnRightDegrees(90, 50);
 	*/
 
-	DriveForwardDistanceGyro(110,50);
+	//DriveForwardDistanceGyro(110,50);
+
+	while(true)
+	{
+		nxtDisplayTextLine(1, "%d", readGyroSpeed());
+	}
 }
