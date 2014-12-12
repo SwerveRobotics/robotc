@@ -30,6 +30,7 @@ task main()
 	InitializeAuto();
 	waitForStart();
 
+	//Turn test
 	/*
 	TurnLeftDegrees(90, 50);
 	wait1Msec(1000);
@@ -40,10 +41,12 @@ task main()
 	TurnRightDegrees(90, 50);
 	*/
 
+	//Gyro drive test
 	//DriveForwardDistanceGyro(110,50);
 
+	//Gyro rotation display
 	while(true)
 	{
-		nxtDisplayTextLine(1, "%d", readGyroSpeed());
+		nxtDisplayTextLine(1, "Rotation rate: %d", readGyroSpeed());
 	}
 }
