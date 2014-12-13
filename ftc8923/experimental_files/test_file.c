@@ -42,11 +42,21 @@ task main()
 	*/
 
 	//Gyro drive test
-	//DriveForwardDistanceGyro(110,50);
+	DriveForwardDistanceGyro(110,50);
 
+	/*
 	//Gyro rotation display
+	StopAllDriveMotors();
+	wait1Msec(250); //The wait is here to ensure the robot comes to a stop before calibrating the gyro
+	ResetEncoderValue();
+	startGyro();
+	while(!gyroValid()) {} // @todo should have a timeout here
+	resetGyro();
+	ClearTimer(T4);
+	bool failed = false;
 	while(true)
 	{
-		nxtDisplayTextLine(1, "Rotation rate: %d", readGyroSpeed());
+		nxtDisplayTextLine(1, "%d", readGyroSpeed());
 	}
+	*/
 }
