@@ -68,6 +68,12 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					stopAction = true;
 					break;
 				}
+
+				//readGyro() may need to be divided by some number to not make too big of a change
+				DriveRightMotors(drivePower-readGyro());
+				DriveLeftMotors(drivePower+readGyro());
+
+				/*
 				if(readGyro() > 1) // turning right
 				{
 					// Reset shavedPower if we just switched turn directions //
@@ -98,7 +104,9 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 				{
 					DriveForward(drivePower);
 				}
+
 				wait1Msec(25); // so we don't attempt to adjust power 60 times a second thus reducing one motor power to zero
+				*/
 				break;
 			case DriveActionTurnLeft:
 				TurnLeft(drivePower);
