@@ -3,17 +3,25 @@
 
 task main()
 {
-	int MotorSpeed;
+	const int defaultSpeed = 50;
+	int motorSpeed = defaultSpeed;
 	while(true)
 	{
+		//Right arrow to speed up
   	if(nNxtButtonPressed == 1)
   	{
-   		MotorSpeed = 50;
+   		motorSpeed += 10;
   	}
+  	//Left arrow to slow down
   	if(nNxtButtonPressed == 2)
 		{
-			MotorSpeed += 5;
+			motorSpeed -= 10;
 		}
-		motor[Lift] = MotorSpeed;
+		//Center button to return to normal speed
+		if(nNxtButtonPressed == 3)
+		{
+			motorSpeed = defaultSpeed;
+		}
+		motor[Lift] = motorSpeed;
 	}
 }
