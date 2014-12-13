@@ -14,7 +14,7 @@ void DectectFloorIR()
 	{
 		CENTER_GOAL_POSITION = 1;
 	}
-	else
+	else if(ReadIRSensor(1) == 5)
 	{
 		CENTER_GOAL_POSITION = 3;
 	}
