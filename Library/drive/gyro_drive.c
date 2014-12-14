@@ -35,16 +35,11 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	resetGyro();
 	ClearTimer(T4);
 	bool failed = false;
-
 	bool stopAction = false;
-	bool wasTurningRight = false;
-	bool wasTurningLeft = false;
-	int shavedPower = drivePower;
+
 	if(driveAction == DriveActionBackward)
 	{
 		drivePower *= -1; // @todo test this
-		shavedPower *= -1;
-		MOTOR_POWER_SHAVE *= -1;
 	}
 	// Action loop
 	while(true)
@@ -68,45 +63,8 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					stopAction = true;
 					break;
 				}
-
-				//readGyro() may need to be divided by some number to not make too big of a change
-				DriveRightMotors(drivePower-readGyro());
-				DriveLeftMotors(drivePower+readGyro());
-
-				/*
-				if(readGyro() > 1) // turning right
-				{
-					// Reset shavedPower if we just switched turn directions //
-					wasTurningLeft = true;
-					if(wasTurningRight == true)
-					{
-						wasTurningRight = false;
-						shavedPower = drivePower;
-					}
-					shavedPower = shavedPower - (MOTOR_POWER_SHAVE);
-					DriveLeftMotors(shavedPower);
-					DriveRightMotors(drivePower);
-				}
-				else if(readGyro() < -1) // turning left
-				{
-					// Reset shavedPower if we just switched turn directions //
-					wasTurningRight = true;
-					if(wasTurningLeft == true)
-					{
-						wasTurningLeft = false;
-						shavedPower = drivePower;
-					}
-					shavedPower = shavedPower - (MOTOR_POWER_SHAVE);
-					DriveRightMotors(shavedPower);
-					DriveLeftMotors(drivePower);
-				}
-				else
-				{
-					DriveForward(drivePower);
-				}
-
-				wait1Msec(25); // so we don't attempt to adjust power 60 times a second thus reducing one motor power to zero
-				*/
+				DriveRightMotors(drivePower+readGyro()*5);
+				DriveLeftMotors(drivePower-readGyro()*5);
 				break;
 			case DriveActionTurnLeft:
 				TurnLeft(drivePower);
