@@ -10,7 +10,6 @@ int LEFT_TURN_GYRO_OVERRUN = 5;
 int RIGHT_TURN_GYRO_OVERRUN = 5;
 
 const int GYRO_PERIOD = 10;
-const float GYRO_FLOAT_SPEED = 10.0;
 const int GYRO_CAL_SAMPLES = 25;
 
 tSensors GYRO_SENSOR;
@@ -55,9 +54,6 @@ task gyro() {
 
 		// Read and integrate
 		float speed = readGyroSpeed();
-		if (abs(speed) < GYRO_FLOAT_SPEED) {
-			speed = 0.0;
-		}
 		GYRO_ANGLE += speed * ((float)GYRO_PERIOD / 1000.0);
 		GYRO_READY = true;
 	}
