@@ -28,9 +28,9 @@ void RampKickPos1()
 
 void RampKickPos2()
 {
-	DriveForwardDistanceGyro(10, 50);
+	DriveForwardDistanceGyro(12, 50);
 	TurnLeftDegrees(75, 50);
-	DriveForwardDistanceGyro(35, 50);
+	DriveForwardDistanceGyro(36, 50);
 }
 
 void RampKickPos3()
