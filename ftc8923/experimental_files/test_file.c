@@ -42,6 +42,7 @@ task main()
 	*/
 
 	//Gyro drive test
+	wait1Msec(5000);
 	DriveForwardDistanceGyro(110,50);
 
 	/*
@@ -56,7 +57,6 @@ task main()
 	bool failed = false;
 	while(true)
 	{
-		nxtDisplayTextLine(1, "%d", readGyroSpeed());
-	}
-	*/
+		nxtDisplayTextLine(1, "%d", readGyro());
+	}*/
 }
