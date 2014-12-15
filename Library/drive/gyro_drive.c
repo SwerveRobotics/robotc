@@ -33,7 +33,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	startGyro();
 	while(!gyroValid()) {} // @todo should have a timeout here
 	resetGyro();
-	ClearTimer(T4);
 	time1[T3] = 0;
 	bool failed = false;
 	bool stopAction = false;
