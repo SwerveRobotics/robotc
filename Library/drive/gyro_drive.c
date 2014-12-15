@@ -37,9 +37,9 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	bool failed = false;
 	bool stopAction = false;
 
-	if(driveAction == DriveActionBackward)
+	if(driveAction == DriveActionBackward || driveAction == DriveActionTurnLeft)
 	{
-		drivePower *= -1; // @todo test this
+		drivePower *= -1;
 	}
 	// Action loop
 	while(true)
@@ -54,30 +54,26 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 		}
 		switch(driveAction)
 		{
-			// Drive Forward and Drive Backward with the gyro shaves power off of one motor
-			// when the Gyro detects any turn degrees.
+			//Driving strait code
 			case DriveActionBackward:
 			case DriveActionForward:
+				//If the distance has been reached, it stops running
 				if(EncoderDistance(abs(ReadEncoderValue())) > abs(driveArg)) // hopefully you have configured your encoder!
 				{
 					stopAction = true;
 					break;
 				}
+				//Adjusts power according to gyro reading
 				DriveRightMotors(drivePower+readGyro()*5);
 				DriveLeftMotors(drivePower-readGyro()*5);
 				break;
+			//Turning code
 			case DriveActionTurnLeft:
-				TurnLeft(drivePower);
-				// Turn until we exceed the requested (absolute) angle
-				int angleLeft = abs(readGyro());
-				if (angleLeft > driveArg)
-					stopAction = true;
-				break;
 			case DriveActionTurnRight:
+				//Turns until requested angle is reached
 				TurnRight(drivePower);
-				// Turn until we exceed the requested (absolute) angle
-				int angleRight = abs(readGyro());
-				if (angleRight > driveArg)
+				int angle = abs(readGyro());
+				if (angle > driveArg)
 					stopAction = true;
 				break;
 		}
