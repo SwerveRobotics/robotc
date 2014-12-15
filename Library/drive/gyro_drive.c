@@ -34,6 +34,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	while(!gyroValid()) {} // @todo should have a timeout here
 	resetGyro();
 	ClearTimer(T4);
+	time1[T3] = 0;
 	bool failed = false;
 	bool stopAction = false;
 
@@ -63,6 +64,12 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					stopAction = true;
 					break;
 				}
+				//If the robot hasn't stopped after 10 seconds, it breaks
+				if(time1[T3] == 10000)
+				{
+					stopAction = true;
+					break;
+				}
 				//Adjusts power according to gyro reading
 				DriveRightMotors(drivePower+readGyro()*5);
 				DriveLeftMotors(drivePower-readGyro()*5);
@@ -70,6 +77,12 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 			//Turning code
 			case DriveActionTurnLeft:
 			case DriveActionTurnRight:
+				//If the robot hasn't stopped after 5 seconds, it breaks
+				if(time1[T3] == 5000)
+				{
+					stopAction = true;
+					break;
+				}
 				//Turns until requested angle is reached
 				TurnRight(drivePower);
 				int angle = abs(readGyro());
