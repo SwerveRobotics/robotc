@@ -53,8 +53,7 @@ task gyro() {
 		time1[T4] = 0;
 
 		// Read and integrate
-		float speed = readGyroSpeed();
-		GYRO_ANGLE += speed * ((float)GYRO_PERIOD / 1000.0);
+		GYRO_ANGLE += readGyroSpeed() * ((float)GYRO_PERIOD / 1000.0);
 		GYRO_READY = true;
 	}
 	// only runs when you stop the gyro task
