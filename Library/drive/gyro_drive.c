@@ -8,6 +8,7 @@
 #include "../drive/auto_drive.c"
 #include "../drive_modes/drive_modes.h"
 #include "../sensors/gyro.c"
+#include "../motors/stall_protection.c"
 
 // May need to calibrate to specific robots
 int MOTOR_POWER_SHAVE = 3;
@@ -29,18 +30,31 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 {
 	StopAllDriveMotors();
 	wait1Msec(250); //The wait is here to ensure the robot comes to a stop before calibrating the gyro
+
 	ResetEncoderValue();
 	startGyro();
 	while(!gyroValid()) {} // @todo should have a timeout here
+
 	resetGyro();
-	time1[T3] = 0;
 	bool failed = false;
 	bool stopAction = false;
+	LAST_ENCODER_VALUE = 0;
 
+	//Makes robot go in opposite direction to avoid rewriting code
 	if(driveAction == DriveActionBackward || driveAction == DriveActionTurnLeft)
 	{
 		drivePower *= -1;
 	}
+
+	//Starts monitor encoder task to detect if we stop moving
+	if(driveAction == DriveActionBackward || driveAction == DriveActionForward)
+	{
+		StartTask(MonitorEncoder);
+		//This gets us our first reading so it doesn't mess us up in the action loop
+		DriveForward(drivePower);
+		wait1Msec(10);
+	}
+
 	// Action loop
 	while(true)
 	{
@@ -63,8 +77,8 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					stopAction = true;
 					break;
 				}
-				//If the robot hasn't stopped after 10 seconds, it breaks
-				if(time1[T3] == 10000)
+				//If the robot stops moving, then it stops running
+				if(CurrentSpeed() == 0)
 				{
 					stopAction = true;
 					break;
@@ -76,8 +90,8 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 			//Turning code
 			case DriveActionTurnLeft:
 			case DriveActionTurnRight:
-				//If the robot hasn't stopped after 5 seconds, it breaks
-				if(time1[T3] == 5000)
+				//If the robot stops turning, then it stops running
+				if(readGyroSpeed() == 0)
 				{
 					stopAction = true;
 					break;
@@ -92,6 +106,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	}
 	StopAllDriveMotors();
 	stopGyro();
+	StopTask(MonitorEncoder);
 }
 
 void TurnLeftDegrees(int degrees, int power)
