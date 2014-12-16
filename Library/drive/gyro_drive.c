@@ -5,7 +5,7 @@
 // NOTE: This file relies on the user having correctly defined their
 // tank drive mode option from those shown in drive_modes.h
 
-#include "../autonomous/auto_drive.c"
+#include "../drive/auto_drive.c"
 #include "../drive_modes/drive_modes.h"
 #include "../sensors/gyro.c"
 
