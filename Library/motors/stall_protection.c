@@ -19,7 +19,7 @@ task MonitorEncoder()
 	{
 		LAST_ENCODER_VALUE = CURRENT_ENCODER_VALUE;
 		CURRENT_ENCODER_VALUE = ReadEncoderValue();
-		wait1Msec(10);
+		wait1Msec(100);
 	}
 }
 
