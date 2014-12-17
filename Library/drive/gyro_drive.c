@@ -46,13 +46,17 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 		drivePower *= -1;
 	}
 
-	//Starts monitor encoder task to detect if we stop moving
+	//Gets robot going so it doesn't stop instantly if the robot isn't moving
 	if(driveAction == DriveActionBackward || driveAction == DriveActionForward)
 	{
 		StartTask(MonitorEncoder);
-		//This gets us our first reading so it doesn't mess us up in the action loop
 		DriveForward(drivePower);
-		wait1Msec(10);
+		wait1Msec(100);
+	}
+	if(driveAction == DriveActionTurnLeft || driveAction == DriveActionTurnRight)
+	{
+		TurnRight(drivePower);
+		wait1Msec(100);
 	}
 
 	// Action loop
