@@ -26,7 +26,7 @@
 
 task main()
 {
-	InitializeAuto();
+	 InitializeAuto();
 	waitForStart();
 
 	//Goto and grab medium goal
