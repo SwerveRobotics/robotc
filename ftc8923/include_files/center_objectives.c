@@ -30,14 +30,14 @@ void RampKickPos2()
 {
 	DriveForwardDistanceGyro(12, 50);
 	TurnLeftDegrees(75, 50);
-	DriveForwardDistanceGyro(36, 50);
+	DriveForwardDistanceGyro(40, 50);
 }
 
 void RampKickPos3()
 {
 	TurnLeftDegrees(35, 50);
 	DriveForwardDistanceGyro(50, 50);
-	TurnLeftDegrees(45, 50);
-	DriveForwardDistanceGyro(95, 50);
+	TurnLeftDegrees(60, 50);
+	DriveForwardDistanceGyro(60, 50);
 }
 #endif
