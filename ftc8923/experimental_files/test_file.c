@@ -31,7 +31,7 @@ task main()
 	waitForStart();
 
 	//Turn test
-	/*
+
 	TurnLeftDegrees(90, 50);
 	wait1Msec(1000);
 	TurnRightDegrees(180, 50);
@@ -39,11 +39,11 @@ task main()
 	TurnLeftDegrees(180, 50);
 	wait1Msec(1000);
 	TurnRightDegrees(90, 50);
-	*/
+
 
 	//Gyro drive test
-	wait1Msec(5000);
-	DriveForwardDistanceGyro(110,50);
+	//wait1Msec(5000);
+	//DriveForwardDistanceGyro(110,50);
 
 	/*
 	//Gyro rotation display
