@@ -8,6 +8,19 @@
 #include "../drive_modes/drive_modes.h"
 #include "../controllers/controller_defines.h"
 
+
+void DriveRightMotors(int pow)
+{
+	motor[motorFR] = pow;
+	motor[motorBR] = pow;
+}
+
+void DriveLeftMotors(int pow)
+{
+	motor[motorFL] = pow;
+	motor[motorBL] = pow;
+}
+
 task DriveTank()
 {
 	while(true)
@@ -15,15 +28,25 @@ task DriveTank()
 		getJoystickSettings(joystick);
 
 		if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
+		{
 			DriveLeftMotors(joystick.joy1_y1);
+		}
 		else
-			StopLeftDriveMotors();
+		{
+			DriveLeftMotors(0);
+		}
 
 		if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
+		{
 			DriveRightMotors(joystick.joy1_y2);
+		}
 		else
-			StopRightDriveMotors();
+		{
+			DriveRightMotors(0);
+		}
 	}
 }
+
+
 
 #endif

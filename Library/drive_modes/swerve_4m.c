@@ -153,10 +153,10 @@ float CalculateDriveSpeed(float velocityX,float velocityY,float velocityZ, Motor
 
 void WriteToServosInd()
 {
-	ClosestDegToWinchServo(FRONT_RIGHT_SERVO, Drive[FRONT_RIGHT].servoPosition);
-	ClosestDegToWinchServo(FRONT_LEFT_SERVO,  Drive[FRONT_LEFT].servoPosition);
-	ClosestDegToWinchServo(BACK_RIGHT_SERVO,  Drive[BACK_RIGHT].servoPosition);
-	ClosestDegToWinchServo(BACK_LEFT_SERVO,   Drive[BACK_LEFT].servoPosition);
+	DegToCRServo(FRONT_RIGHT_SERVO, FRONT_RIGHT_MOTOR, Drive[FRONT_RIGHT].servoPosition);
+	DegToCRServo(FRONT_LEFT_SERVO,  FRONT_LEFT_MOTOR,  Drive[FRONT_LEFT].servoPosition);
+	DegToCRServo(BACK_RIGHT_SERVO,  BACK_RIGHT_MOTOR,  Drive[BACK_RIGHT].servoPosition);
+	DegToCRServo(BACK_LEFT_SERVO,   BACK_LEFT_MOTOR,   Drive[BACK_LEFT].servoPosition);
 }
 
 void WriteToMotorsInd()
@@ -182,9 +182,9 @@ void RadialDrive(int speed, float radius)
 	int rearLeftAngle =     atan2(-15.875, radius + 15.875);
 
 	Drive[BACK_RIGHT].servoPosition =  forwardRightAngle + 90;
-	Drive[BACK_LEFT].servoPosition =   forwardLeftAngle + 90;
-	Drive[FRONT_RIGHT].servoPosition = rearRightAngle + 90;
-	Drive[FRONT_RIGHT].servoPosition = rearLeftAngle + 90;
+	Drive[BACK_LEFT].servoPosition =   forwardLeftAngle  + 90;
+	Drive[FRONT_RIGHT].servoPosition = rearRightAngle    + 90;
+	Drive[FRONT_RIGHT].servoPosition = rearLeftAngle     + 90;
 
 	Drive[FRONT_LEFT].motorPower = speed;
 	Drive[FRONT_RIGHT].motorPower = speed;

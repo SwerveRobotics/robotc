@@ -6,16 +6,16 @@
 
 typedef enumWord
 {
-	FORWARD   = 180,
-	FORTH     = 180,
-	AGRIEVE   = 180,
-	RIGHT     = 270,
-	STARBOARD = 270,
-	BACKWARD  =   0,
-	BACK      =   0,
-	ABSCOND   =   0,
-	LEFT      =  90,
-	PORT      =  90
+	FORWARD   =  90,
+	FORTH     =  90,
+	AGRIEVE   =  90,
+	RIGHT     =   0,
+	STARBOARD =   0,
+	BACKWARD  = 270,
+	BACK      = 270,
+	ABSCOND   = 270,
+	LEFT      = 180,
+	PORT      = 180
 }
 DirectionEnum;
 
@@ -47,10 +47,18 @@ void SimpleDriveDirection(int direction, int power, int distance)
 		nMotorEncoder(FRONT_LEFT_MOTOR) +
 		nMotorEncoder(FRONT_LEFT_MOTOR)
 		) / 4;
-		distanceDriven = ENCODER_TO_CM * avgEncVal;
+		distanceDriven = 1 * avgEncVal;
 	}
 	SimpleWriteToMotors(0);													//stop motors
 }
+void TimedDriveDirection(int direction, int power, float time)
+{
+	SimpleWriteToServos(direction);
+	SimpleWriteToMotors(power);
+	wait1Msec(time * 1000);
+	SimpleWriteToMotors(0);
+}
+
 void RotateTo(int degrees)
 {
 		SetServosRotateMode();
