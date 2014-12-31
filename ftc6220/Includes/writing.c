@@ -6,7 +6,7 @@
 int reverseMotorFactor = 1;
 
 const float	MOTOR_GEAR_RATIO      = 1.206;
-const float	SERVO_GEAR_RATIO      = 1.0;
+const float	SERVO_GEAR_RATIO      = 0.5; // maybe raise to -1?
 
 const float CENTER_RADIUS         = 22.86; //centimeters
 const float WHEEL_RADIUS          = 11.16; //centimeters
@@ -17,8 +17,6 @@ const float MAX_MOTOR_SPEED_CMPS  = 81.93;//theoretical max based on 154rpm moto
 const float SERVO_TICK_PER_DEGREE = 1.4118;//number of servo ticks nessesary to rotate 1 degree (standard servo)
 
 const int ENCODER_RESOLUTION = 1440;
-
-const float ENCODER_TO_CM = (ENCODER_RESOLUTION / MAX_MOTOR_SPEED_CMPS) / (WHEEL_RADIUS * 2 * PI);
 
 const float ENCODER_TO_DEG = 360 / ENCODER_RESOLUTION;
 const float DEG_TO_ENCODER = ENCODER_RESOLUTION / 360;
@@ -33,41 +31,17 @@ tMotor FRONT_LEFT_MOTOR;
 tMotor BACK_LEFT_MOTOR;
 tMotor FRONT_RIGHT_MOTOR;
 tMotor BACK_RIGHT_MOTOR;
+tMotor SWEEPER_MOTOR;
+tMotor FAN_MOTOR_1;
+tMotor FAN_MOTOR_2;
 
 TServoIndex FRONT_LEFT_SERVO;
 TServoIndex BACK_LEFT_SERVO;
 TServoIndex FRONT_RIGHT_SERVO;
 TServoIndex BACK_RIGHT_SERVO;
 TServoIndex GRABBER_SERVO;
-
-//-------------------------------------------------------------------------------------------------//
-// !!! IMPORTANT - The following three functions MUST be called, else the drive will not work. !!! //
-//-------------------------------------------------------------------------------------------------//
-
-//register the motors clockwise
-void RegisterMotors(tMotor frontLeftM, tMotor backLeftM, tMotor backRightM, tMotor frontRightM)
-{
-	FRONT_LEFT_MOTOR  = frontLeftM;
-	BACK_LEFT_MOTOR   = backLeftM;
-	FRONT_RIGHT_MOTOR = frontRightM;
-	BACK_RIGHT_MOTOR  = backRightM;
-}
-
-//register the servos clockwise
-void RegisterServos(TServoIndex frontLeftS, TServoIndex backLeftS, TServoIndex backRightS, TServoIndex frontRightS, TServoIndex grabberS)
-{
-	FRONT_LEFT_SERVO  = frontLeftS;
-	BACK_LEFT_SERVO   = backLeftS;
-	FRONT_RIGHT_SERVO = frontRightS;
-	BACK_RIGHT_SERVO  = backRightS;
-	GRABBER_SERVO = grabberS;
-
-}
-
-
-//--------------------------------------//
-//   !!! End of required funtions !!!   //
-//--------------------------------------//
+TServoIndex SWEEPER_SERVO;
+TServoIndex TUBE_SERVO;
 
 //Set Motor Power from a CM/S value
 void CMPSToMotor(tMotor motorName, float cmps)
@@ -88,19 +62,19 @@ void PulseCRServo(TServoIndex servoName, float length)
 	wait1Msec(1);
 }
 
-int GetCRServoPosition(tMotor servoEnc)
+float GetCRServoPosition(tMotor servoEnc)
 {
-	return nMotorEncoder[servoEnc] * ENCODER_TO_DEG;
+	return nMotorEncoder[servoEnc] * ENCODER_TO_DEG / SERVO_GEAR_RATIO;
 }
 
 void SetCRServoEncoder(tMotor servoEnc, int deg)
 {
-	nMotorEncoder[servoEnc] = deg	 * DEG_TO_ENCODER;
+	nMotorEncoder[servoEnc] = deg	 * DEG_TO_ENCODER * SERVO_GEAR_RATIO;
 }
 
-//flawed
 void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
 {
+
 	while (GetCRServoPosition(servoEnc) > 359)
 	{
 		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) - 360);
@@ -110,11 +84,24 @@ void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
 		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) + 360);
 	}
 	int dAngle = angle - GetCRServoPosition(servoEnc);
+	if (abs(dAngle) > 180)
+	{
+		angle = angle + (180 * sgn(dAngle));
+		if (reverseMotorFactor == 1)
+		{
+			reverseMotorFactor = -1;
+		}
+		else
+		{
+			reverseMotorFactor = 1;
+		}
+	}
 	while (abs(dAngle) <= 2)
 	{
-		PulseCRServo(servoName, sgn(dAngle) + 1.5);
+		servo[servoName] = 127 + (sgn(dAngle) * 127);
 		dAngle = angle - GetCRServoPosition(servoEnc);
 	}
+	servo[servoName] = 127;
 }
 
 void DegToWinchServo(TServoIndex servoName, int angle)//set a winch servo to a position between -360 and 720
@@ -186,17 +173,52 @@ void ClosestDegToWinchServo(TServoIndex servoName, int angle)//set a winch servo
 	servo[servoName] = (angle + 360) * DEG_TO_WINCH_TICK;
 }
 
-void EnableGoalGrabber(bool state)
+//-------------------------------------------------------------------------------------------------//
+// !!! IMPORTANT - The following three functions MUST be called, else the drive will not work. !!! //
+//-------------------------------------------------------------------------------------------------//
+
+//register the motors clockwise
+void RegisterMotors(
+tMotor frontLeftM,    tMotor backLeftM,
+tMotor backRightM,    tMotor frontRightM,//drive motors
+tMotor motorS,        tMotor motorF1,
+tMotor motorF2                                 //manipulator motors
+)
 {
-	if (state == true)
-	{
-		servo[GRABBER_SERVO] = 90;
-	}
-	else
-	{
-		servo[GRABBER_SERVO] = 0;
-	}
+	FRONT_LEFT_MOTOR  = frontLeftM;
+	BACK_LEFT_MOTOR   = backLeftM;
+	FRONT_RIGHT_MOTOR = frontRightM;
+	BACK_RIGHT_MOTOR  = backRightM;
+	SWEEPER_MOTOR     = motorS;
+	FAN_MOTOR_1       = motorF1;
+	FAN_MOTOR_2       = motorF2;
 }
+
+//register the servos clockwise and "zero" the encoders, assuming that the motors are facing forward
+void RegisterServos(
+TServoIndex frontLeftS,  TServoIndex backLeftS,
+TServoIndex backRightS,  TServoIndex frontRightS,//drive servos
+TServoIndex grabberS,    TServoIndex sweeperS,
+TServoIndex tubeS                                //manipulator servos
+){
+	FRONT_LEFT_SERVO  = frontLeftS;
+	BACK_LEFT_SERVO   = backLeftS;
+	FRONT_RIGHT_SERVO = frontRightS;
+	BACK_RIGHT_SERVO  = backRightS;
+	GRABBER_SERVO     = grabberS;
+	SWEEPER_SERVO     = sweeperS;
+	TUBE_SERVO        = tubeS;
+
+	SetCRServoEncoder(FRONT_LEFT_MOTOR,  90);
+	SetCRServoEncoder(FRONT_RIGHT_MOTOR, 90);
+	SetCRServoEncoder(BACK_RIGHT_MOTOR,  90);
+	SetCRServoEncoder(BACK_LEFT_MOTOR,   90);
+}
+
+
+//--------------------------------------//
+//   !!! End of required funtions !!!   //
+//--------------------------------------//
 
 
 
