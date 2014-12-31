@@ -5,16 +5,41 @@
 
 //Ratio between centimeters and inches
 const float CENTIMETERS_TO_INCHES = 2.54;
-tSensors SONAR_SENSOR;
 
-void RegisterSonarSensor(tSensors sonarSensorName)
+
+
+typedef enum
 {
-	SONAR_SENSOR = sonarSensorName;
+	SonarOne,
+	SonarTwo,
+	SonarThree,
+	SonarFour
+}SonarEnum;
+const int SONAR_COUNT = 4;
+tSensors SONAR[SONAR_COUNT];
+
+void RegisterSonar(tSensors SonarName, SonarEnum sonarNum = 0)
+{
+	switch(sonarNum)
+	{
+		case SonarOne:
+			SONAR[SonarOne] = SonarName;
+			break;
+		case SonarTwo:
+			SONAR[SonarTwo] = SonarName;
+			break;
+		case SonarThree:
+			SONAR[SonarThree] = SonarName;
+			break;
+		case SonarFour:
+			SONAR[SonarFour] = SonarName;
+			break;
+	}
 }
 
-int ReadSonar()
+int ReadSonar(SonarEnum sonarNum = 0)
 {
-	return SensorValue[SONAR_SENSOR];
+	return SensorValue[SONAR[sonarNum]];
 }
 
 //Displays on the NXT screen how far away the sensor is from an object in inches
@@ -23,7 +48,7 @@ void DisplaySonarOnNXTDisplay()
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
 }
 
-void GoToObject()
+void GoToObject(int power)
 {
 	//The distance we want the robot to be away from an object
 	const int targetDistance = 30;
