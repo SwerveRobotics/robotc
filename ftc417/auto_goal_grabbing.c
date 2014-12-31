@@ -16,10 +16,12 @@
 
 #include "auto_init.c"
 #include "JoystickDriver.c"
+#include "../library/drive_modes/drive_modes.h"
+
 
  task main()
 {
-	InitializeAuto();
+	AutoInitialize();
 	waitForStart();
 
 	DriveBackwardDistance(90, 20);
