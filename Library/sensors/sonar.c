@@ -47,7 +47,7 @@ void DisplaySonarOnNXTDisplay()
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
 }
 
-void FollowRightWall(int distanceFromWall, int driveDistance, int power, int sonarNum)
+void FollowRightWallDistance(int distanceFromWall, int driveDistance, int power, int sonarNum)
 {
 	StartTask(MonitorSpeed);
 	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
