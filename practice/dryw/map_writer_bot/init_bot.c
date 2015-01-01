@@ -3,7 +3,7 @@
 
 #include "../../../Library/sensors/sonar.c"
 
-const int DEFAULT_SPEED = 50;
+const int DEFAULT_POWER = 50;
 
 void InitBot()
 {
