@@ -14,6 +14,6 @@ task main()
 {
 	InitBot();
 
-	MapRoom();
+	//MapRoom();
 	//ReturnHome();
 }
