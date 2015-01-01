@@ -2,6 +2,7 @@
 #define SONAR_C
 
 #include "../drive_modes/drive_modes.h"
+#include "../motors/stall_protection.c"
 
 //Ratio between centimeters and inches
 const float CENTIMETERS_TO_INCHES = 2.54;
@@ -46,19 +47,29 @@ void DisplaySonarOnNXTDisplay()
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
 }
 
-void FollowRightWall(int distanceFromWall, int inches, int power, int sonarNum)
+void FollowRightWall(int distanceFromWall, int driveDistance, int power, int sonarNum)
 {
-	while(EncoderDistance(abs(ReadEncoderValue())) < inches)
+	StartTask(MonitorSpeed);
+	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
 	{
+		if(CURRENT_SPEED == 0)
+		{
+			break;
+		}
 	 	DriveRightMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
 	 	DriveLeftMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	}
 }
 
-void FollowLeftWall(int distanceFromWall, int inches, int power, int sonarNum)
+void FollowLeftWall(int distanceFromWall, int driveDistance, int power, int sonarNum)
 {
-	while(EncoderDistance(abs(ReadEncoderValue())) < inches)
+	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
 	{
+		StartTask(MonitorSpeed);
+		if(CURRENT_SPEED == 0)
+		{
+			break;
+		}
 	 	DriveRightMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	 	DriveLeftMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
 	}
