@@ -4,12 +4,17 @@
 void DriveUntilObjectHit(int power)
 {
 	StartTask(MonitorSpeed);
-	DriveForward(power);
-	while(CurrentSpeed() != 0)
-	{
+	DriveForwardDistanceGyro(500, DEFAULT_POWER);
+}
 
+void DrivePerimeterRight()
+{
+	while(true)
+	{
+		FollowRightWall(3, 500, DEFAULT_POWER, 2);
+		DriveBackwardDistance(5, DEFAULT_POWER);
+		TurnLeftDegrees(30, DEFAULT_POWER);
 	}
-	StopAllDriveMotors();
 }
 
 #endif
