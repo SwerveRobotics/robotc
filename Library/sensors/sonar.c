@@ -6,8 +6,6 @@
 //Ratio between centimeters and inches
 const float CENTIMETERS_TO_INCHES = 2.54;
 
-
-
 typedef enum
 {
 	SonarOne,
@@ -46,6 +44,24 @@ int ReadSonar(SonarEnum sonarNum = 0)
 void DisplaySonarOnNXTDisplay()
 {
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
+}
+
+void FollowRightWall(int distanceFromWall, int power)
+{
+	while(true)
+	{
+	 	DriveRightMotors(power + (ReadSonar(2) - distanceFromWall));
+	 	DriveLeftMotors(power - (ReadSonar(2) - distanceFromWall));
+	}
+}
+
+void FollowLeftWall(int distanceFromWall, int power)
+{
+	while(true)
+	{
+	 	DriveRightMotors(power - (ReadSonar(1) - distanceFromWall));
+	 	DriveLeftMotors(power + (ReadSonar(1) - distanceFromWall));
+	}
 }
 
 void GoToObject(int power)
