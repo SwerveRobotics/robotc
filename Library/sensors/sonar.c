@@ -46,25 +46,25 @@ void DisplaySonarOnNXTDisplay()
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
 }
 
-void FollowRightWall(int distanceFromWall, int power)
+void FollowRightWall(int distanceFromWall, int power, int sonarNum)
 {
 	while(true)
 	{
-	 	DriveRightMotors(power + (ReadSonar(2) - distanceFromWall));
-	 	DriveLeftMotors(power - (ReadSonar(2) - distanceFromWall));
+	 	DriveRightMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
+	 	DriveLeftMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	}
 }
 
-void FollowLeftWall(int distanceFromWall, int power)
+void FollowLeftWall(int distanceFromWall, int power, int sonarNum)
 {
 	while(true)
 	{
-	 	DriveRightMotors(power - (ReadSonar(1) - distanceFromWall));
-	 	DriveLeftMotors(power + (ReadSonar(1) - distanceFromWall));
+	 	DriveRightMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
+	 	DriveLeftMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
 	}
 }
 
-void GoToObject(int power)
+void GoToObject(int power, int sonarNum)
 {
 	//The distance we want the robot to be away from an object
 	const int targetDistance = 30;
@@ -73,12 +73,12 @@ void GoToObject(int power)
 	const int accuracyMargin = 3;
 
 	//If the sensor is farther away from an object than the target distance, the robot moves forward
-	if(ReadSonar() > targetDistance + accuracyMargin)
+	if(ReadSonar(sonarNum) > targetDistance + accuracyMargin)
 	{
 		DriveForward(power);
 	}
 	//If the sensor is closer to an object than the target distance, the robot moves backward
-	else if(ReadSonar() < targetDistance - accuracyMargin)
+	else if(ReadSonar(sonarNum) < targetDistance - accuracyMargin)
 	{
 		DriveBackward(power);
 	}
