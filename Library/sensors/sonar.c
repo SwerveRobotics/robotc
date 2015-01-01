@@ -46,18 +46,18 @@ void DisplaySonarOnNXTDisplay()
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
 }
 
-void FollowRightWall(int distanceFromWall, int power, int sonarNum)
+void FollowRightWall(int distanceFromWall, int inches, int power, int sonarNum)
 {
-	while(true)
+	while(EncoderDistance(abs(ReadEncoderValue())) < inches)
 	{
 	 	DriveRightMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
 	 	DriveLeftMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	}
 }
 
-void FollowLeftWall(int distanceFromWall, int power, int sonarNum)
+void FollowLeftWall(int distanceFromWall, int inches, int power, int sonarNum)
 {
-	while(true)
+	while(EncoderDistance(abs(ReadEncoderValue())) < inches)
 	{
 	 	DriveRightMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	 	DriveLeftMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
