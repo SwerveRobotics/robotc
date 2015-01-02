@@ -9,7 +9,6 @@ void LeaveBase()
 
 void FollowRightWall(int distanceFromWall, int power, int sonarNum)
 {
-	StartTask(MonitorSpeed);
 	while(SensorValue(bumper) == 0)
 	{
 	 	DriveRightMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
@@ -22,6 +21,7 @@ void DrivePerimeterRight()
 	while(true)
 	{
 		FollowRightWall(3, DEFAULT_POWER, 2);
+		//If the bumper hits a wall, the function above breaks and we turn, then follow the wall again
 		DriveBackwardTime(250, DEFAULT_POWER);
 		TurnLeftTime(250, DEFAULT_POWER);
 	}
