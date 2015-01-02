@@ -25,7 +25,7 @@ task MonitorEncoder()
 
 int CurrentSpeed() // ticks per second
 {
-	return (CURRENT_ENCODER_VALUE - LAST_ENCODER_VALUE) * 100;
+	return (CURRENT_ENCODER_VALUE - LAST_ENCODER_VALUE) * 10;
 }
 
 int LAST_SPEED;
@@ -35,6 +35,7 @@ int CURRENT_POWER;
 
 task MonitorSpeed()
 {
+	StartTask(MonitorEncoder);
 	while(true)
 	{
 		LAST_SPEED = CURRENT_SPEED;
@@ -45,7 +46,9 @@ task MonitorSpeed()
 		int speedDiff = CURRENT_SPEED-LAST_SPEED;
 		int powerDiff = CURRENT_POWER-LAST_POWER;
 		if(speedDiff == 0 && powerDiff > 10)
+		{
 			// save leh motor
+		}
 
 		wait1Msec(20);
 	}
