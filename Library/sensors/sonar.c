@@ -49,7 +49,7 @@ void DisplaySonarOnNXTDisplay()
 
 void FollowRightWallDistance(int distanceFromWall, int driveDistance, int power, int sonarNum)
 {
-	StartTask(MonitorSpeed);
+	StartTask(MonitorEncoder);
 	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
 	{
 		if(CURRENT_SPEED == 0)
@@ -59,13 +59,14 @@ void FollowRightWallDistance(int distanceFromWall, int driveDistance, int power,
 	 	DriveRightMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
 	 	DriveLeftMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	}
+	StopTask(MonitorEncoder);
 }
 
 void FollowLeftWall(int distanceFromWall, int driveDistance, int power, int sonarNum)
 {
 	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
 	{
-		StartTask(MonitorSpeed);
+		StartTask(MonitorEncoder);
 		if(CURRENT_SPEED == 0)
 		{
 			break;
@@ -73,6 +74,7 @@ void FollowLeftWall(int distanceFromWall, int driveDistance, int power, int sona
 	 	DriveRightMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
 	 	DriveLeftMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
 	}
+	StopTask(MonitorEncoder);
 }
 
 void GoToObject(int power, int sonarNum)
