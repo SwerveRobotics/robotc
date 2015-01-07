@@ -1,0 +1,6 @@
+#include "../../Library/sensors/ir_seeker.c"
+#include "../../Library/drive/gyro_drive.c"
+#include "functions.c"
+#include "init_auto.c"
+#include "center_objectives.c"
+#include "JoystickDriver.c"
