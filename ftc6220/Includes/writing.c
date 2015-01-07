@@ -16,7 +16,7 @@ const float MAX_MOTOR_SPEED_CMPS  = 81.93;//theoretical max based on 154rpm moto
 
 const float SERVO_TICK_PER_DEGREE = 1.4118;//number of servo ticks nessesary to rotate 1 degree (standard servo)
 
-const int ENCODER_RESOLUTION = 1440;
+const float ENCODER_RESOLUTION = 1440;
 
 const float ENCODER_TO_DEG = 360 / ENCODER_RESOLUTION;
 const float DEG_TO_ENCODER = ENCODER_RESOLUTION / 360;
@@ -64,7 +64,7 @@ void PulseCRServo(TServoIndex servoName, float length)
 
 float GetCRServoPosition(tMotor servoEnc)
 {
-	return nMotorEncoder[servoEnc] * ENCODER_TO_DEG / SERVO_GEAR_RATIO;
+	return (float)nMotorEncoder[servoEnc] * ENCODER_TO_DEG * SERVO_GEAR_RATIO;
 }
 
 void SetCRServoEncoder(tMotor servoEnc, int deg)
@@ -72,7 +72,7 @@ void SetCRServoEncoder(tMotor servoEnc, int deg)
 	nMotorEncoder[servoEnc] = deg	 * DEG_TO_ENCODER * SERVO_GEAR_RATIO;
 }
 
-void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
+void DegToCRServo(TServoIndex servoName, tMotor servoEnc, float angle)
 {
 
 	while (GetCRServoPosition(servoEnc) > 359)
@@ -83,8 +83,8 @@ void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
 	{
 		SetCRServoEncoder(servoEnc, GetCRServoPosition(servoEnc) + 360);
 	}
-	int dAngle = angle - GetCRServoPosition(servoEnc);
-	if (abs(dAngle) > 180)
+	float dAngle = angle - GetCRServoPosition(servoEnc);
+	/*if (abs(dAngle) > 180)
 	{
 		angle = angle + (180 * sgn(dAngle));
 		if (reverseMotorFactor == 1)
@@ -96,9 +96,26 @@ void DegToCRServo(TServoIndex servoName, tMotor servoEnc, int angle)
 			reverseMotorFactor = 1;
 		}
 	}
-	while (abs(dAngle) <= 2)
+	while (abs(dAngle) >= 2)
 	{
-		servo[servoName] = 127 + (sgn(dAngle) * 127);
+		servo[servoName] = 127 - (sgn(dAngle)) * 127 + dAngle / 10;
+		dAngle = angle - GetCRServoPosition(servoEnc);
+	}*/
+
+	while( abs(dAngle) > 5)
+	{
+		if (abs(dAngle) <= 5)
+		{
+			break;
+		}
+		if (dAngle > 0)
+		{
+			servo[servoName] = 100;
+		}
+		else
+		{
+			servo[servoName] = 154;
+		}
 		dAngle = angle - GetCRServoPosition(servoEnc);
 	}
 	servo[servoName] = 127;
