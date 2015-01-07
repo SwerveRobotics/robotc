@@ -29,10 +29,12 @@ task main()
 	InitializeAuto();
 	waitForStart();
 
+	DriveBackwardDistanceGyro(60, 20);
+	TurnRightDegrees(90, 50);
+	DriveForwardDistanceGyro(20, 20);
+	TurnLeftDegrees(100, 50);
 	DriveBackwardDistanceGyro(50, 20);
-	TurnLeftDegrees(60, 50);
-	DriveBackwardDistanceGyro(35, 20);
-	TurnRightDegrees(60, 50);
+
 
 
 }
