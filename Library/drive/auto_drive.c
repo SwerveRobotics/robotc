@@ -50,6 +50,18 @@ void DriveBackwardDistance(int inches, int power)
 	DriveForwardDistance(inches, -1*power);
 }
 
+void DriveForwardTime(int time, int power)
+{
+	DriveForward(power);
+	wait1Msec(time);
+	StopAllDriveMotors();
+}
+
+void DriveBackwardTime(int time, int power)
+{
+	DriveForwardTime(time, power);
+}
+
 //Turns left at a given power until a time limit is reached
 void TurnLeftTime(int time, int power)
 {

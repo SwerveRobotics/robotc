@@ -2,19 +2,43 @@
 #define SONAR_C
 
 #include "../drive_modes/drive_modes.h"
+#include "../motors/stall_protection.c"
 
 //Ratio between centimeters and inches
 const float CENTIMETERS_TO_INCHES = 2.54;
-tSensors SONAR_SENSOR;
 
-void RegisterSonarSensor(tSensors sonarSensorName)
+typedef enum
 {
-	SONAR_SENSOR = sonarSensorName;
+	SonarOne,
+	SonarTwo,
+	SonarThree,
+	SonarFour
+}SonarEnum;
+const int SONAR_COUNT = 4;
+tSensors SONAR[SONAR_COUNT];
+
+void RegisterSonar(tSensors SonarName, SonarEnum sonarNum = 0)
+{
+	switch(sonarNum)
+	{
+		case SonarOne:
+			SONAR[SonarOne] = SonarName;
+			break;
+		case SonarTwo:
+			SONAR[SonarTwo] = SonarName;
+			break;
+		case SonarThree:
+			SONAR[SonarThree] = SonarName;
+			break;
+		case SonarFour:
+			SONAR[SonarFour] = SonarName;
+			break;
+	}
 }
 
-int ReadSonar()
+int ReadSonar(SonarEnum sonarNum = 0)
 {
-	return SensorValue[SONAR_SENSOR];
+	return SensorValue[SONAR[sonarNum]];
 }
 
 //Displays on the NXT screen how far away the sensor is from an object in inches
@@ -23,7 +47,37 @@ void DisplaySonarOnNXTDisplay()
 	nxtDisplayTextLine(0, "Distance(Inches): %d", ReadSonar() / CENTIMETERS_TO_INCHES);
 }
 
-void GoToObject()
+void FollowRightWallDistance(int distanceFromWall, int driveDistance, int power, int sonarNum)
+{
+	StartTask(MonitorEncoder);
+	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
+	{
+		if(CURRENT_SPEED == 0)
+		{
+			break;
+		}
+	 	DriveRightMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
+	 	DriveLeftMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
+	}
+	StopTask(MonitorEncoder);
+}
+
+void FollowLeftWall(int distanceFromWall, int driveDistance, int power, int sonarNum)
+{
+	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
+	{
+		StartTask(MonitorEncoder);
+		if(CURRENT_SPEED == 0)
+		{
+			break;
+		}
+	 	DriveRightMotors(power - (ReadSonar(sonarNum) - distanceFromWall));
+	 	DriveLeftMotors(power + (ReadSonar(sonarNum) - distanceFromWall));
+	}
+	StopTask(MonitorEncoder);
+}
+
+void GoToObject(int power, int sonarNum)
 {
 	//The distance we want the robot to be away from an object
 	const int targetDistance = 30;
@@ -32,12 +86,12 @@ void GoToObject()
 	const int accuracyMargin = 3;
 
 	//If the sensor is farther away from an object than the target distance, the robot moves forward
-	if(ReadSonar() > targetDistance + accuracyMargin)
+	if(ReadSonar(sonarNum) > targetDistance + accuracyMargin)
 	{
 		DriveForward(power);
 	}
 	//If the sensor is closer to an object than the target distance, the robot moves backward
-	else if(ReadSonar() < targetDistance - accuracyMargin)
+	else if(ReadSonar(sonarNum) < targetDistance - accuracyMargin)
 	{
 		DriveBackward(power);
 	}
