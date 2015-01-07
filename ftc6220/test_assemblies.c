@@ -47,17 +47,17 @@ task main()
 		servoSweep,
 		servoTube
 	);
+
 	waitForStart();
 	while(true)
 	{
-		if (abs(joystick.joy1_y2) > 15 )
-		{
-			servo[FRONT_LEFT_SERVO] = 127 + 1.2 * (joystick.joy1_y2 - 15);
-			//DegToCRServo(FRONT_LEFT_SERVO, FRONT_LEFT_MOTOR, joystick.joy1_y2);
-		}
-		else
-		{
-			servo[FRONT_LEFT_SERVO] = 127;
-		}
+		get
+		wait1Msec(200);
 	}
+
+
+
+
+
+
 }

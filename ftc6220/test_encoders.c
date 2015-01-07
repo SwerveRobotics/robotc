@@ -2,7 +2,7 @@
 #pragma config(Hubs,  S2, HTMotor,  HTMotor,  HTServo,  none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
-#pragma config(Motor,  mtr_S1_C1_1,     motorFL,       tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S1_C1_1,     motorFL,       tmotorTetrix, openLoop, encoder)
 #pragma config(Motor,  mtr_S1_C1_2,     motorFR,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     motorBL,       tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_2,     motorBR,       tmotorTetrix, openLoop)
@@ -30,10 +30,10 @@
 task main()
 {
 	RegisterMotors(
-		motorFR,
 		motorFL,
 		motorBL,
 		motorBR,
+		motorFR,
 		motorSweep,
 		motorFan1,
 		motorFan2
@@ -47,21 +47,27 @@ task main()
 		servoSweep,
 		servoTube
 	);
-
+	float encVal2;
+	bool nib = true;
+	float ang = 90.0;
 	waitForStart();
 	while(true)
 	{
-		string context = " ENC Value:  ";
-		int encVal =  GetCRServoPosition(FRONT_LEFT_MOTOR);//  nMotorEncoder[motorFL];
-		nxtDisplayString(3, "%s", context);
-		nxtDisplayTextLine(4, "%d", encVal);
-		//nxtDisplayString(3, "%s", " ");
-		//nxtDisplayString(4, "%s", " ");
-		//nxtDisplayString(5, "%s", " ");
-		//nxtDisplayString(6, "%s", " ");
+		string context = " ENC Values:  ";
+		float encVal1 =  GetCRServoPosition(FRONT_LEFT_MOTOR);
+		encVal2 =  GetCRServoPosition(FRONT_RIGHT_MOTOR);
+		if (nib == true)
+		{
+			DegToCRServo(FRONT_LEFT_SERVO, FRONT_RIGHT_MOTOR, ang);
+		}
+		nib = false;
+		ang = 57.5  * atan2(joystick.joy1_y2 , joystick.joy1_x2);
 		wait1Msec(50);
+		if (joystick.joy1_Buttons == 2)
+		{
+			nib = true;
+		}
 	}
-
 
 
 
