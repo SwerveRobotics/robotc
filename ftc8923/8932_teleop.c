@@ -71,6 +71,19 @@ task main()
 		}
 
 		//Lift Commands
+		if(joystick.joy2_y2 > ANALOG_DEAD_ZONE)
+		{
+			RaiseLift();
+		}
+		else if(joystick.joy2_y2 < -1*ANALOG_DEAD_ZONE)
+		{
+			LowerLift();
+		}
+		else
+		{
+			StopLift();
+		}
+		/*
 		if(joy2Btn(1) == 1)
 		{
 			MoveLifter(DownPos);
@@ -90,6 +103,6 @@ task main()
 		else if(joy2Btn(10) == 1)
 		{
 			MoveLifter(CenterGoalPos);
-		}
+		}*/
 	}
 }
