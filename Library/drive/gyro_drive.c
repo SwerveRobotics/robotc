@@ -82,11 +82,11 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					break;
 				}
 				//If the robot stops moving, then it stops running
-				if(CurrentSpeed() == 0)
+				/*if(CurrentSpeed() == 0)
 				{
 					stopAction = true;
 					break;
-				}
+				}*/
 				//Adjusts power according to gyro reading
 				DriveRightMotors(drivePower+readGyro()*5);
 				DriveLeftMotors(drivePower-readGyro()*5);
