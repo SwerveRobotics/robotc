@@ -1,6 +1,14 @@
 #ifndef MANIPULATORS.C
 #define MANIPULATORS.C
 
+/* Code Review by Darrell
+ - *Good use of includes.*
+ - Servo positions lack explanations.
+ - You use a single & at one point which is not doing what you may think. Please read this file:
+   http://cdn.robotc.net/pdfs/natural-language/hp_boolean_logic.pdf
+ - Setting of motors and servos should be using functions like SetServoPosition(servoName, position).
+*/
+
 #include "writing.c"
 #include "JoystickDriver.c"
 
@@ -141,7 +149,7 @@ task manipulators()
 
 
 		///   !!!   begin tube   !!!   ///
-		if ((joystick.joy1_Buttons == 4) & tubeReady == true)
+		if ((joystick.joy1_Buttons == 4) & tubeReady == true) // wrong type of AND. You need to use "&&"
 		{
 			tubeReady = false;
 			if (tubeToggle == false)

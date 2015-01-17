@@ -1,6 +1,21 @@
 #ifndef WRITING_C
 #define	WRITNG_C
 
+/* Code Review by Darrell
+ - *Great use of consts and great adherance to style guide for naming them!*
+ - *Good use of comments to explain constants.*
+ - Motors and Servos should really be in an array of structs indexed by an enum. Each
+   struct should have one tMotor and one TServoIndex in it.
+ - CMPSToMotor: This should be two functions: CMPSToMotorPower() and SetMotorPower()
+ - DegToServo: This should be two functions: SetServoDegree() and DegreesToTicks()
+ - Your use of functions to perform two tasks forces you to re-perform those tasks in each function.
+ - Complexity of this file could be reduced greatly if you do the two things I recommend:
+   1. Stop doing two functions in single functions.
+   2. Create an array of structs indexed by enums. This will reduce some of your functiosn from 20 lines to 3.
+ - Curly brace placement is inconsistent.
+ - Naming of this file is odd. Why is it called "writing"?
+*/
+
 /// - SERVE DRIVE AND CONVERSION PARAMETERS - ///
 
 int reverseMotorFactor = 1;
@@ -121,6 +136,7 @@ void DegToCRServo(TServoIndex servoName, tMotor servoEnc, float angle)
 	servo[servoName] = 127;
 }
 
+/* Review by Darrell - If you used an array indexed by an enum, then you wouldn't need the large if-statement. */
 void DegToWinchServo(TServoIndex servoName, int angle)//set a winch servo to a position between -360 and 720
 {
 	servo[servoName] = (angle + 360) * DEG_TO_WINCH_TICK;
@@ -143,6 +159,7 @@ void DegToWinchServo(TServoIndex servoName, int angle)//set a winch servo to a p
 	}
 }
 
+/* Review by Darrell - If you used an array indexed by an enum, then you wouldn't need the large if-statement. */
 void ClosestDegToWinchServo(TServoIndex servoName, int angle)//set a winch servo to a position between -360 and 720, but perfers the closest value
 {
 	int w;
