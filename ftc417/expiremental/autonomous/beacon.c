@@ -3,6 +3,13 @@
 //note add #define TANK_4M to any file that uses this//
 #include "../../../library/drive_modes/drive_modes.h"
 
+/* Code Review by Darrell
+ - *Nice to see functions in a separate file.*
+ - Should rely on library and registering drive motors so that you can call DriveForward() instead of 4 lines.
+ - Encoder should use library.
+ - Encoder set points should rely on distance functions calculated in inches or cm
+   Or use the wheel circumference code Dryw wrote.
+*/
 
 const int MOTOR_POWER = 60;
 const int motorPower = MOTOR_POWER;
