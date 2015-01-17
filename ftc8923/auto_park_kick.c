@@ -48,14 +48,14 @@ task main()
 
 	if(CENTER_GOAL_POSITION == 1)
 	{
-		RampKickPos1();
+		KnockKickstandPos1();
 	}
 	else if(CENTER_GOAL_POSITION == 2)
 	{
-		RampKickPos2();
+		KnockKickstandPos2();
 	}
 	else if(CENTER_GOAL_POSITION == 3)
 	{
-		RampKickPos3();
+		KnockKickstandPos3();
 	}
 }

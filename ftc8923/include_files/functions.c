@@ -18,41 +18,31 @@ typedef enum
 LiftPositionsEnum;
 
 //Goal grabber functions
-void GrabGoal()
-{
-	servo[goalGrabber] = 170;
-}
+#define GRAB_GOAL_SERVO_POS 170
+#define RELEASE_GOAL_SERVO_POS 100
 
-void ReleaseGoal()
+void SetGoalGrabberPos(int position)
 {
-	servo[goalGrabber] = 100;
+	servo[goalGrabber] = position;
 }
 
 //Collector functions
-void CollectBalls()
-{
-	motor[collector] = -100;
-}
+#define RUN_COLLECTOR_FORWARD 100
+#define RUN_COLLECTOR_BACKWARD -100
+#define STOP_COLLECTOR 0
 
-void ReleaseBalls()
+void RunCollector(int power)
 {
-	motor[collector] = 100;
-}
-
-void StopCollector()
-{
-	motor[collector] = 0;
+	SetMotorPower(collector, power);
 }
 
 //Container functoins
-void HoldBalls()
-{
-	servo[container] = 0;
-}
+#define HOLD_BALLS 127
+#define DUMP_BALLS 127
 
-void DumpBalls()
+void SetContainerPos(int pos)
 {
-	servo[container] = 100;
+	servo[container] = pos;
 }
 
 /* Code Review by Darrell
@@ -63,20 +53,23 @@ void DumpBalls()
 */
 
 //Lift functions
+void SetLiftPower(int power)
+{
+	SetMotorPower(mtrLifterL, power);
+	SetMotorPower(mtrLifterR, power);
+}
+
 void LowerLift()
 {
-	motor[mtrLifterL] = -100;
-	motor[mtrLifterR] = -100;
+	SetLiftPower(-100);
 }
 void RaiseLift()
 {
-	motor[mtrLifterL] = 100;
-	motor[mtrLifterR] = 100;
+	SetLiftPower(100);
 }
 void StopLift()
 {
-	motor[mtrLifterL] = 0;
-	motor[mtrLifterR] = 0;
+	SetLiftPower(0);
 }
 
 bool LiftAboveDetect(int pos)

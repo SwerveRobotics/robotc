@@ -1,3 +1,5 @@
+#ifndef INCLUDES_H
+#define INCLUDES_H
 
 /* Code Review by Darrell
  - *Great work using an include of includes.*
@@ -11,3 +13,5 @@
 #include "init_auto.c"
 #include "center_objectives.c"
 #include "JoystickDriver.c"
+
+#endif

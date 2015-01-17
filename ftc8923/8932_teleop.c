@@ -30,8 +30,8 @@
 #define TANK_4M
 
 #include "../Library/controllers/tank_controller.c"
-#include "include_files/init_teleop.c"
 #include "include_files/functions.c"
+#include "include_files/init_teleop.c"
 
 task main()
 {
@@ -46,35 +46,35 @@ task main()
 		//Goal grabber commands
 		if(joy1Btn(8) == 1)
 		{
-			GrabGoal();
+			SetGoalGrabberPos(GRAB_GOAL_SERVO_POS);
 		}
 		if(joy1Btn(2) == 1)
 		{
-			ReleaseGoal();
+			SetGoalGrabberPos(RELEASE_GOAL_SERVO_POS);
 		}
 
 		//Collector commands
 		if(joy2Btn(8) == 1)
 		{
-			CollectBalls();
+			RunCollector(RUN_COLLECTOR_FORWARD);
 		}
 		else if(joy2Btn(7) == 1)
 		{
-			ReleaseBalls();
+			RunCollector(RUN_COLLECTOR_BACKWARD);
 		}
 		else
 		{
-			StopCollector();
+			RunCollector(STOP_COLLECTOR);
 		}
 
 		//Container commands
 		if(joystick.joy2_TopHat == 0)
 		{
-			HoldBalls();
+			SetContainerPos(HOLD_BALLS);
 		}
 		else if(joystick.joy2_TopHat == 4)
 		{
-			DumpBalls();
+			SetContainerPos(DUMP_BALLS);
 		}
 
 		//Lift Commands
