@@ -4,6 +4,13 @@
 #include "../../Library/drive_modes/simple_swerve_4m.c"
 #include "writing.c"
 
+/* Code Review by Darrell
+ - Instead of an enumWord, you should probably be using constants for Direction.
+ - avgEncVal is not doing an average because all the values added are the same
+ - I recommend against any timed drive functionality as it is prone to error. Use distance instead.
+   There is some circumference code in the library which helps convert ticks to inches or cm.
+*/
+
 typedef enumWord
 {
 	FORWARD   =  90,
@@ -40,7 +47,7 @@ void SimpleDriveDirection(int direction, int power, int distance)
 	SimpleWriteToMotors(power);
 	while(distanceDriven < distance)			//while distance driven is less than target distance, set motors to the set power and update distance driven
 	{
-		int avgEncVal =
+		int avgEncVal =                   // you migh as well do X*4/4. Adding and dividing does not average them if they are all the same.
 		(
 		nMotorEncoder(FRONT_LEFT_MOTOR) +
 		nMotorEncoder(FRONT_LEFT_MOTOR) +
