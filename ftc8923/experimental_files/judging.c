@@ -26,31 +26,34 @@ task main()
 {
 	while(true)
 	{
-		//Right arrow to speed up
+		//Right arrow to raise lift
   	if(nNxtButtonPressed == 1)
   	{
-  		MoveLifter(HighGoalPos);
+  		RaiseLift();
   		while(nNxtButtonPressed == 1)
   		{
 
   		}
+  		StopLift();
   	}
-  	//Left arrow to slow down
+  	//Left arrow to lower lift
   	if(nNxtButtonPressed == 2)
 		{
-			MoveLifter(DownPos);
+			LowerLift();
 			while(nNxtButtonPressed == 2)
 			{
 
 			}
+			StopLift();
 		}
-		//Center button to return to normal speed
+		//Center button to run collector
 		if(nNxtButtonPressed == 3)
 		{
 			while(nNxtButtonPressed == 3)
 			{
 				CollectBalls();
 			}
+			StopCollector();
 		}
 	}
 }
