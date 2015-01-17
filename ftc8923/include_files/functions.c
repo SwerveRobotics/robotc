@@ -1,6 +1,11 @@
 #ifndef FTC8923_FUNCTIONS
 #define FTC8923_FUNCTIONS
 
+/* Code Review by Darrell
+ - Should adjust the GrabGoal() and ReleaseGoal() functions to call a single function named SetGoalServoPosition().
+ - Apply this concept to the rest of the serve set functions too. This will further reduce code redundancy so that you call the single function.
+*/
+
 //Positions of lift
 typedef enum
 {
@@ -49,6 +54,13 @@ void DumpBalls()
 {
 	servo[container] = 100;
 }
+
+/* Code Review by Darrell
+ - add a SetMotorPower(tMotor motorName, int power) function
+ - add a SetLiftPower(int power) function which uses SetMotorPower()
+ - adjust LowerLift() to call SetLiftPower()
+ - etc etc
+*/
 
 //Lift functions
 void LowerLift()
