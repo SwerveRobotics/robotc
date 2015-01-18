@@ -1,0 +1,105 @@
+#ifndef FTC8923_FUNCTIONS
+#define FTC8923_FUNCTIONS
+
+//Positions of lift
+typedef enum
+{
+	DownPos = 0,
+	LowGoalPos = 5000,
+	MediumGoalPos = 10000,
+	HighGoalPos = 15000,
+	CenterGoalPos = 20000
+}
+LiftPositionsEnum;
+
+//Goal grabber functions
+void GrabGoal()
+{
+	servo[goalGrabber] = 170;
+}
+
+void ReleaseGoal()
+{
+	servo[goalGrabber] = 100;
+}
+
+//Collector functions
+void CollectBalls()
+{
+	motor[collector] = -100;
+}
+
+void ReleaseBalls()
+{
+	motor[collector] = 100;
+}
+
+void StopCollector()
+{
+	motor[collector] = 0;
+}
+
+//Container functoins
+void HoldBalls()
+{
+	servo[container] = 0;
+}
+
+void DumpBalls()
+{
+	servo[container] = 100;
+}
+
+//Lift functions
+void LowerLift()
+{
+	motor[mtrLifterL] = -100;
+	motor[mtrLifterR] = -100;
+}
+void RaiseLift()
+{
+	motor[mtrLifterL] = 100;
+	motor[mtrLifterR] = 100;
+}
+void StopLift()
+{
+	motor[mtrLifterL] = 0;
+	motor[mtrLifterR] = 0;
+}
+
+bool LiftAboveDetect(int pos)
+{
+	if(nMotorEncoder[mtrLifterL] > pos)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool LiftBelowDetect(int pos)
+{
+	if(nMotorEncoder[mtrLifterL] < pos)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void MoveLifter(int pos)
+{
+	while(LiftAboveDetect(pos))
+	{
+		LowerLift();
+	}
+	while(LiftBelowDetect(pos))
+	{
+		RaiseLift();
+	}
+	StopLift();
+}
+#endif
