@@ -1,6 +1,13 @@
 #ifndef SWIVE_C
 #define SWIVE_C
 
+/* Code Review by Darrell
+ - *Good use of includes and library.*
+ - Task name should be capitalized per style guide -> Drive.
+ - File lacks comments explaing what is going on.
+ - Controls are not adequately explained.
+*/
+
 #include "../../library/drive_modes/swerve_4m.c"
 #include "JoystickDriver.c"
 #include "writing.c"

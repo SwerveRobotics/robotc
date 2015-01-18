@@ -1,6 +1,14 @@
 #ifndef BEACONPOS1_C
 #define BEACONPOS1_C
 
+/* Code Review by Darrell
+ - User of magic numbers needs fixed.
+ - Direct assignment of speeds should be replaced by function calls
+ - File should be using our library code
+ - File name does not meet minimal style requirements
+ - Encoder should be using our library code
+*/
+
 task BeaconPos1()
 {
 		//move the robot forward 3-4 rotations
