@@ -25,6 +25,8 @@
 /// !!! SETUP INSTRUCTIONS !!! ///
 // Place robot facing away from ramp slope, 1/2 inch from rear edge, centered between ledge and field fence
 
+
+//Autonomous is undergoing reorganization this file will not compile
 #include "includes/auto_swive.c"
 #include "Includes/manipulators.c"
 #include "Includes/writing.c"
@@ -36,17 +38,25 @@ task main()
 	RegisterMotors(
 	motorFR,
 	motorFL,
-	motorBR,
-	motorBL
+	motorBL,
+	motorBR
 	);
 
 	RegisterServos(
 	servoFR,
 	servoFL,
-	servoBR,
 	servoBL,
+	servoBR,
 	servoGrabber
 	);
+	EnableGoalGrabber(false);
+	waitForStart();
+	SimpleDriveDirection(BACKWARD, 60, 94 * INCH_TO_CM);  // Move off of the ramp and to the goal
 
-	TimedDriveDirection(FORWARD, 60, 4);  // Move off of the ramp
-	}
+	EnableGoalGrabber(true);   // Grab goal
+
+	SimpleDriveDirection(FORWARD - 42.5, 60, 108 * INCH_TO_CM); // Move toparking zone
+
+	RotateTo(-90);   // Move goal intp zone
+
+}

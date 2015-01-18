@@ -26,52 +26,91 @@
 
 #include "includes/writing.c"
 #include "JoystickDriver.c"
+#include "../library/drive_modes/simple_swerve_4m.c"
 
 task main()
 {
 	RegisterMotors(
-		motorFL,
-		motorBL,
-		motorBR,
-		motorFR,
-		motorSweep,
-		motorFan1,
-		motorFan2
+	motorFL,
+	motorFR,
+	motorBL,
+	motorBR,
+	motorSweep,
+	motorFan1,
+	motorFan2
 	);
 	RegisterServos(
-		servoFL,
-		servoFR,
-		servoBL,
-		servoBR,
-		servoGrabber,
-		servoSweep,
-		servoTube
+	servoFL,
+	servoFR,
+	servoBL,
+	servoBR,
+	servoGrabber,
+	servoSweep,
+	servoTube
 	);
-	float encVal2;
-	bool nib = true;
-	float ang = 90.0;
+
+	float Kp = 0.008;
+	float Ki = 0.015;
+	float Kd = 0.002;
+	float errorPrevSum = 0;
+	float errorPrev = 0;
+	float error;
+	float ang = 0.0;
+	float newAng = 0.0;
+	float n = 0.0;
+	float angPrev = 0.0;
+	float newAngPrev = 0.0;
+	float servoSpeed = 0.0;
+
 	waitForStart();
 	while(true)
 	{
-		string context = " ENC Values:  ";
-		float encVal1 =  GetCRServoPosition(FRONT_LEFT_MOTOR);
-		encVal2 =  GetCRServoPosition(FRONT_RIGHT_MOTOR);
-		if (nib == true)
+		if ( sqrt( pow(joystick.joy1_x2, 2) + pow( joystick.joy1_y2, 2) ) > 20)
 		{
-			DegToCRServo(FRONT_LEFT_SERVO, FRONT_RIGHT_MOTOR, ang);
+			int powe = sqrt( pow(joystick.joy1_x2, 2) + pow( joystick.joy1_y2, 2) );
+			motor[FRONT_LEFT_MOTOR] = powe;
+			motor[FRONT_RIGHT_MOTOR] = -1 * powe;
+			motor[BACK_LEFT_MOTOR] = powe;
+			motor[BACK_RIGHT_MOTOR] = -1 * powe;
 		}
-		nib = false;
-		ang = 57.5  * atan2(joystick.joy1_y2 , joystick.joy1_x2);
-		wait1Msec(50);
-		if (joystick.joy1_Buttons == 2)
+		else
 		{
-			nib = true;
+			motor[FRONT_LEFT_MOTOR] = 0;
+			motor[FRONT_RIGHT_MOTOR] = 0;
+			motor[BACK_LEFT_MOTOR] = 0;
+			motor[BACK_RIGHT_MOTOR] = 0;
 		}
+
+		angPrev = ang;
+		newAngPrev = newAng;
+		if ( sqrt( pow(joystick.joy1_x2, 2) + pow( joystick.joy1_y2, 2) ) > 20)
+		{
+			ang = 57.5 * atan2(joystick.joy1_y2, joystick.joy1_x2);
+
+			if (abs(ang) > 90)
+			{
+				if (sgn(ang * angPrev) == -1)
+				{
+					n = n + -1 * sgn(ang);
+				}
+			}
+			newAng = ang + n * 360 - 90;
+		}
+		error = newAng - GetCRServoPosition(BACK_RIGHT_MOTOR);
+		nxtDisplayTextLine(3, "%f", ang);
+		nxtDisplayTextLine(4, "%f", newAng);
+		nxtDisplayTextLine(5, "%f", error);
+		nxtDisplayTextLine(6, "%f", n);
+		servoSpeed = ( Kp * error ) + ( Ki * errorPrevSum ) + ( Kd * (error - errorPrev) );
+
+		servo[BACK_RIGHT_SERVO] = 127 * ( -1 * servoSpeed + 1);
+		servo[BACK_LEFT_SERVO] = 127 * ( -1 * servoSpeed + 1);
+		servo[FRONT_RIGHT_SERVO] = 127 * ( -1 * servoSpeed + 1);
+		servo[FRONT_LEFT_SERVO] = 127 * ( -1 * servoSpeed + 1);
+
+		errorPrev = error;
+		errorPrevSum = errorPrevSum + errorPrev * 0.005;
+		wait1Msec(100);
+
 	}
-
-
-
-
-
-
 }

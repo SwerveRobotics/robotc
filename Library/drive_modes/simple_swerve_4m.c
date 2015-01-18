@@ -3,7 +3,30 @@
 
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
-#include "../../ftc6220/includes/writing.c"
+#include "../../ftc6220/includes/read_write.c"
+
+
+//swerve module structure for storing all values specific to any given drive assembly
+typedef struct
+{
+	float offsetAngle;        //in radians
+	float servoPosition;     	//in degrees (0 - 360)
+	float servoSpeed;
+	float motorPower;         //in motor power units (0 - 100)
+	//PID variables
+	float error;
+	float errorPrev;
+	float errorSum;
+	float servoTgt;
+	float servoPositionPrev;
+	float n;
+}
+DriveAssemblyState;
+
+DriveAssemblyState Drive[4];
+
+float RTgt;//currently unused, but would be to degree toward which the robot spins
+
 //Attenuate the joystick used for rotation based on the maximum angular speed possible
 //and find the "desired" angular velocity.
 float JoystickToRotRate(float joystickZ)
@@ -42,41 +65,38 @@ float JoystickToMagnitude(float joystickXorY) // return a -1 to 1 value for moto
 	}
 }
 
-float CalculateDriveAngle(float valueX, float valueY)
-{
-	int tangent = 57.3 * atan2(valueX, valueY); //drive angle
-	if (tangent < 0)
-	{
-		return tangent + 360;
-	}
-	else
-	{
-		return tangent;
-	}
-}
 
 void SimpleWriteToMotors(float cmps)
 {
-	CMPSToMotor(FRONT_LEFT_MOTOR,  cmps);
-	CMPSToMotor(BACK_LEFT_MOTOR,   cmps);
-	CMPSToMotor(BACK_RIGHT_MOTOR,  cmps);
-	CMPSToMotor(FRONT_RIGHT_MOTOR, cmps);
+	Drive[FRONT_LEFT].motorPower = cmps * reverseMotorFactor[FRONT_LEFT] * MOTOR_POWER_PER_CMPS;
+	Drive[FRONT_RIGHT].motorPower = cmps * reverseMotorFactor[FRONT_RIGHT] * MOTOR_POWER_PER_CMPS;
+	Drive[BACK_LEFT].motorPower = cmps * reverseMotorFactor[BACK_LEFT] * MOTOR_POWER_PER_CMPS;
+	Drive[BACK_RIGHT].motorPower = cmps * reverseMotorFactor[BACK_RIGHT] * MOTOR_POWER_PER_CMPS;
 }
 
-void SimpleWriteToServos(int angle)
+void SetServos(float angle)
 {
-	DegToCRServo(FRONT_LEFT_SERVO,  FRONT_LEFT_MOTOR,  angle);
-	DegToCRServo(BACK_LEFT_SERVO,   BACK_LEFT_MOTOR,   angle);
-	DegToCRServo(BACK_RIGHT_SERVO,  BACK_RIGHT_MOTOR,  angle);
-	DegToCRServo(FRONT_RIGHT_SERVO, FRONT_RIGHT_MOTOR, angle);
+	Drive[FRONT_LEFT].servoPosition = angle;
+	Drive[FRONT_RIGHT].servoPosition = angle;
+	Drive[BACK_LEFT].servoPosition = angle;
+	Drive[BACK_RIGHT].servoPosition = angle;
 }
 
 void SetServosRotateMode()
 {
-	ClosestDegToWinchServo(FRONT_LEFT_SERVO,  0  );
-	ClosestDegToWinchServo(BACK_LEFT_SERVO,   90 );
-	ClosestDegToWinchServo(BACK_RIGHT_SERVO,  180);
-	ClosestDegToWinchServo(FRONT_RIGHT_SERVO, 270);
+	Drive[FRONT_LEFT].servoPosition = 45;
+	Drive[FRONT_RIGHT].servoPosition = 135;
+	Drive[BACK_LEFT].servoPosition = 225;
+	Drive[BACK_RIGHT].servoPosition = 315;
+}
+
+void RotateBotToDeg(int angle)
+{
+	SetServosRotateMode();
+	RTgt = angle;
+	rotateMode = true;
+	wait1Msec(400);
+	rotateMode = false;
 }
 
 #endif

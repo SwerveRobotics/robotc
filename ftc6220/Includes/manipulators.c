@@ -1,78 +1,89 @@
 #ifndef MANIPULATORS.C
 #define MANIPULATORS.C
 
-#include "writing.c"
+#include "read_write.c"
 #include "JoystickDriver.c"
 
+const tSensors tubeTouchSensor = (tSensors) S4;
 
+//either enable or disable the goal grabber by raising and lowering the "hook" servo
 void EnableGoalGrabber(bool state)
 {
 	if (state == true)
 	{
-		servo[GRABBER_SERVO] = 255;
+		SetServo(GRABBER_SERVO, 50);
 	}
 	else
 	{
-		servo[GRABBER_SERVO] = 130;
+		SetServo(GRABBER_SERVO, 0);
 	}
 }
 
 
-
+//raise (disable) or lower (enable) the sweeper mechanism
 void EnableSweeper(bool state)
 {
 	if (state == true)
 	{
-		servo[SWEEPER_SERVO] = 127;
+		SetServo(SWEEPER_SERVO, 127);
 	}
 	else
 	{
-		servo[SWEEPER_SERVO] = 18;
+		SetServo(SWEEPER_SERVO, 18);
 	}
 }
 
-
-
+//begin or stop sweeping up balls
 void RunSweeper(bool state)
 {
 	if (state == true)
 	{
-		motor[SWEEPER_MOTOR] = 128;
+		setMotorPower(SWEEPER_MOTOR, 128);
 	}
 	else
 	{
-		motor[SWEEPER_MOTOR] = 0;
+		setMotorPower(SWEEPER_MOTOR, 0);
 	}
 }
 
-
-
+//activate both fan motors to run the fan
 void RunFan(bool state)
 {
 	if (state == true)
 	{
-		motor[FAN_MOTOR_1] = 128;
-		motor[FAN_MOTOR_2] = 128;
+		setMotorPower(FAN_MOTOR_1, 128);
+		setMotorPower(FAN_MOTOR_2, 128);
 	}
 	else
 	{
-		motor[FAN_MOTOR_1] = 0;
-		motor[FAN_MOTOR_2] = 0;
+		setMotorPower(FAN_MOTOR_1, 0);
+		setMotorPower(FAN_MOTOR_2, 0);
 	}
 }
 
-
+//rotate the tube loading mechanism. "continous" loading would mean that this fucntion is alternately called with true and false
 void LoadTube(bool state)
 {
 	if (state == true)
 	{
-		servo[TUBE_SERVO] = 0;
+		SetServo(TUBE_SERVO, 0);
 	}
 	else
 	{
-		servo[TUBE_SERVO] = 255;
+		SetServo(TUBE_SERVO, 255);
 	}
 }
+
+//needs changing to incorporate the exnding tube. also wrong servo.
+void liftTube()
+{
+	while(SensorValue(tubeTouchSensor) == 0)
+	{
+		SetServo(TUBE_SERVO, 255);
+	}
+	SetServo(TUBE_SERVO, 127);
+}
+
 task manipulators()
 {
 	bool grabbed      = false;
@@ -83,7 +94,7 @@ task manipulators()
 
 	bool tubeToggle   = false;
 	bool tubeReady    = true;
-
+	liftTube();
 	while(true)
 	{
 		//   !!!   begin goal grabber   !!!   //
@@ -139,7 +150,7 @@ task manipulators()
 		}
 		///   !!!   end sweeper   !!!   ///
 
-
+		/*
 		///   !!!   begin tube   !!!   ///
 		if ((joystick.joy1_Buttons == 4) & tubeReady == true)
 		{
@@ -160,7 +171,7 @@ task manipulators()
 			tubeReady = true;
 		}
 		///   !!!   end tube   !!!   ///
-
+		*/
 
 	}
 }
