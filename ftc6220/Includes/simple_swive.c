@@ -1,6 +1,13 @@
 #ifndef SWIVE_C
 #define SWIVE_C
 
+/* Code Review by Darrell
+ - *Good use of library code.*
+ - task name should be capitalized per style guide -> Drive.
+ - *Great descriptive variable names.*
+ - Instead of fetching the joystick values several times. It would be easier to read if they were first stored in scoped variables.
+*/
+
 #include "../../library/drive_modes/simple_swerve_4m.c"
 #include "pid.c"
 #include "JoystickDriver.c"

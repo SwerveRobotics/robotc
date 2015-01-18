@@ -1,18 +1,23 @@
 #ifndef CENTER_OBJECTIVES_C
 #define CENTER_OBJECTIVES_C
 
+/* Code Review by Darrell
+ - Should set CENTER_GOAL_POSITION via a function instead of directly.
+ -
+*/
+
 int CENTER_GOAL_POSITION = 0;
 
 void DectectFloorIR()
 {
 	wait1Msec(500);
-	if(ReadIRSensor(1) == 4)
-	{
-		CENTER_GOAL_POSITION = 2;
-	}
-	else if(ReadIRSensor(1) == 3)
+	if(ReadIRSensor(1) == 3)
 	{
 		CENTER_GOAL_POSITION = 1;
+	}
+	else if(ReadIRSensor(1) == 4)
+	{
+		CENTER_GOAL_POSITION = 2;
 	}
 	else if(ReadIRSensor(1) == 5)
 	{
@@ -20,20 +25,24 @@ void DectectFloorIR()
 	}
 }
 
-void RampKickPos1()
+/* Code Review by Darrell
+ - *Awesomely simple code.*
+*/
+
+void KnockKickstandPos1()
 {
 	TurnLeftDegrees(60, 50);
 	DriveForwardDistanceGyro(40, 50);
 }
 
-void RampKickPos2()
+void KnockKickstandPos2()
 {
 	DriveForwardDistanceGyro(12, 50);
 	TurnLeftDegrees(75, 50);
 	DriveForwardDistanceGyro(40, 50);
 }
 
-void RampKickPos3()
+void KnockKickstandPos3()
 {
 	TurnLeftDegrees(35, 50);
 	DriveForwardDistanceGyro(45, 50);

@@ -14,6 +14,12 @@
 
 #define TANK_4M
 
+/* Code Review by Darrell
+ - servo should be using a function.
+ - *Good use of library.*
+ - *Clean code looks really good.*
+*/
+
 #include "auto_init.c"
 #include "JoystickDriver.c"
 #include "../library/drive_modes/drive_modes.h"
@@ -24,7 +30,7 @@
 	AutoInitialize();
 	waitForStart();
 
-	DriveBackwardDistance(90, 20);
+	DriveBackwardDistance(90, 20);	// what distance is this driving? 90 or 20?
 	servo[goalGrabber] = 45;
 	TurnRightTime(2000, 30);
 	DriveForwardDistance(93, 50);
