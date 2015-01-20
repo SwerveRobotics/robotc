@@ -28,9 +28,9 @@ void ResetEncoderValue()
 //Takes an input of encoder ticks and converts to inches
 float EncoderDistance(float ticks)
 {
-	float circumference = PI * WHEEL_DIAMETER;
-	float revolutions = (ticks / TICKS_PER_REVOLUTION) * GEAR_RATIO;
-	return revolutions * circumference;
+	float circumference = PI * WHEEL_DIAMETER; // in inches
+	float revolutions = (ticks / TICKS_PER_REVOLUTION) * GEAR_RATIO; // revolutions
+	return revolutions * circumference; // (inches/revolutions)*revolutions = inches
 }
 
 //Drives forward at given power until the distance has been reached
