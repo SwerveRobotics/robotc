@@ -30,6 +30,7 @@
  - Also might want to describe where robot starts
 */
 
+// The robot starts in the parking zone facing strait out in the closest position to the opponits goals
 #define TANK_4M
 
 #include "include_files/includes.h"
@@ -41,8 +42,8 @@ task main()
 
 	//Get positioned to detect beacon
 	DriveBackwardDistanceGyro(10, 50);
-	TurnLeftDegrees(70, 50);
-	DriveBackwardDistanceGyro(25, 20);
+	TurnLeftDegrees(70, 20);
+	DriveBackwardDistanceGyro(26, 20);
 
 	DectectFloorIR();
 

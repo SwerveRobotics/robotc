@@ -37,7 +37,7 @@ void KnockKickstandPos1()
 
 void KnockKickstandPos2()
 {
-	DriveForwardDistanceGyro(12, 50);
+	DriveForwardDistanceGyro(15, 50);
 	TurnLeftDegrees(75, 50);
 	DriveForwardDistanceGyro(40, 50);
 }
