@@ -8,7 +8,7 @@
 #include "../drive_modes/drive_modes.h"
 #include "../controllers/controller_defines.h"
 
-int BACKWARD_BUTTON = 0;
+int BACKWARD_BUTTON = -1; // Set to non-button so no accidental backwards driving ensues
 
 void RegisterBackwardButton(int button)
 {
@@ -22,7 +22,7 @@ task DriveTank()
 		getJoystickSettings(joystick);
 
 		//Drive forward
-		if(joy1Btn(BACKWARD_BUTTON) == 0)
+		if(BACKWARD_BUTTON < 0 || joy1Btn(BACKWARD_BUTTON) == 0)
 		{
 			if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
 				DriveLeftMotors(joystick.joy1_y1);
