@@ -2,6 +2,7 @@
 #define BEACON_C
 //note add #define TANK_4M to any file that uses this//
 #include "../../../library/drive_modes/drive_modes.h"
+#define TANK_4M;
 
 /* Code Review by Darrell
  - *Nice to see functions in a separate file.*
