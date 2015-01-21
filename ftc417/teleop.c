@@ -35,11 +35,11 @@ task main()
 	StartTask(DriveTank);
 	while(true)
 	{
-		if (joystick.joy2_TopHat == 2)
+		if (joy2Btn(3) == 1)
 		{
 			servo[goalGrabber] = 150;
 		}
-		else if (joystick.joy2_TopHat == 4)
+		else if (joy2Btn(2) == 1)
 		{
 			servo[goalGrabber] = 45;
 		}
