@@ -13,8 +13,8 @@ typedef enum
 LiftPositionsEnum;
 
 //Goal grabber functions
-#define GRAB_GOAL_SERVO_POS 170
-#define RELEASE_GOAL_SERVO_POS 100
+const int GRAB_GOAL_SERVO_POS = 170;
+const int RELEASE_GOAL_SERVO_POS = 100;
 
 void SetGoalGrabberPos(int position)
 {
@@ -22,9 +22,9 @@ void SetGoalGrabberPos(int position)
 }
 
 //Collector functions
-#define RUN_COLLECTOR_FORWARD 100
-#define RUN_COLLECTOR_BACKWARD -100
-#define STOP_COLLECTOR 0
+const int RUN_COLLECTOR_FORWARD = 100;
+const int RUN_COLLECTOR_BACKWARD = -100;
+const int STOP_COLLECTOR = 0;
 
 void RunCollector(int power)
 {
@@ -32,8 +32,8 @@ void RunCollector(int power)
 }
 
 //Container functoins
-#define HOLD_BALLS 127
-#define DUMP_BALLS 127
+const int HOLD_BALLS = 127;
+const int DUMP_BALLS = 127;
 
 void SetContainerPos(int pos)
 {
