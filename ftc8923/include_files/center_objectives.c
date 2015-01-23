@@ -1,11 +1,6 @@
 #ifndef CENTER_OBJECTIVES_C
 #define CENTER_OBJECTIVES_C
 
-/* Code Review by Darrell
- - Should set CENTER_GOAL_POSITION via a function instead of directly.
- -
-*/
-
 int CENTER_GOAL_POSITION = 0;
 
 void DectectFloorIR()
@@ -24,10 +19,6 @@ void DectectFloorIR()
 		CENTER_GOAL_POSITION = 3;
 	}
 }
-
-/* Code Review by Darrell
- - *Awesomely simple code.*
-*/
 
 void KnockKickstandPos1()
 {
