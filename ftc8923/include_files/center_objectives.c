@@ -31,17 +31,20 @@ void DectectFloorIR()
 
 void KnockKickstandPos1()
 {
-	TurnLeftDegrees(60, 50);
+	TurnLeftDegrees(56, 50);
 	DriveForwardDistanceGyro(40, 50);
+	DriveBackwardDistanceGyro(50, 60);
 }
 
 void KnockKickstandPos2()
 {
-	DriveForwardDistanceGyro(20, 50);
-	TurnLeftDegrees(80, 50);
+	DriveForwardDistanceGyro(25, 50);
+	TurnLeftDegrees(86, 50);
 	DriveForwardDistanceGyro(40, 50);
 	//Get out of way of alliance partner
-	DriveBackwardDistanceGyro(60, 100);
+	DriveBackwardDistanceGyro(40, 100);
+	TurnRightDegrees(70, 50);
+	DriveBackwardDistanceGyro(40, 100);
 }
 
 void KnockKickstandPos3()
