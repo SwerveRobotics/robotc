@@ -1,11 +1,6 @@
 #ifndef INIT_AUTO_C
 #define INIT_AUTO_C
 
-/* Code Review by Darrell
- - Would like to see descriptively named values instead of magic numbers.
- - Bare minimum expect comments explaing servo position.
-*/
-
 void InitializeAuto()
 {
 	ASSUME_CONTROLLER_INPUT = false;
