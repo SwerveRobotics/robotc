@@ -38,12 +38,12 @@ void KnockKickstandPos1()
 
 void KnockKickstandPos2()
 {
-	DriveForwardDistanceGyro(25, 50);
-	TurnLeftDegrees(86, 50);
+	DriveForwardDistanceGyro(27, 50);
+	TurnLeftDegrees(88, 50);
 	DriveForwardDistanceGyro(40, 50);
 	//Get out of way of alliance partner
 	DriveBackwardDistanceGyro(40, 100);
-	TurnRightDegrees(70, 50);
+	TurnRightDegrees(87, 50);
 	DriveBackwardDistanceGyro(40, 100);
 }
 
