@@ -7,5 +7,6 @@
 #include "init_auto.c"
 #include "center_objectives.c"
 #include "JoystickDriver.c"
+#include "center_goal.c"
 
 #endif
