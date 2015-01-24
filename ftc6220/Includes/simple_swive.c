@@ -29,9 +29,9 @@ task drive()
 		getJoystickSettings(joystick);
 
 		joyDistance = sqrt( pow(joystick.joy1_x2, 2) + pow( joystick.joy1_y2, 2) );
-		int joyX = joystick.joy1_x2;
-		int joyY = joystick.joy1_y2;
-		int joyZ = joystick.joy1_x1;
+		joyX = joystick.joy1_x2;
+		joyY = joystick.joy1_y2;
+		joyZ = joystick.joy1_x1;
 
 		if (JoystickToRotRate(joyZ) == 0)
 		{

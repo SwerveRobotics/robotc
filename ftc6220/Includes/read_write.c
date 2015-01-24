@@ -69,8 +69,13 @@ tMotor FAN_MOTOR_1;
 tMotor FAN_MOTOR_2;
 
 TServoIndex GRABBER_SERVO;
-TServoIndex SWEEPER_SERVO;
-TServoIndex TUBE_SERVO;
+TServoIndex SWEEPER_SERVO_ARM;
+TServoIndex TUBE_SERVO_SLIDE;
+TServoIndex TUBE_SERVO_LIFT;
+TServoIndex TUBE_SERVO_WINCH;
+TServoIndex SWEEPER_SERVO_1;
+TServoIndex SWEEPER_SERVO_2;
+TServoIndex LOADER_SERVO;
 
 //send a servo a value
 void SetServo(TServoIndex servoName, int value)
@@ -139,16 +144,23 @@ tMotor motorF2                                 //manipulator motors
 void RegisterServos(
 TServoIndex frontLeftS,  TServoIndex backLeftS,
 TServoIndex backRightS,  TServoIndex frontRightS,//drive servos
-TServoIndex grabberS,    TServoIndex sweeperS,
-TServoIndex tubeS                                //manipulator servos
+TServoIndex grabberS,    TServoIndex sweeperSarm,
+TServoIndex sweeperS1,   TServoIndex sweeperS2,
+TServoIndex tubeSlift,   TServoIndex tubeSslide,
+TServoIndex tubeSwinch,  TServoIndex loaderS//manipulator servos
 ){
 	Assembly[FRONT_LEFT].servo  = frontLeftS;
 	Assembly[BACK_LEFT].servo   = backLeftS;
 	Assembly[FRONT_RIGHT].servo = frontRightS;
 	Assembly[BACK_RIGHT].servo  = backRightS;
 	GRABBER_SERVO     = grabberS;
-	SWEEPER_SERVO     = sweeperS;
-	TUBE_SERVO        = tubeS;
+	SWEEPER_SERVO_ARM     = sweeperSarm;
+	TUBE_SERVO_WINCH  = tubeSwinch;
+	TUBE_SERVO_LIFT   = tubeSlift;
+	TUBE_SERVO_SLIDE  = tubeSslide;
+	LOADER_SERVO      = loaderS;
+	SWEEPER_SERVO_1   = sweeperS1;
+	SWEEPER_SERVO_2   = sweeperS2;
 
 	SetServo(Assembly[FRONT_LEFT].servo, 127);
 	SetServo(Assembly[FRONT_RIGHT].servo, 127);
