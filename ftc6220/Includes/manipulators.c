@@ -25,11 +25,11 @@ void EnableSweeper(bool state)
 {
 	if (state == true)
 	{
-		SetServo(SWEEPER_SERVO, 127);
+		SetServo(SWEEPER_SERVO_ARM, 127);
 	}
 	else
 	{
-		SetServo(SWEEPER_SERVO, 18);
+		SetServo(SWEEPER_SERVO_ARM, 18);
 	}
 }
 
@@ -38,11 +38,11 @@ void RunSweeper(bool state)
 {
 	if (state == true)
 	{
-		setMotorPower(SWEEPER_MOTOR, 128);
+		SetMotorPower(SWEEPER_MOTOR, 128);
 	}
 	else
 	{
-		setMotorPower(SWEEPER_MOTOR, 0);
+		SetMotorPower(SWEEPER_MOTOR, 0);
 	}
 }
 
@@ -51,13 +51,13 @@ void RunFan(bool state)
 {
 	if (state == true)
 	{
-		setMotorPower(FAN_MOTOR_1, 128);
-		setMotorPower(FAN_MOTOR_2, 128);
+		SetMotorPower(FAN_MOTOR_1, 128);
+		SetMotorPower(FAN_MOTOR_2, 128);
 	}
 	else
 	{
-		setMotorPower(FAN_MOTOR_1, 0);
-		setMotorPower(FAN_MOTOR_2, 0);
+		SetMotorPower(FAN_MOTOR_1, 0);
+		SetMotorPower(FAN_MOTOR_2, 0);
 	}
 }
 
@@ -66,22 +66,26 @@ void LoadTube(bool state)
 {
 	if (state == true)
 	{
-		SetServo(TUBE_SERVO, 0);
+		SetServo(LOADER_SERVO, 0);
 	}
 	else
 	{
-		SetServo(TUBE_SERVO, 255);
+		SetServo(LOADER_SERVO, 255);
 	}
 }
 
 //needs changing to incorporate the exnding tube. also wrong servo.
 void liftTube()
 {
-	while(SensorValue(tubeTouchSensor) == 0)
+	SetStandardServoDegree(TUBE_SERVO_LIFT, 90);// lift the tube to vertical
+	wait1Msec(50);
+	SetStandardServoDegree(TUBE_SERVO_LIFT, 0);
+	while(SensorValue(tubeTouchSensor) == 0)//drag the tube to the loader
 	{
-		SetServo(TUBE_SERVO, 255);
+		SetServo(TUBE_SERVO_SLIDE, 255);
 	}
-	SetServo(TUBE_SERVO, 127);
+	SetServo(TUBE_SERVO_SLIDE, 127);
+	//extend tube?
 }
 
 task manipulators()
