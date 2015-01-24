@@ -25,7 +25,8 @@ typedef enum
 	PairCount1,	// front
 	PairCount2,
 	PairCount3,
-	PairCount4  // back
+	PairCount4,  // back
+	PairCountEnd  // NEVER ASSIGN THIS - For Iteration only
 }PairCountEnum;
 const int MOTOR_PAIRS_COUNT = 4;
 tMotor LEFT_MOTORS[MOTOR_PAIRS_COUNT];
@@ -39,7 +40,7 @@ void RegisterDriveMotorPair(tMotor leftMotor, tMotor rightMotor, PairCountEnum p
 
 void DriveLeftMotors(int power)
 {
-	for(int i=PairCount1; i<=PairCount4; i++)
+	for(int i=PairCount1; i<PairCountEnd; i++)
 	{
 		SetMotorPower(LEFT_MOTORS[i], power);
 	}
@@ -52,7 +53,7 @@ void StopLeftDriveMotors()
 
 void DriveRightMotors(int power)
 {
-	for(int i=PairCount1; i<=PairCount4; i++)
+	for(int i=PairCount1; i<PairCountEnd; i++)
 	{
 		SetMotorPower(RIGHT_MOTORS[i], power);
 	}

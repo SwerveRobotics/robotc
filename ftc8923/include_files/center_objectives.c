@@ -1,11 +1,6 @@
 #ifndef CENTER_OBJECTIVES_C
 #define CENTER_OBJECTIVES_C
 
-/* Code Review by Darrell
- - Should set CENTER_GOAL_POSITION via a function instead of directly.
- -
-*/
-
 int CENTER_GOAL_POSITION = 0;
 
 void DectectFloorIR()
@@ -25,28 +20,35 @@ void DectectFloorIR()
 	}
 }
 
-/* Code Review by Darrell
- - *Awesomely simple code.*
-*/
-
 void KnockKickstandPos1()
 {
-	TurnLeftDegrees(60, 50);
-	DriveForwardDistanceGyro(40, 50);
+	TurnLeftDegrees(42, 50);
+	DriveForwardDistanceGyro(48, 50);
+	//Get out of way of alliance partner and block opponent
+	TurnRightDegrees(32, 50);
+	DriveBackwardDistanceGyro(55, 60);
 }
 
 void KnockKickstandPos2()
 {
-	DriveForwardDistanceGyro(12, 50);
-	TurnLeftDegrees(75, 50);
+	DriveForwardDistanceGyro(27, 50);
+	TurnLeftDegrees(88, 50);
 	DriveForwardDistanceGyro(40, 50);
+	//Get out of way of alliance partner and block opponent
+	DriveBackwardDistanceGyro(40, 100);
+	TurnRightDegrees(107, 50);
+	DriveBackwardDistanceGyro(55, 100);
 }
 
 void KnockKickstandPos3()
 {
 	TurnLeftDegrees(35, 50);
 	DriveForwardDistanceGyro(45, 50);
-	TurnLeftDegrees(78, 50);
-	DriveForwardDistanceGyro(20, 50);
+	TurnLeftDegrees(82, 50);
+	DriveForwardDistanceGyro(25, 50);
+	//Get out of way of alliance partner and block opponent
+	DriveBackwardDistanceGyro(35, 100);
+	TurnRightDegrees(125, 50);
+	DriveBackwardDistanceGyro(68, 100);
 }
 #endif
