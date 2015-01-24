@@ -41,6 +41,8 @@ task main()
 	DriveBackwardDistanceGyro(10, 50);
 	TurnLeftDegrees(70, 30);
 	DriveBackwardDistanceGyro(21, 20);
+	TurnRightDegrees(40, 50);
+	DriveBackwardDistanceGyro(30, 50);
 
 	DectectGoalIR();
 
