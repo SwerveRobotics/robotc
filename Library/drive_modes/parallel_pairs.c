@@ -64,15 +64,15 @@ void StopRightDriveMotors()
 	DriveRightMotors(0);
 }
 
-void MoveForward(int power)
+void DriveForward(int power)
 {
 	DriveLeftMotors(power);
 	DriveRightMotors(power);
 }
 
-void MoveBackward(int power)
+void DriveBackward(int power)
 {
-	MoveForward(-1 * power);
+	DriveForward(-1 * power);
 }
 
 void StopAllDriveMotors()
