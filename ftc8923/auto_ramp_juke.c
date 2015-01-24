@@ -38,17 +38,20 @@ task main()
 	InitializeAuto();
 	waitForStart();
 
-	DriveBackwardDistanceGyro(50, 20);
+	//Drive off ramp and wait for a while for other robot to pass by
+	DriveBackwardDistanceGyro(56, 50);
 	TurnRightDegrees(90, 50);
-	DriveForwardDistanceGyro(20, 20);
-	TurnLeftDegrees(90, 50);
-	wait1Msec(8000);
-	DriveBackwardDistanceGyro(57, 20);
+	DriveForwardDistanceGyro(16, 50);
+	TurnLeftDegrees(85, 50);
+	wait1Msec(1000);
+	//Grab goal
+	DriveBackwardDistanceGyro(56, 50);
 	GrabGoal();
-	DriveForwardDistanceGyro(70,20);
-	TurnRightDegrees(45,20);
-	DriveForwardDistanceGyro(10,20);
-	TurnLeftDegrees(90,20);
-	TurnLeftDegrees(90,20);
-	DriveBackwardDistanceGyro(20,20);
+	wait1Msec(250);
+	//Place goal in parking zone
+	DriveForwardDistanceGyro(70, 50);
+	TurnRightDegrees(45, 50);
+	DriveForwardDistanceGyro(25, 50);
+	TurnLeftDegrees(180, 50);
+	DriveBackwardDistanceGyro(18,50);
 }
