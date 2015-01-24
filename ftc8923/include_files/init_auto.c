@@ -11,7 +11,7 @@ void InitializeAuto()
 	nMotorEncoder[mtrLifterL] = 0;
 	WHEEL_DIAMETER = 4;
 	GEAR_RATIO = 1.5;
-	SetGoalGrabberPos(RELEASE_GOAL_SERVO_POS);
+	ReleaseGoal();
 	LEFT_TURN_GYRO_OVERRUN = 15;
 	RIGHT_TURN_GYRO_OVERRUN = 20;
 }
