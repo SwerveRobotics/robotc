@@ -43,7 +43,7 @@ task main()
 	TurnRightDegrees(90, 50);
 	DriveForwardDistanceGyro(16, 50);
 	TurnLeftDegrees(85, 50);
-	wait1Msec(1000);
+	wait1Msec(8000);
 	//Grab goal
 	DriveBackwardDistanceGyro(56, 50);
 	GrabGoal();
