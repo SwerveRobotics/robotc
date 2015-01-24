@@ -1,10 +1,66 @@
 #ifndef FTC8923_FUNCTIONS
 #define FTC8923_FUNCTIONS
 
-/* Code Review by Darrell
- - Should adjust the GrabGoal() and ReleaseGoal() functions to call a single function named SetGoalServoPosition().
- - Apply this concept to the rest of the serve set functions too. This will further reduce code redundancy so that you call the single function.
-*/
+#include "../../Library/servos/servos.c"
+#include "../../Library/motors/motors.c"
+
+const int GRAB_GOAL_POS = 170;
+const int RELEASE_GOAL_POS = 100;
+
+//Goal grabber functions
+void SetGoalGrabberPosition(int pos)
+{
+	SetServoPosition(goalGrabber, pos);
+}
+void GrabGoal()
+{
+	SetGoalGrabberPosition(GRAB_GOAL_POS);
+}
+void ReleaseGoal()
+{
+	SetGoalGrabberPosition(RELEASE_GOAL_POS);
+}
+
+//Collector functions
+const int RUN_COLLECTOR_FORWARD = -100;
+const int RUN_COLLECTOR_BACKWARD = 100;
+const int STOP_COLLECTOR = 0;
+
+void RunCollector(int power)
+{
+	SetMotorPower(collector, power);
+}
+void CollectBalls()
+{
+	RunCollector(RUN_COLLECTOR_FORWARD);
+}
+void ReleaseBalls()
+{
+	RunCollector(RUN_COLLECTOR_BACKWARD);
+}
+void StopCollector()
+{
+	RunCollector(STOP_COLLECTOR);
+}
+
+//Container functoins
+const int HOLD_BALLS = 127;
+const int DUMP_BALLS = 127;
+
+void SetContainerPos(int pos)
+{
+	SetServoPosition(container, pos);
+}
+void HoldBalls()
+{
+	SetContainerPos(HOLD_BALLS);
+}
+void DumpBalls()
+{
+	SetContainerPos(DUMP_BALLS);
+}
+
+//Lift functions
 
 //Positions of lift
 typedef enum
@@ -17,42 +73,6 @@ typedef enum
 }
 LiftPositionsEnum;
 
-//Goal grabber functions
-#define GRAB_GOAL_SERVO_POS 170
-#define RELEASE_GOAL_SERVO_POS 100
-
-void SetGoalGrabberPos(int position)
-{
-	servo[goalGrabber] = position;
-}
-
-//Collector functions
-#define RUN_COLLECTOR_FORWARD 100
-#define RUN_COLLECTOR_BACKWARD -100
-#define STOP_COLLECTOR 0
-
-void RunCollector(int power)
-{
-	SetMotorPower(collector, power);
-}
-
-//Container functoins
-#define HOLD_BALLS 127
-#define DUMP_BALLS 127
-
-void SetContainerPos(int pos)
-{
-	servo[container] = pos;
-}
-
-/* Code Review by Darrell
- - add a SetMotorPower(tMotor motorName, int power) function
- - add a SetLiftPower(int power) function which uses SetMotorPower()
- - adjust LowerLift() to call SetLiftPower()
- - etc etc
-*/
-
-//Lift functions
 void SetLiftPower(int power)
 {
 	SetMotorPower(mtrLifterL, power);

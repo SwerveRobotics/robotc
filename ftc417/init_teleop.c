@@ -13,5 +13,7 @@ void InitializeTeleOP()
 	ASSUME_CONTROLLER_INPUT = true;
 	RegisterDriveMotors(LeftMid, LeftSides, RightMid, RightSides);
 	servo[goalGrabber] = 150;
+	RegisterSlowModeButton(7);
+	SlowModeDivisor(3);
 }
 #endif

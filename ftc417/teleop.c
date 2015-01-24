@@ -1,4 +1,4 @@
-#pragma config(Hubs,  S1, HTMotor,  HTMotor,  none,     none)
+#pragma config(Hubs,  S1, HTMotor,  HTMotor,  HTMotor,  none)
 #pragma config(Hubs,  S2, HTServo,  none,     none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     ,               sensorI2CMuxController)
@@ -6,6 +6,8 @@
 #pragma config(Motor,  mtr_S1_C1_2,     LeftSides,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C2_1,     RightMid,      tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C2_2,     RightSides,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S1_C3_1,     Arm,           tmotorTetrix, openLoop, encoder)
+#pragma config(Motor,  mtr_S1_C3_2,     motorI,        tmotorTetrix, openLoop)
 #pragma config(Servo,  srvo_S2_C1_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
@@ -42,13 +44,27 @@ task main()
 	StartTask(DriveTank);
 	while(true)
 	{
-		if (joystick.joy2_TopHat == 2)
+		if (joy2Btn(3) == 1)
 		{
 			servo[goalGrabber] = 150;
 		}
-		else if (joystick.joy2_TopHat == 4)
+		else if (joy2Btn(2) == 1)
 		{
 			servo[goalGrabber] = 45;
 		}
+
+		/*while (joy2Btn(7) == 1 && nMotorEncoder[Arm] <= 1110)
+		{
+			motor[Arm] = 50;
+		}
+		nMotorEncoder[Arm] = 0;
+
+		while(joy2Btn(6) == 1 && nMotorEncoder[Arm] >= -1110)
+		{
+			motor[Arm] = -50;
+		}
+		nMotorEncoder[Arm] = 0;*/
+
+
 	}
 }
