@@ -44,7 +44,7 @@ task main()
 	TurnLeftDegrees(90, 50);
 	wait1Msec(8000);
 	DriveBackwardDistanceGyro(57, 20);
-	SetGoalGrabberPos(GRAB_GOAL_SERVO_POS);
+	GrabGoal();
 	DriveForwardDistanceGyro(70,20);
 	TurnRightDegrees(45,20);
 	DriveForwardDistanceGyro(10,20);

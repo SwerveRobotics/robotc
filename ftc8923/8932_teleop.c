@@ -39,35 +39,35 @@ task main()
 		//Goal grabber commands
 		if(joy1Btn(8) == 1)
 		{
-			SetGoalGrabberPos(GRAB_GOAL_SERVO_POS);
+			GrabGoal();
 		}
-		if(joy1Btn(2) == 1)
+		if(joy1Btn(7) == 1)
 		{
-			SetGoalGrabberPos(RELEASE_GOAL_SERVO_POS);
+			ReleaseGoal();
 		}
 
 		//Collector commands
 		if(joy2Btn(8) == 1)
 		{
-			RunCollector(RUN_COLLECTOR_FORWARD);
+			CollectBalls();
 		}
 		else if(joy2Btn(7) == 1)
 		{
-			RunCollector(RUN_COLLECTOR_BACKWARD);
+			ReleaseBalls();
 		}
 		else
 		{
-			RunCollector(STOP_COLLECTOR);
+			StopCollector();
 		}
 
 		//Container commands
 		if(joystick.joy2_TopHat == 0)
 		{
-			SetContainerPos(HOLD_BALLS);
+			HoldBalls();
 		}
 		else if(joystick.joy2_TopHat == 4)
 		{
-			SetContainerPos(DUMP_BALLS);
+			DumpBalls();
 		}
 
 		//Lift Commands

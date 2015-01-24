@@ -40,7 +40,7 @@ task main()
 
 	//Goto and grab medium goal
 	DriveBackwardDistanceGyro(90, 20);
-	SetGoalGrabberPos(GRAB_GOAL_SERVO_POS);
+	GrabGoal();
 	DriveBackwardDistance(5, 20);
 
 	//Place goal in parking zone
