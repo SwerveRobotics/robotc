@@ -95,11 +95,11 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 			case DriveActionTurnLeft:
 			case DriveActionTurnRight:
 				//If the robot stops turning, then it stops running
-				if(readGyroSpeed() == 0)
-				{
-					stopAction = true;
-					break;
-				}
+				//if(readGyroSpeed() == 0)
+				//{
+				//	stopAction = true;
+				//	break;
+				//}
 				//Turns until requested angle is reached
 				TurnRight(drivePower);
 				int angle = abs(readGyro());
