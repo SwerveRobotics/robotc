@@ -17,6 +17,20 @@ void RegisterBackwardButton(int button)
 	BACKWARD_BUTTON = button;
 }
 
+/* Reverse Drive Recommendation by Darrell
+bool ReverseDrive()
+{
+	// note that short-circuit may cause second term to not get evaluated
+	// if backward button is not set
+	return (BACKWARD_BUTTON >= 0 && joy1Btn(BACKWARD_BUTTON) == 1);
+}
+
+int ReverseDriveMultiplier()
+{
+	return (ReverseDrive() ? -1 : 1);
+}
+*/
+
 void RegisterSlowModeButton(int button)
 {
 	SLOW_MODE_BUTTON = button;
@@ -32,6 +46,23 @@ task DriveTank()
 	while(true)
 	{
 		getJoystickSettings(joystick);
+
+/* Reverse Drive Recommendation by Darrell
+ * Follow this pattern to implement slow drive by looking at the functions I have written.
+ * @todo to use these, the functions implemented in tank_4m.c must be also set in tank_2m.c, tank_6m.c, and parallel_pairs.c
+
+		ReverseDriveMotors(ReverseDrive()); // sets motors to correct setting
+		if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
+			DriveLeftMotors(ReverseDriveMultiplier()*joystick.joy1_y1);
+		else
+			StopLeftDriveMotors();
+
+		if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
+			DriveRightMotors(ReverseDriveMultiplier()*joystick.joy1_y2);
+		else
+			StopRightDriveMotors();
+*/
+
 
 		//Drive forward
 		if(BACKWARD_BUTTON < 0 || joy1Btn(BACKWARD_BUTTON) == 0)
