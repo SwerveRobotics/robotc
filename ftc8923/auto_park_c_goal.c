@@ -39,7 +39,8 @@ task main()
 	//Get positioned to detect beacon
 	DriveBackwardDistanceGyro(10, 50);
 	TurnLeftDegrees(70, 30);
-	DriveBackwardDistanceGyro(21, 20);
+	DriveBackwardDistanceGyro(20, 20);
+
 
 	DectectFloorIR();
 
