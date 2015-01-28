@@ -7,39 +7,7 @@
 #include "JoystickDriver.c"
 #include "../drive_modes/drive_modes.h"
 #include "../controllers/controller_defines.h"
-
-int BACKWARD_BUTTON = -1; // Set to non-button so no accidental backwards driving ensues
-int SLOW_MODE_BUTTON = -1;
-int SLOW_MODE_DIVISOR = 1;
-
-void RegisterBackwardButton(int button)
-{
-	BACKWARD_BUTTON = button;
-}
-
-/* Reverse Drive Recommendation by Darrell
-bool ReverseDrive()
-{
-	// note that short-circuit may cause second term to not get evaluated
-	// if backward button is not set
-	return (BACKWARD_BUTTON >= 0 && joy1Btn(BACKWARD_BUTTON) == 1);
-}
-
-int ReverseDriveMultiplier()
-{
-	return (ReverseDrive() ? -1 : 1);
-}
-*/
-
-void RegisterSlowModeButton(int button)
-{
-	SLOW_MODE_BUTTON = button;
-}
-
-void SlowModeDivisor(int divisor)
-{
-	SLOW_MODE_DIVISOR = divisor;
-}
+#include "tank_controller_options.c"
 
 task DriveTank()
 {
