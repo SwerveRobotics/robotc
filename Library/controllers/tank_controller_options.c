@@ -3,7 +3,7 @@
 
 int BACKWARD_BUTTON = -1; // Set to non-button so no accidental backwards driving ensues
 int SLOW_MODE_BUTTON = -1;
-float DRIVE_POWER_MULTIPLIER = 1;
+float SLOW_MODE_DIVISOR = 1;
 
 void RegisterBackwardButton(int button)
 {
@@ -28,9 +28,19 @@ void RegisterSlowModeButton(int button)
 	SLOW_MODE_BUTTON = button;
 }
 
-void SetSlowModeMultiplier(int multiplier)
+void SetSlowModeDivisor(int divisor)
 {
-	DRIVE_POWER_MULTIPLIER = multiplier;
+	SLOW_MODE_DIVISOR = divisor;
+}
+
+bool DriveSlow()
+{
+	return (BACKWARD_BUTTON >= 0 && joy1Btn(BACKWARD_BUTTON) == 1);
+}
+
+int SlowModeDivisor()
+{
+	return (DriveSlow() ? SLOW_MODE_DIVISOR: 1);
 }
 
 #endif
