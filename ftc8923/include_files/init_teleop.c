@@ -5,7 +5,8 @@
 void InitializeTeleop()
 {
 	ASSUME_CONTROLLER_INPUT = true;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
+	RegisterDriveMotorPair(mtrFL, mtrFR, 0);
+	RegisterDriveMotorPair(mtrBL, mtrBR, 1);
 	GrabGoal();
 }
 #endif
