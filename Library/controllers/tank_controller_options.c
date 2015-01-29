@@ -1,9 +1,11 @@
 #ifndef TANK_CONTROLLER_OPTIONS_C
 #define TANK_CONTROLLER_OPTIONS_C
 
+/// @todo rename file to generic options.c
+/// @todo make naming the same (reverse vs backward)
+
+////// REVERSE MODE /////////
 int BACKWARD_BUTTON = -1; // Set to non-button so no accidental backwards driving ensues
-int SLOW_MODE_BUTTON = -1;
-float SLOW_MODE_DIVISOR = 1;
 
 void RegisterBackwardButton(int button)
 {
@@ -23,6 +25,11 @@ int ReverseDriveMultiplier()
 	return (ReverseDrive() ? -1 : 1);
 }
 
+
+////// SLOW MODE /////////
+int SLOW_MODE_BUTTON = -1;
+float SLOW_MODE_DIVISOR = 1;
+
 void RegisterSlowModeButton(int button)
 {
 	SLOW_MODE_BUTTON = button;
@@ -40,7 +47,7 @@ bool DriveSlow()
 
 int SlowModeDivisor()
 {
-	return (DriveSlow() ? SLOW_MODE_DIVISOR: 1);
+	return (DriveSlow() ? SLOW_MODE_DIVISOR : 1);
 }
 
 #endif
