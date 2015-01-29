@@ -27,6 +27,9 @@
 /// !!! SETUP INSTRUCTIONS !!! ///
 // Place robot facing away from ramp slope, 1/2 inch from rear edge, centered between ledge and field fence
 
+/* code review by Darrell
+	This file does not compile. All commits must compile.
+*/
 
 //Autonomous is undergoing reorganization this file will not compile
 #include "includes/auto_swive.c"
