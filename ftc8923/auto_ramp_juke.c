@@ -29,7 +29,7 @@
 //the center of the goal.
 ////////////////////////////////////////
 
-#define TANK_4M
+#define PARALLEL_PAIRS
 
 #include "include_files/includes.h"
 

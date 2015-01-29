@@ -28,7 +28,7 @@
 //the inside edge of the tile seam.
 ////////////////////////////////////////
 
-#define TANK_4M
+#define PARALLEL_PAIRS
 
 #include "include_files/includes.h"
 
