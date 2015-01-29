@@ -69,9 +69,9 @@ task main()
 	servoSweep2,
 	);
 
-	float Kp = 0.008;
-	float Ki = 0.015;
-	float Kd = 0.000;
+	float Kp = 0.009;
+	float Ki = 0.008;
+	float Kd = 0.005;
 	float errorPrevSum = 0;
 	float errorPrev = 0;
 	float error;
@@ -89,19 +89,14 @@ task main()
 	int joyX;
 	int joyY;
 	int joyZ;
-	bool debug = false;
 
-	while(debug)
-	{
-		servo[servoFL] = 255;
-	}
-	while(!debug)
+	while(true)
 	{
 		joyX = joystick.joy1_x2;
 		joyY = joystick.joy1_y2;
 		joyZ = joystick.joy1_x1;
 		joyDistance = sqrt( pow(joyX, 2) + pow( joyY, 2) );
-		joyAngle = 57.3 * atan2(joyY, joyX);
+		joyAngle = -57.3 * atan2(joyY, joyX);
 
 		angPrev = ang;
 		newAngPrev = newAng;
@@ -113,27 +108,39 @@ task main()
 		{
 			ang = joyAngle;
 
-			if (abs(ang) > 90)
+			/*if (abs(ang) > 90)
 			{
-				if (sgn(ang * angPrev) == -1)
-				{
-					n = n + -1 * sgn(ang);
-				}
+			if (sgn(ang * angPrev) == -1)
+			{
+			n = n + -1 * sgn(ang);
+			}
 			}
 			if (n > 3)
 			{
-				n = 4.0;
+			n = 4.0;
 			}
 			else if (n < -3)
 			{
-				n = -3.0;
+			n = -3.0;
+			}*/
+			if (abs(ang - angPrev) > 180)
+			{
+				n = n + -360 * sgn(ang-angPrev);
 			}
-			newAng = ang + n * 360 - 90;
-		}
-		error = newAng - GetCRServoPosition(BACK_RIGHT);
-		servoSpeed = ( Kp * error ) + ( Ki * errorPrevSum ) + ( Kd * (error - errorPrev) );
 
-		nxtDisplayBigTextLine(3, "%f", newAng);
+			else if (abs(ang - angPrev) > 90)
+			{
+				n = n + -180 * sgn(ang-angPrev);
+			}
+			newAng = ang + n - 90;
+			/*if (abs(newAng - angPrev) > 90)
+			{
+				n = n + -180 * sgn(ang-angPrev);
+			}
+			newAng = ang + n - 90;*/
+		}
+		error = newAng + GetCRServoPosition(FRONT_LEFT);
+		servoSpeed = ( Kp * error ) + ( Ki * errorPrevSum ) + ( Kd * (error - errorPrev) );
 		servo[Assembly[FRONT_LEFT].driveServo] = 127 * ( -1 * servoSpeed + 1);
 
 		errorPrev = error;
