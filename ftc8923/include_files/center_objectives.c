@@ -59,12 +59,15 @@ void CenterGoalScorePos1()
 
 void CenterGoalScorePos2()
 {
+	TurnRightDegrees(120,50);
+	DriveBackwardDistanceGyro(25, 30);
+	TurnLeftDegrees(20, 50);
 
 }
 
 void CenterGoalScorePos3()
 {
-	DriveForwardDistanceGyro(33, 30);
+	DriveForwardDistanceGyro(32, 30);
 	TurnRightDegrees(66, 50);
 	DriveBackwardDistanceGyro(24, 20);
 	SetLiftPower(50);
