@@ -5,8 +5,10 @@
 void InitializeTeleop()
 {
 	ASSUME_CONTROLLER_INPUT = true;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
-	RegisterBackwardButton(7);
+	RegisterDriveMotorPair(mtrFL, mtrFR, 0);
+	RegisterDriveMotorPair(mtrBL, mtrBR, 1);
+	RegisterSlowModeButton(2);
+	SetSlowModeDivisor(3);
 	GrabGoal();
 }
 #endif

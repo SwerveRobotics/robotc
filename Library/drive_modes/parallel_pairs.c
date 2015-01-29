@@ -17,7 +17,6 @@ task main()
 }
 */
 
-
 #include "../motors/motors.c"
 
 typedef enum
@@ -32,15 +31,58 @@ const int MOTOR_PAIRS_COUNT = 4;
 tMotor LEFT_MOTORS[MOTOR_PAIRS_COUNT];
 tMotor RIGHT_MOTORS[MOTOR_PAIRS_COUNT];
 
+bool MOTORS_REVERSED = false; // for use with ReverseDriveMotors()
+
 void RegisterDriveMotorPair(tMotor leftMotor, tMotor rightMotor, PairCountEnum pair = 0)
 {
 	LEFT_MOTORS[pair] = leftMotor;
 	RIGHT_MOTORS[pair] = rightMotor;
 }
 
+bool MotorsReversed()
+{
+	return MOTORS_REVERSED;
+}
+
+// Designed for use when having the robot drive backwards as though it were driving forwards
+// Care still needs to be taken to negate the power direction inputs
+void ReverseDriveMotors(bool setReversed)
+{
+	tMotor oldLeftMotors[MOTOR_PAIRS_COUNT];
+	// if the request to reverse does not match the current status, then reverse
+	if(MotorsReversed() != setReversed)
+	{
+		for(unsigned int i=(unsigned int)PairCount1; i<(unsigned int)PairCountEnd; i++)
+		{
+			oldLeftMotors[i] = LEFT_MOTORS[i];
+		}
+
+		for(unsigned int i=(unsigned int)PairCount1; i<(unsigned int)PairCountEnd; i++)
+		{
+			unsigned int reverseIndex = (unsigned int)PairCountEnd-i-1;
+			LEFT_MOTORS[reverseIndex] = RIGHT_MOTORS[i];
+		}
+
+		for(unsigned int i=(unsigned int)PairCountEnd; i>(unsigned int)PairCount1; i--)
+		{
+			unsigned int reverseIndex = (unsigned int)PairCountEnd-i-1;
+			RIGHT_MOTORS[reverseIndex] = oldLeftMotors[i];
+		}
+
+		// Set flag for tracking status
+		MOTORS_REVERSED = !MOTORS_REVERSED;
+	}
+}
+
+void ToggleReverseDriveMotors()
+{
+	ReverseDriveMotors(MotorsReversed() ? false: true);
+}
+
 void DriveLeftMotors(int power)
 {
-	for(int i=PairCount1; i<PairCountEnd; i++)
+	power *= MotorsReversed() ? -1: 1;
+	for(int i=(int)PairCount1; i<(int)PairCountEnd; i++)
 	{
 		SetMotorPower(LEFT_MOTORS[i], power);
 	}
@@ -53,7 +95,8 @@ void StopLeftDriveMotors()
 
 void DriveRightMotors(int power)
 {
-	for(int i=PairCount1; i<PairCountEnd; i++)
+	power *= MotorsReversed() ? -1: 1;
+	for(int i=(int)PairCount1; i<(int)PairCountEnd; i++)
 	{
 		SetMotorPower(RIGHT_MOTORS[i], power);
 	}

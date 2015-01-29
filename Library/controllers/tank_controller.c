@@ -7,25 +7,7 @@
 #include "JoystickDriver.c"
 #include "../drive_modes/drive_modes.h"
 #include "../controllers/controller_defines.h"
-
-int BACKWARD_BUTTON = -1; // Set to non-button so no accidental backwards driving ensues
-int SLOW_MODE_BUTTON = -1;
-int SLOW_MODE_DIVISOR = 1;
-
-void RegisterBackwardButton(int button)
-{
-	BACKWARD_BUTTON = button;
-}
-
-void RegisterSlowModeButton(int button)
-{
-	SLOW_MODE_BUTTON = button;
-}
-
-void SlowModeDivisor(int divisor)
-{
-	SLOW_MODE_DIVISOR = divisor;
-}
+#include "tank_controller_options.c"
 
 task DriveTank()
 {
@@ -33,47 +15,17 @@ task DriveTank()
 	{
 		getJoystickSettings(joystick);
 
-		//Drive forward
-		if(BACKWARD_BUTTON < 0 || joy1Btn(BACKWARD_BUTTON) == 0)
-		{
-			if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
-				DriveLeftMotors(joystick.joy1_y1);
-			else
-				StopLeftDriveMotors();
+		ReverseDriveMotors(MotorsReversed());
 
-			if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
-				DriveRightMotors(joystick.joy1_y2);
-			else
-				StopRightDriveMotors();
-		}
-
-		//slow mode
-		if(SLOW_MODE_BUTTON < 0 || joy1Btn(SLOW_MODE_BUTTON) == 0)
-		{
-			if(abs(joystick.joy1_y1) > ANALOG_DEAD_ZONE)
-				DriveLeftMotors(joystick.joy1_y1 / SLOW_MODE_DIVISOR);
-			else
-				StopLeftDriveMotors();
-
-			if(abs(joystick.joy1_y2) > ANALOG_DEAD_ZONE)
-				DriveRightMotors(joystick.joy1_y2 / SLOW_MODE_DIVISOR);
-			else
-				StopRightDriveMotors();
-		}
-
-		//Drive Backward
+		if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
+			DriveLeftMotors(joystick.joy1_y1 / SlowModeDivisor());
 		else
-		{
-			if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
-				DriveRightMotors(-1*joystick.joy1_y1);
-			else
-				StopLeftDriveMotors();
+			StopLeftDriveMotors();
 
-			if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
-				DriveLeftMotors(-1*joystick.joy1_y2);
-			else
-				StopRightDriveMotors();
-		}
+		if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
+			DriveRightMotors(joystick.joy1_y2 / SlowModeDivisor());
+		else
+			StopRightDriveMotors();
 	}
 }
 
