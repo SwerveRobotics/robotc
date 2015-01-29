@@ -36,7 +36,7 @@
 
 task main()
 {
-	//RegisterDriveMotors(LeftMid, LeftSides, RightMid, RightSides);
+  RegisterDriveMotors(LeftMid, LeftSides, RightMid, RightSides);
 	InitializeTeleOP();
 
 	waitForStart();

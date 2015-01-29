@@ -27,9 +27,13 @@ typedef enum
 	PairCount4,  // back
 	PairCountEnd  // NEVER ASSIGN THIS - For Iteration only
 }PairCountEnum;
-const int MOTOR_PAIRS_COUNT = 4;
+const int MOTOR_PAIRS_COUNT = (int)PairCountEnd;
 tMotor LEFT_MOTORS[MOTOR_PAIRS_COUNT];
 tMotor RIGHT_MOTORS[MOTOR_PAIRS_COUNT];
+
+//@todo write a function to store the nubmer of pairs a user has
+// then modify the for-loops to not iterate beyond the set pair count
+// -> you coul deven set the pair count based on the RegisterDriveMotorPair() function
 
 bool MOTORS_REVERSED = false; // for use with ReverseDriveMotors()
 
@@ -43,6 +47,12 @@ bool MotorsReversed()
 {
 	return MOTORS_REVERSED;
 }
+//   ^^
+// FL  FR
+// FL2 FR2
+// FL3 FR3
+// FL4 FR4
+//   vv
 
 // Designed for use when having the robot drive backwards as though it were driving forwards
 // Care still needs to be taken to negate the power direction inputs
