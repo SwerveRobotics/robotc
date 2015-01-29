@@ -1,8 +1,8 @@
 #ifndef SERVOS_C
 #define SERVOS_C
 
-GOAL_GRABBER_GRAB_GOAL = 45;
-GOAL_GRABBER_RELEASE_GOAL = 150;
+int GOAL_GRABBER_GRAB_GOAL = 45;
+int GOAL_GRABBER_RELEASE_GOAL = 150;
 
 void SetServoPosition(tMotor servoName, int servoPosition)
 {
