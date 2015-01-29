@@ -176,8 +176,8 @@ TServoIndex tubeSwinch,  TServoIndex loaderS//manipulator servos
 	SetServo(Assembly[BACK_RIGHT].driveServo, 127);
 	servo[GRABBER_SERVO] = 11;
 	SetServo(Sweeper.armServo, 0);
-	SetServo(Sweeper.servo1, 128);
-	SetServo(Sweeper.servo2, 128);
+	SetServo(servoSweep1, 128);
+	SetServo(servoSweep2, 128);
 	SetStandardServoDegree(Tube.liftServo, 80);
 	SetServo(Tube.slideServo, 127);
 	SetCRServoEncoder(FRONT_LEFT,  0);
