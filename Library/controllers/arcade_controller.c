@@ -12,7 +12,6 @@
 
 task DriveArcade()
 {
-	int deadZone = 15;
 	while(true)
 	{
 		getJoystickSettings(joystick);
