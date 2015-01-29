@@ -8,7 +8,6 @@
 #include "../drive/auto_drive.c"
 #include "../drive_modes/drive_modes.h"
 #include "../sensors/gyro.c"
-#include "../motors/stall_protection.c"
 
 // May need to calibrate to specific robots
 int MOTOR_POWER_SHAVE = 3;
@@ -81,12 +80,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					stopAction = true;
 					break;
 				}
-				//If the robot stops moving, then it stops running
-				/*if(CurrentSpeed() == 0)
-				{
-					stopAction = true;
-					break;
-				}*/
 				//Adjusts power according to gyro reading
 				DriveRightMotors(drivePower+readGyro()*5);
 				DriveLeftMotors(drivePower-readGyro()*5);
@@ -94,12 +87,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 			//Turning code
 			case DriveActionTurnLeft:
 			case DriveActionTurnRight:
-				//If the robot stops turning, then it stops running
-				if(readGyroSpeed() == 0)
-				{
-					stopAction = true;
-					break;
-				}
 				//Turns until requested angle is reached
 				TurnRight(drivePower);
 				int angle = abs(readGyro());

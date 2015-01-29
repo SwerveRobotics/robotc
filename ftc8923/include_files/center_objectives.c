@@ -51,4 +51,26 @@ void KnockKickstandPos3()
 	TurnRightDegrees(125, 50);
 	DriveBackwardDistanceGyro(68, 100);
 }
+
+void CenterGoalScorePos1()
+{
+
+}
+
+void CenterGoalScorePos2()
+{
+
+}
+
+void CenterGoalScorePos3()
+{
+	DriveForwardDistanceGyro(33, 30);
+	TurnRightDegrees(66, 50);
+	DriveBackwardDistanceGyro(24, 20);
+	SetLiftPower(50);
+	wait1Msec(8900);
+	SetLiftPower(0);
+	DriveBackwardDistanceGyro(4, 20);
+}
+
 #endif
