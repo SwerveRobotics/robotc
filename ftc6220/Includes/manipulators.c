@@ -37,7 +37,7 @@ void RunSweeper(bool state)
 {
 	if (state == true)
 	{
-		SetMotorPower(Sweeper.motor1, 128);
+		SetMotorPower(Sweeper.motor1, -128);
 		SetServo(Sweeper.servo1, 255);
 		SetServo(Sweeper.servo2, 255);
 	}

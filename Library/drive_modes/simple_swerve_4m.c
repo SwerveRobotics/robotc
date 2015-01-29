@@ -75,7 +75,7 @@ void SimpleWriteToMotors(float cmps)
 	Drive[BACK_RIGHT].motorPower = cmps * reverseMotorFactor[BACK_RIGHT] * MOTOR_POWER_PER_CMPS;
 }
 
-void SetServos(float angle)
+void SetServosDirection(float angle)
 {
 	Drive[FRONT_LEFT].servoPosition = angle;
 	Drive[FRONT_RIGHT].servoPosition = angle;
