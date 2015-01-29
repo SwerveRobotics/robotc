@@ -1,6 +1,10 @@
 #ifndef SWERVE_4M_C
 #define SWERVE_4M_C
 
+/* code review by Darrell
+	driverRelativeMode should have a default initial value
+*/
+
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
 #include "../../ftc6220/includes/read_write.c"

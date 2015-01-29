@@ -1,6 +1,12 @@
 #ifndef READ_WRITE_C
 #define	READ_WRITE_C
 
+/* code review by Darrell
+	file name should describe contents.
+	if the contents are too varied to describe, then they should be divided into easily describable files
+	-> maybe move all the parameters to a "parameters.h" file?
+
+*/
 /// - SERVE DRIVE AND CONVERSION PARAMETERS - ///
 
 int reverseMotorFactor[4] = {1, 1, 1, 1};
@@ -169,6 +175,12 @@ TServoIndex tubeSwinch,  TServoIndex loaderS//manipulator servos
 	Sweeper.armServo  = sweeperSArm;
 	Sweeper.servo1    = sweeperS1;
 	Sweeper.servo2    = sweeperS2;
+
+	/* code review by Darrell
+		The close below here should *not* be done in your register function.
+		If you need to initialize stuff, then do it in an intialize function.
+		Register should *only* register.
+	*/
 
 	SetServo(Assembly[FRONT_LEFT].driveServo, 127);
 	SetServo(Assembly[FRONT_RIGHT].driveServo, 127);
