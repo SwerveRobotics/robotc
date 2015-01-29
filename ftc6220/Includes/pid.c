@@ -22,8 +22,11 @@ float RErrorSum;
 
 task PID()
 {
-	resetGyro();
-	startGyro();
+	if (driverRelativeMode == true)
+	{
+		resetGyro();
+		startGyro();
+	}
 	while (true)
 	{
 		//servo pid
@@ -49,19 +52,19 @@ task PID()
 			Drive[p].error = Drive[p].servoTgt - GetCRServoPosition(p);
 
 			Drive[p].servoSpeed = (Sp * Drive[p].error) + (Si * Drive[p].errorSum) + (Sd * Drive[p].error - Drive[p].errorPrev);
-			SetServo(Assembly[p].servo, Drive[p].servoSpeed);
+			SetServo(Assembly[p].driveServo, Drive[p].servoSpeed);
 		}
 
-		//motors
+		/*//pid for rotating the robot to a specific angle
 		RLastAngle = readGyro();
 		RErrorPrev = RError;
 		RErrorSum += RErrorPrev;
 		RError = RTgt - readGyro();
-		if (rotateMode == True)
+		if (rotateMode == true)
 		{
 			float mag = (Rp * RError) + (Ri * RErrorSum) + (Rd * RError - RErrorPrev);
 			SimpleWriteToMotors(mag * MAX_MOTOR_SPEED_CMPS);
-		}
+		}*/
 		wait1Msec(100);
 	}
 }
