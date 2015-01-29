@@ -4,7 +4,7 @@
 const float ANALOG_DEAD_ZONE = 15.0;
 const float MAX_ANALOG = 128.0;
 
-const int joystickRange = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
+const int INPUT_RANGE = MAX_ANALOG - ANALOG_DEAD_ZONE; //allowed input range along any axis from the joystick.
 
 // Desired Controller Input and Motor Ouput is assumed to be as follows:
 // INPUT             OUTPUT
