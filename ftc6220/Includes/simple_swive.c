@@ -15,10 +15,10 @@
 
 
 
-task drive()
+task DriveTask()
 {
 	//initialization
-	bool driverRelativeMode = true;
+	driverRelativeMode = false;
 	float joyDistance;
 	int joyX;
 	int joyY;
@@ -42,12 +42,11 @@ task drive()
 			}
 			else
 			{
-				driveDirection = RADIAN_TO_DEGREE * atan2(joyY, joyX) - readGyro();
+				driveDirection = RADIAN_TO_DEGREE * atan2(joyY, joyX);
 			}
 			float driveMagnitude = JoystickToMagnitude(joyDistance);
 			SimpleWriteToMotors(driveMagnitude * MAX_MOTOR_SPEED_CMPS);
 			SetServos(driveDirection);
-
 		}
 		else
 		{
