@@ -37,7 +37,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	resetGyro();
 	bool failed = false;
 	bool stopAction = false;
-	LAST_ENCODER_VALUE = 0;
+
 
 	//Makes robot go in opposite direction to avoid rewriting code
 	if(driveAction == DriveActionBackward || driveAction == DriveActionTurnLeft)
@@ -48,7 +48,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	//Gets robot going so it doesn't stop instantly if the robot isn't moving
 	if(driveAction == DriveActionBackward || driveAction == DriveActionForward)
 	{
-		StartTask(MonitorEncoder);
 		DriveForward(drivePower);
 		wait1Msec(100);
 	}
@@ -97,7 +96,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	}
 	StopAllDriveMotors();
 	stopGyro();
-	StopTask(MonitorEncoder);
+
 }
 
 void TurnLeftDegrees(int degrees, int power)
