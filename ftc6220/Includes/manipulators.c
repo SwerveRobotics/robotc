@@ -4,7 +4,6 @@
 #include "read_write.c"
 #include "JoystickDriver.c"
 
-const tSensors tubeTouchSensor = (tSensors) S4;
 
 //either enable or disable the goal grabber by raising and lowering the "hook" servo
 void EnableGoalGrabber(bool state)
@@ -25,11 +24,11 @@ void EnableSweeper(bool state)
 {
 	if (state == true)
 	{
-		SetServo(SWEEPER_SERVO_ARM, 127);
+		SetServo(Sweeper.armServo, 127);
 	}
 	else
 	{
-		SetServo(SWEEPER_SERVO_ARM, 18);
+		SetServo(Sweeper.armServo, 18);
 	}
 }
 
@@ -38,11 +37,15 @@ void RunSweeper(bool state)
 {
 	if (state == true)
 	{
-		SetMotorPower(SWEEPER_MOTOR, 128);
+		SetMotorPower(Sweeper.motor1, 128);
+		SetServo(Sweeper.servo1, 255);
+		SetServo(Sweeper.servo2, 255);
 	}
 	else
 	{
-		SetMotorPower(SWEEPER_MOTOR, 0);
+		SetMotorPower(Sweeper.motor1, 0);
+		SetServo(Sweeper.servo1, 127);
+		SetServo(Sweeper.servo2, 127);
 	}
 }
 
@@ -51,7 +54,7 @@ void RunFan(bool state)
 {
 	if (state == true)
 	{
-		SetMotorPower(FAN_MOTOR_1, 128);
+		SetMotorPower(FAN_MOTOR_1, -128);
 		SetMotorPower(FAN_MOTOR_2, 128);
 	}
 	else
@@ -66,29 +69,34 @@ void LoadTube(bool state)
 {
 	if (state == true)
 	{
-		SetServo(LOADER_SERVO, 0);
+		SetServo(Tube.loaderServo, 17);
 	}
 	else
 	{
-		SetServo(LOADER_SERVO, 255);
+		SetServo(Tube.loaderServo, 249);
 	}
+}
+
+void SetTubeHeight(float h)
+{
+	int n = h;//needs to be recongfigured for cm
+	SetServo(Tube.winchServo, n);
 }
 
 //needs changing to incorporate the exnding tube. also wrong servo.
-void liftTube()
+void LiftTube()
 {
-	SetStandardServoDegree(TUBE_SERVO_LIFT, 90);// lift the tube to vertical
-	wait1Msec(50);
-	SetStandardServoDegree(TUBE_SERVO_LIFT, 0);
-	while(SensorValue(tubeTouchSensor) == 0)//drag the tube to the loader
+	//verticalize tube?
+	while(SensorValue(Tube.touchSensor) == 1023)//drag the tube to the loader
 	{
-		SetServo(TUBE_SERVO_SLIDE, 255);
+		SetServo(Tube.slideServo, 0);
+		wait10Msec(10);
 	}
-	SetServo(TUBE_SERVO_SLIDE, 127);
-	//extend tube?
+	SetServo(Tube.slideServo, 127);
+	SetTubeHeight(HIGH_GOAL_HEIGHT);
 }
 
-task manipulators()
+task Manipulators()
 {
 	bool grabbed      = false;
 	bool grabberReady = true;
@@ -98,7 +106,12 @@ task manipulators()
 
 	bool tubeToggle   = false;
 	bool tubeReady    = true;
-	liftTube();
+
+	bool fanRunning   = false;
+	bool fanReady     = true;
+	LiftTube();
+	RunFan(true);
+	fanRunning = true;
 	while(true)
 	{
 		//   !!!   begin goal grabber   !!!   //
@@ -154,9 +167,9 @@ task manipulators()
 		}
 		///   !!!   end sweeper   !!!   ///
 
-		/*
+
 		///   !!!   begin tube   !!!   ///
-		if ((joystick.joy1_Buttons == 4) & tubeReady == true)
+		if ((joystick.joy2_Buttons == 4) & tubeReady == true)
 		{
 			tubeReady = false;
 			if (tubeToggle == false)
@@ -170,12 +183,46 @@ task manipulators()
 				LoadTube(false);
 			}
 		}
-		else if (joystick.joy1_Buttons != 4)
+		else if (joystick.joy2_Buttons != 4)
 		{
 			tubeReady = true;
 		}
+
+		if (joystick.joy2_TopHat == 0)
+		{
+			SetTubeHeight(CENTER_GOAL_HEIGHT);
+		}
+		else if (joystick.joy2_TopHat == 6)
+		{
+			SetTubeHeight(HIGH_GOAL_HEIGHT);
+		}
+		else if (joystick.joy2_TopHat == 4)
+		{
+			SetTubeHeight(MEDIUM_GOAL_HEIGHT);
+		}
 		///   !!!   end tube   !!!   ///
-		*/
+
+
+		///   !!!   begin fan  !!!   ///
+		if ((joystick.joy2_Buttons == 1) & fanReady == true)
+		{
+			fanReady = false;
+			if (fanRunning == false)
+			{
+				fanRunning = true;
+				RunFan(true);
+			}
+			else
+			{
+				fanRunning = false;
+				RunFan(false);
+			}
+		}
+		else if (joystick.joy2_Buttons != 1)
+		{
+			fanReady = true;
+		}
+		///   !!!   end fan    !!!   ///
 
 	}
 }

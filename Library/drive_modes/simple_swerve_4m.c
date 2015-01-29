@@ -5,6 +5,7 @@
 #include "../motors/motors.c"
 #include "../../ftc6220/includes/read_write.c"
 
+bool driverRelativeMode; //if true, the robot will be relative to the field and driver. if false, it will drive like a car
 
 //swerve module structure for storing all values specific to any given drive assembly
 typedef struct
