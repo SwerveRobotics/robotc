@@ -24,14 +24,14 @@
 #pragma config(Servo,  srvo_S2_C3_4,    servo2_3_4,           tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_5,    servo2_3_5,           tServoStandard)
 #pragma config(Servo,  srvo_S2_C3_6,    servo2_3_6,           tServoStandard)
-#pragma config(Servo,  srvo_S3_C1_1,    servoSweep1,          tServoContinuousRotation)
-#pragma config(Servo,  srvo_S3_C1_2,    servoSweep2,          tServoContinuousRotation)
+#pragma config(Servo,  srvo_S3_C1_1,    servoSweepArm,          tServoContinuousRotation)
+#pragma config(Servo,  srvo_S3_C1_2,    servoTubeWinch,          tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_3,    servoLoader,          tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_4,    servo3_1_4,           tServoContinuousRotation)
 #pragma config(Servo,  srvo_S3_C1_5,    servo3_1_5,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C1_6,    servo3_1_6,           tServoStandard)
-#pragma config(Servo,  srvo_S3_C2_1,    servoSweepArm,        tServoStandard)
-#pragma config(Servo,  srvo_S3_C2_2,    servoTubeWinch,       tServoStandard)
+#pragma config(Servo,  srvo_S3_C2_1,    servoSweep1,        tServoStandard)
+#pragma config(Servo,  srvo_S3_C2_2,    servoSweep2,       tServoStandard)
 #pragma config(Servo,  srvo_S3_C2_3,    servoGrabber,         tServoStandard)
 #pragma config(Servo,  srvo_S3_C2_4,    servo3_2_4,           tServoStandard)
 #pragma config(Servo,  srvo_S3_C2_5,    servo3_2_5,           tServoStandard)
@@ -78,7 +78,6 @@ task main()
 	waitForStart();
 	StartTask(DriveTask);
 	StartTask(Manipulators);
-
 	while(true)
 	{
 		//not sure what to put here yet

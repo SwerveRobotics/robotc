@@ -46,7 +46,7 @@ task DriveTask()
 			}
 			float driveMagnitude = JoystickToMagnitude(joyDistance);
 			SimpleWriteToMotors(driveMagnitude * MAX_MOTOR_SPEED_CMPS);
-			SetServos(driveDirection);
+			SetServosDirection(driveDirection);
 		}
 		else
 		{

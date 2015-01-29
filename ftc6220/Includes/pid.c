@@ -30,7 +30,7 @@ task PID()
 	while (true)
 	{
 		//servo pid
-		for (CornerEnum p; p <= 4; p++)
+		for (CornerEnum p; p < 4; p++)
 		{
 			//update PID specific past values
 			Drive[p].servoPositionPrev = Drive[p].servoPosition;
