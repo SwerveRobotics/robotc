@@ -14,7 +14,7 @@ void EnableGoalGrabber(bool state)
 	}
 	else
 	{
-		SetServo(GRABBER_SERVO, 0);
+		SetServo(GRABBER_SERVO, 8);
 	}
 }
 

@@ -139,9 +139,9 @@ task main()
 			}
 			newAng = ang + n - 90;*/
 		}
-		error = newAng + GetCRServoPosition(FRONT_LEFT);
+		error = newAng + GetCRServoPosition(BACK_LEFT);
 		servoSpeed = ( Kp * error ) + ( Ki * errorPrevSum ) + ( Kd * (error - errorPrev) );
-		servo[Assembly[FRONT_LEFT].driveServo] = 127 * ( -1 * servoSpeed + 1);
+		servo[Assembly[BACK_LEFT].driveServo] = 127 * ( -1 * servoSpeed + 1);
 
 		errorPrev = error;
 		errorPrevSum = errorPrevSum + errorPrev * 0.005;
