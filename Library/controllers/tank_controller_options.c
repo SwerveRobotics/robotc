@@ -42,7 +42,7 @@ void SetSlowModeDivisor(int divisor)
 
 bool DriveSlow()
 {
-	return (BACKWARD_BUTTON >= 0 && joy1Btn(BACKWARD_BUTTON) == 1);
+	return (SLOW_MODE_BUTTON >= 0 && joy1Btn(SLOW_MODE_BUTTON) == 1);
 }
 
 int SlowModeDivisor()
