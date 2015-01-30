@@ -47,6 +47,7 @@ bool MotorsReversed()
 {
 	return MOTORS_REVERSED;
 }
+
 //   ^^
 // FL  FR
 // FL2 FR2
@@ -70,13 +71,13 @@ void ReverseDriveMotors(bool setReversed)
 		for(unsigned int i=(unsigned int)PairCount1; i<(unsigned int)PairCountEnd; i++)
 		{
 			unsigned int reverseIndex = (unsigned int)PairCountEnd-i-1;
-			LEFT_MOTORS[reverseIndex] = RIGHT_MOTORS[i];
+			LEFT_MOTORS[i] = RIGHT_MOTORS[i];
 		}
 
-		for(unsigned int i=(unsigned int)PairCountEnd; i>(unsigned int)PairCount1; i--)
+		for(unsigned int i=(unsigned int)PairCount1; i>(unsigned int)PairCountEnd; i++)
 		{
 			unsigned int reverseIndex = (unsigned int)PairCountEnd-i-1;
-			RIGHT_MOTORS[reverseIndex] = oldLeftMotors[i];
+			RIGHT_MOTORS[i] = oldLeftMotors[i];
 		}
 
 		// Set flag for tracking status
@@ -91,7 +92,7 @@ void ToggleReverseDriveMotors()
 
 void DriveLeftMotors(int power)
 {
-	power *= MotorsReversed() ? -1: 1;
+	power *= (MotorsReversed() ? -1: 1);
 	for(int i=(int)PairCount1; i<(int)PairCountEnd; i++)
 	{
 		SetMotorPower(LEFT_MOTORS[i], power);
@@ -105,7 +106,7 @@ void StopLeftDriveMotors()
 
 void DriveRightMotors(int power)
 {
-	power *= MotorsReversed() ? -1: 1;
+	power *= (MotorsReversed() ? -1: 1);
 	for(int i=(int)PairCount1; i<(int)PairCountEnd; i++)
 	{
 		SetMotorPower(RIGHT_MOTORS[i], power);
