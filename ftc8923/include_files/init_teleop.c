@@ -9,6 +9,7 @@ void InitializeTeleop()
 	RegisterDriveMotorPair(mtrBL, mtrBR, 1);
 	RegisterSlowModeButton(2);
 	SetSlowModeDivisor(3);
+	RegisterBackwardButton(1);
 	GrabGoal();
 }
 #endif
