@@ -15,7 +15,7 @@ task DriveTank()
 	{
 		getJoystickSettings(joystick);
 
-		ReverseDriveMotors(MotorsReversed());
+		ReverseDriveMotors(ReverseDrive());
 
 		if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
 			DriveLeftMotors(joystick.joy1_y1 / SlowModeDivisor());
