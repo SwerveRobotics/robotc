@@ -20,12 +20,6 @@ bool ReverseDrive()
 	return (BACKWARD_BUTTON >= 0 && joy1Btn(BACKWARD_BUTTON) == 1);
 }
 
-int ReverseDriveMultiplier()
-{
-	return (ReverseDrive() ? -1 : 1);
-}
-
-
 ////// SLOW MODE /////////
 int SLOW_MODE_BUTTON = -1;
 float SLOW_MODE_DIVISOR = 1;
