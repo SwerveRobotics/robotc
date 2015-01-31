@@ -1,12 +1,6 @@
 #ifndef READ_WRITE_C
 #define	READ_WRITE_C
 
-/* code review by Darrell
-	file name should describe contents.
-	if the contents are too varied to describe, then they should be divided into easily describable files
-	-> maybe move all the parameters to a "parameters.h" file?
-
-*/
 /// - SERVE DRIVE AND CONVERSION PARAMETERS - ///
 
 int reverseMotorFactor[4] = {1, 1, 1, 1};
@@ -32,9 +26,7 @@ const float ENCODER_TO_DEG = 360 / ENCODER_RESOLUTION;
 const float DEG_TO_ENCODER = ENCODER_RESOLUTION / 360;
 const float DEG_TO_WINCH_TICK = 4.235;
 
-const float MEDIUM_GOAL_HEIGHT = 182;
-const float HIGH_GOAL_HEIGHT = 133;
-const float CENTER_GOAL_HEIGHT = 54;
+
 /// -           END OF PARAMETERS           - ///
 
 
@@ -51,7 +43,7 @@ CornerEnum;
 //structure used to reference servos, sensors, and motors that are accocated with a given drive assembly
 typedef struct
 {
-	TServoIndex driveServo;
+	TServoIndex servo;
 	tSensors zeroTrigger;
 	tMotor driveMotor;
 	tMotor encoder;
@@ -60,35 +52,25 @@ DriveAssemblyHardware;
 
 DriveAssemblyHardware Assembly[4];
 
-//structures used to reference servos, sensors, and motors that are accocated with a given manipulator
+//structure used to reference servos, sensors, and motors that are accocated with a given manipulator//unused as of yet
 typedef struct
 {
-	TServoIndex liftServo;
-	TServoIndex winchServo;
-	TServoIndex slideServo;
-	TServoIndex loaderServo;
-	tSensors touchSensor;
+	TServoIndex servo;
+	tSensors sensor;
+	tMotor motor;
 }
-TubeStruct;
+ManipulatorStruct;
 
-TubeStruct Tube;
+ManipulatorStruct Manipulator[4];
 
-typedef struct
-{
-	tMotor motor1;
-	TServoIndex servo1;
-	TServoIndex servo2;
-	TServoIndex armServo;
-}
-SweeperStruct;
-
-SweeperStruct Sweeper;
-
-// these variables will be used to write to the motors and servos outside of the drive, tube, or sweeper
+// these variables will be used to write to the motors and servos
+tMotor SWEEPER_MOTOR;
 tMotor FAN_MOTOR_1;
 tMotor FAN_MOTOR_2;
+
 TServoIndex GRABBER_SERVO;
-tSensors IR_SENSOR;
+TServoIndex SWEEPER_SERVO;
+TServoIndex TUBE_SERVO;
 
 //send a servo a value
 void SetServo(TServoIndex servoName, int value)
@@ -99,9 +81,8 @@ void SetServo(TServoIndex servoName, int value)
 //send a standard servo to a degree position rather than ticks
 void SetStandardServoDegree(TServoIndex servoName, float angle)
 {
-	SetServo(servoName, angle / 360 * STANDARD_SERVO_TICKS * 2);
+	SetServo(servoName, angle / 360 * STANDARD_SERVO_TICKS);
 }
-
 
 //Set motor power
 void SetMotorPower(tMotor motorName, float power)
@@ -109,10 +90,15 @@ void SetMotorPower(tMotor motorName, float power)
 	motor[motorName] = floor(power);
 }
 
+int MotorPower(float cmps)
+{
+	return floor(MOTOR_POWER_PER_CMPS * MOTOR_GEAR_RATIO * cmps);
+}
+
 //Set Motor Power from a CM/S value
 void CMPSToMotor(tMotor motorName, float cmps)
 {
-	SetMotorPower(Assembly[motorName].driveMotor, MOTOR_POWER_PER_CMPS * MOTOR_GEAR_RATIO * cmps);
+	SetMotorPower(Assembly[motorName].driveMotor, MotorPower(cmps));
 }
 
 //return the position of a drive assembly CR servo in degrees
@@ -149,7 +135,7 @@ tMotor motorF2                                 //manipulator motors
 	Assembly[BACK_LEFT].encoder    = backLeftM;
 	Assembly[FRONT_RIGHT].encoder  = frontRightM;
 	Assembly[BACK_RIGHT].encoder   = backRightM;
-	Sweeper.motor1    = motorS;
+	SWEEPER_MOTOR     = motorS;
 	FAN_MOTOR_1       = motorF1;
 	FAN_MOTOR_2       = motorF2;
 }
@@ -158,40 +144,22 @@ tMotor motorF2                                 //manipulator motors
 void RegisterServos(
 TServoIndex frontLeftS,  TServoIndex backLeftS,
 TServoIndex backRightS,  TServoIndex frontRightS,//drive servos
-TServoIndex grabberS,    TServoIndex sweeperSArm,
-TServoIndex sweeperS1,   TServoIndex sweeperS2,
-TServoIndex tubeSlift,   TServoIndex tubeSslide,
-TServoIndex tubeSwinch,  TServoIndex loaderS//manipulator servos
+TServoIndex grabberS,    TServoIndex sweeperS,
+TServoIndex tubeS                                //manipulator servos
 ){
-	Assembly[FRONT_LEFT].driveServo  = frontLeftS;
-	Assembly[BACK_LEFT].driveServo   = backLeftS;
-	Assembly[FRONT_RIGHT].driveServo = frontRightS;
-	Assembly[BACK_RIGHT].driveServo  = backRightS;
+	Assembly[FRONT_LEFT].servo  = frontLeftS;
+	Assembly[BACK_LEFT].servo   = backLeftS;
+	Assembly[FRONT_RIGHT].servo = frontRightS;
+	Assembly[BACK_RIGHT].servo  = backRightS;
 	GRABBER_SERVO     = grabberS;
-	Tube.winchServo   = tubeSwinch;
-	Tube.liftServo    = tubeSlift;
-	Tube.slideServo   = tubeSslide;
-	Tube.loaderServo  = loaderS;
-	Sweeper.armServo  = sweeperSArm;
-	Sweeper.servo1    = sweeperS1;
-	Sweeper.servo2    = sweeperS2;
+	SWEEPER_SERVO     = sweeperS;
+	TUBE_SERVO        = tubeS;
 
-	/* code review by Darrell
-		The close below here should *not* be done in your register function.
-		If you need to initialize stuff, then do it in an intialize function.
-		Register should *only* register.
-	*/
-
-	SetServo(Assembly[FRONT_LEFT].driveServo, 127);
-	SetServo(Assembly[FRONT_RIGHT].driveServo, 127);
-	SetServo(Assembly[BACK_LEFT].driveServo, 127);
-	SetServo(Assembly[BACK_RIGHT].driveServo, 127);
+	SetServo(Assembly[FRONT_LEFT].servo, 127);
+	SetServo(Assembly[FRONT_RIGHT].servo, 127);
+	SetServo(Assembly[BACK_LEFT].servo, 127);
+	SetServo(Assembly[BACK_RIGHT].servo, 127);
 	servo[GRABBER_SERVO] = 11;
-	SetServo(Sweeper.armServo, 0);
-	SetServo(Sweeper.servo1, 128);
-	SetServo(Sweeper.servo2, 128);
-	SetStandardServoDegree(Tube.liftServo, 80);
-	SetServo(Tube.slideServo, 127);
 	SetCRServoEncoder(FRONT_LEFT,  0);
 	SetCRServoEncoder(FRONT_RIGHT, 0);
 	SetCRServoEncoder(BACK_RIGHT,  0);

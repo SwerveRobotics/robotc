@@ -4,7 +4,8 @@
 void InitializeAuto()
 {
 	ASSUME_CONTROLLER_INPUT = false;
-	RegisterDriveMotors(mtrFL, mtrBL, mtrFR, mtrBR);
+	RegisterDriveMotorPair(mtrFL, mtrFR, 0);
+	RegisterDriveMotorPair(mtrBL, mtrBR, 1);
 	RegisterEncoderMotor(mtrFR);
 	RegisterIRSeeker(IRSensor,1);
 	RegisterGyroSensor(gyroSensor);

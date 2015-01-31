@@ -1,7 +1,7 @@
 #ifndef FTC8923_FUNCTIONS
 #define FTC8923_FUNCTIONS
 
-#include "../../Library/servos/servos.c"
+#include "../../Library/motors/servos.c"
 #include "../../Library/motors/motors.c"
 
 const int GRAB_GOAL_POS = 170;

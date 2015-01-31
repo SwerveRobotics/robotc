@@ -8,7 +8,6 @@
 #include "../drive/auto_drive.c"
 #include "../drive_modes/drive_modes.h"
 #include "../sensors/gyro.c"
-#include "../motors/stall_protection.c"
 
 // May need to calibrate to specific robots
 int MOTOR_POWER_SHAVE = 3;
@@ -38,7 +37,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	resetGyro();
 	bool failed = false;
 	bool stopAction = false;
-	LAST_ENCODER_VALUE = 0;
+
 
 	//Makes robot go in opposite direction to avoid rewriting code
 	if(driveAction == DriveActionBackward || driveAction == DriveActionTurnLeft)
@@ -49,7 +48,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	//Gets robot going so it doesn't stop instantly if the robot isn't moving
 	if(driveAction == DriveActionBackward || driveAction == DriveActionForward)
 	{
-		StartTask(MonitorEncoder);
 		DriveForward(drivePower);
 		wait1Msec(100);
 	}
@@ -81,12 +79,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 					stopAction = true;
 					break;
 				}
-				//If the robot stops moving, then it stops running
-				/*if(CurrentSpeed() == 0)
-				{
-					stopAction = true;
-					break;
-				}*/
 				//Adjusts power according to gyro reading
 				DriveRightMotors(drivePower+readGyro()*5);
 				DriveLeftMotors(drivePower-readGyro()*5);
@@ -94,12 +86,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 			//Turning code
 			case DriveActionTurnLeft:
 			case DriveActionTurnRight:
-				//If the robot stops turning, then it stops running
-				if(readGyroSpeed() == 0)
-				{
-					stopAction = true;
-					break;
-				}
 				//Turns until requested angle is reached
 				TurnRight(drivePower);
 				int angle = abs(readGyro());
@@ -110,7 +96,7 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 	}
 	StopAllDriveMotors();
 	stopGyro();
-	StopTask(MonitorEncoder);
+
 }
 
 void TurnLeftDegrees(int degrees, int power)

@@ -15,10 +15,10 @@
 
 
 
-task drive()
+task DriveTask()
 {
 	//initialization
-	bool driverRelativeMode = true;
+	driverRelativeMode = false;
 	float joyDistance;
 	int joyX;
 	int joyY;
@@ -29,9 +29,9 @@ task drive()
 		getJoystickSettings(joystick);
 
 		joyDistance = sqrt( pow(joystick.joy1_x2, 2) + pow( joystick.joy1_y2, 2) );
-		int joyX = joystick.joy1_x2;
-		int joyY = joystick.joy1_y2;
-		int joyZ = joystick.joy1_x1;
+		joyX = joystick.joy1_x2;
+		joyY = joystick.joy1_y2;
+		joyZ = joystick.joy1_x1;
 
 		if (JoystickToRotRate(joyZ) == 0)
 		{
@@ -42,12 +42,11 @@ task drive()
 			}
 			else
 			{
-				driveDirection = RADIAN_TO_DEGREE * atan2(joyY, joyX) - readGyro();
+				driveDirection = RADIAN_TO_DEGREE * atan2(joyY, joyX);
 			}
 			float driveMagnitude = JoystickToMagnitude(joyDistance);
 			SimpleWriteToMotors(driveMagnitude * MAX_MOTOR_SPEED_CMPS);
-			SetServos(driveDirection);
-
+			SetServosDirection(driveDirection);
 		}
 		else
 		{
