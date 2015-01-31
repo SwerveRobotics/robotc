@@ -11,7 +11,7 @@
 #pragma config(Motor,  mtr_S4_C1_1,     mtrBR,         tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S4_C1_2,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S4_C2_1,     mtrLifterL,    tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S4_C2_2,     mtrLifterR,    tmotorTetrix, openLoop)
+#pragma config(Motor,  mtr_S4_C2_2,     mtrLifterR,    tmotorTetrix, openLoop, reversed)
 #pragma config(Servo,  srvo_S1_C2_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    container,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servo3,               tServoNone)
@@ -29,7 +29,7 @@
 //the center of the goal.
 ////////////////////////////////////////
 
-#define TANK_4M
+#define PARALLEL_PAIRS
 
 #include "include_files/includes.h"
 
@@ -42,16 +42,16 @@ task main()
 	DriveBackwardDistanceGyro(56, 50);
 	TurnRightDegrees(90, 50);
 	DriveForwardDistanceGyro(16, 50);
-	TurnLeftDegrees(85, 50);
+	TurnLeftDegrees(90, 50);
 	wait1Msec(8000);
 	//Grab goal
 	DriveBackwardDistanceGyro(56, 50);
 	GrabGoal();
 	wait1Msec(250);
 	//Place goal in parking zone
-	DriveForwardDistanceGyro(70, 50);
+	DriveForwardDistanceGyro(60, 50);
 	TurnRightDegrees(45, 50);
 	DriveForwardDistanceGyro(25, 50);
 	TurnLeftDegrees(180, 50);
-	DriveBackwardDistanceGyro(18,50);
+	DriveBackwardDistanceGyro(25,50);
 }

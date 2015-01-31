@@ -1,10 +1,15 @@
 #ifndef SWERVE_4M_C
 #define SWERVE_4M_C
 
+/* code review by Darrell
+	driverRelativeMode should have a default initial value
+*/
+
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
 #include "../../ftc6220/includes/read_write.c"
 
+bool driverRelativeMode; //if true, the robot will be relative to the field and driver. if false, it will drive like a car
 
 //swerve module structure for storing all values specific to any given drive assembly
 typedef struct
@@ -32,7 +37,7 @@ float RTgt;//currently unused, but would be to degree toward which the robot spi
 float JoystickToRotRate(float joystickZ)
 {
 
-	float attenuationSlope =  1 / joystickRange;
+	float attenuationSlope =  1 / INPUT_RANGE;
 	//mapping maximum rotational speed to the allowed joystick input range, aka. finding the slope.
 
 	float attenuationIntercept = -1 * ANALOG_DEAD_ZONE * sgn(joystickZ) * attenuationSlope;
@@ -51,7 +56,7 @@ float JoystickToRotRate(float joystickZ)
 
 float JoystickToMagnitude(float joystickXorY) // return a -1 to 1 value for motor power
 {
-	float attenuationSlope = joystickRange / MAX_MOTOR_POWER;
+	float attenuationSlope = INPUT_RANGE / MAX_MOTOR_POWER;
 
 	float attenuationIntercept = -1 * sgn(joystickXorY) * attenuationSlope;
 
@@ -74,7 +79,7 @@ void SimpleWriteToMotors(float cmps)
 	Drive[BACK_RIGHT].motorPower = cmps * reverseMotorFactor[BACK_RIGHT] * MOTOR_POWER_PER_CMPS;
 }
 
-void SetServos(float angle)
+void SetServosDirection(float angle)
 {
 	Drive[FRONT_LEFT].servoPosition = angle;
 	Drive[FRONT_RIGHT].servoPosition = angle;
