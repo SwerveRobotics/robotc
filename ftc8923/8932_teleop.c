@@ -11,7 +11,7 @@
 #pragma config(Motor,  mtr_S4_C1_1,     mtrBR,         tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S4_C1_2,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S4_C2_1,     mtrLifterL,    tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S4_C2_2,     mtrLifterR,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S4_C2_2,     mtrLifterR,    tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C2_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    container,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servo3,               tServoNone)
@@ -71,6 +71,8 @@ task main()
 		}
 
 		//Lift Commands
+
+		//This is for using the lift without encoders
 		if(joystick.joy2_y2 > ANALOG_DEAD_ZONE)
 		{
 			RaiseLift();
@@ -83,7 +85,8 @@ task main()
 		{
 			StopLift();
 		}
-		/*
+
+		//This is for using the lift with the encoder/.  bjvu gu v
 		if(joy2Btn(1) == 1)
 		{
 			MoveLifter(DownPos);
@@ -103,6 +106,6 @@ task main()
 		else if(joy2Btn(10) == 1)
 		{
 			MoveLifter(CenterGoalPos);
-		}*/
+		}
 	}
 }

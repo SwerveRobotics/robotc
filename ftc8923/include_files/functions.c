@@ -44,8 +44,8 @@ void StopCollector()
 }
 
 //Container functoins
-const int HOLD_BALLS = 127;
-const int DUMP_BALLS = 127;
+const int HOLD_BALLS = 185;
+const int DUMP_BALLS = 125;
 
 void SetContainerPos(int pos)
 {
@@ -65,10 +65,10 @@ void DumpBalls()
 //Positions of lift
 typedef enum
 {
-	DownPos = 0,
-	LowGoalPos = 5000,
-	MediumGoalPos = 10000,
-	HighGoalPos = 15000,
+	DownPos = 150,
+	LowGoalPos = 3800,
+	MediumGoalPos = 8500,
+	HighGoalPos = 13500,
 	CenterGoalPos = 20000
 }
 LiftPositionsEnum;
@@ -94,7 +94,7 @@ void StopLift()
 
 bool LiftAboveDetect(int pos)
 {
-	if(nMotorEncoder[mtrLifterL] > pos)
+	if(abs(nMotorEncoder[mtrLifterL]) > pos)
 	{
 		return true;
 	}
@@ -103,9 +103,10 @@ bool LiftAboveDetect(int pos)
 		return false;
 	}
 }
+
 bool LiftBelowDetect(int pos)
 {
-	if(nMotorEncoder[mtrLifterL] < pos)
+	if(abs(nMotorEncoder[mtrLifterL]) < pos)
 	{
 		return true;
 	}
