@@ -59,16 +59,16 @@ void RunFan(bool state)
 		{
 			motor[FAN_MOTOR_1] = -1 * p;
 			motor[FAN_MOTOR_2] = -1 * p;
-			wait10Msec(30);
+			wait10Msec(15);
 		}
 	}
 	else
 	{
-		for (int p = 0; p < 100; p++)
+		for (int p = 0; p < 128; p++)
 		{
 			SetMotorPower(FAN_MOTOR_1, -128 + p);
 			SetMotorPower(FAN_MOTOR_2, -128 + p);
-			wait10Msec(15);
+			wait10Msec(5);
 		}
 	}
 }
