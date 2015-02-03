@@ -24,8 +24,7 @@
 
 #include "include_files/teleop_includes.c"
 
-const tMUXSensor touchSensor = msensor_S3_1;
-const tMUXSensor irSensor = msensor_S3_2;
+
 
 task main()
 {
@@ -90,7 +89,7 @@ task main()
 		//This is for using the lift with the encoder/.  bjvu gu v
 		if(joy2Btn(1) == 1)
 		{
-			MoveLifter(DownPos);
+			ZeroLift();
 		}
 		else if(joy2Btn(2) == 1)
 		{
@@ -108,5 +107,6 @@ task main()
 		{
 			MoveLifter(CenterGoalPos);
 		}
+
 	}
 }
