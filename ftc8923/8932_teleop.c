@@ -2,7 +2,7 @@
 #pragma config(Hubs,  S4, HTMotor,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     gyroSensor,     sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker1200)
+#pragma config(Sensor, S3,     SMUX,           sensorI2CCustom9V)
 #pragma config(Sensor, S4,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFL,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBL,         tmotorTetrix, openLoop)
@@ -22,9 +22,10 @@
 
 #define PARALLEL_PAIRS
 
-#include "../Library/controllers/tank_controller.c"
-#include "include_files/functions.c"
-#include "include_files/init_teleop.c"
+#include "include_files/teleop_includes.c"
+
+const tMUXSensor touchSensor = msensor_S3_1;
+const tMUXSensor irSensor = msensor_S3_2;
 
 task main()
 {
