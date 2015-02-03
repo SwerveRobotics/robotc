@@ -128,13 +128,13 @@ void RaiseSweeperArm()
 
 void ToggleSweeperArm()
 {
-	if(!SWEEPER.raised)
+	if(SWEEPER.raised) // NOTE: Switched from negative test to positive test.
 	{
-		RaiseSweeperArm();
+		LowerSweeperArm();
 	}
 	else
 	{
-		LowerSweeperArm();
+		RaiseSweeperArm();
 	}
 	SWEEPER.raised = !SWEEPER.raised;
 }
@@ -159,7 +159,7 @@ void SetSweeperServos(float speed)
 
 void RunSweeperServos()
 {
-	SetSweeperServos(1.0);
+	SetSweeperServos(1.0); // 1.0 is max speed. Valid range is 0-1.
 }
 
 void StopSweeperServos()
@@ -266,19 +266,25 @@ task LiftTube()
 
 void ExtendTubeToPosition(int position)//alternate tube position setting. takes either 0, 1, or 2 as the three positions
 {
-	if (position == 0)
-	{
-		SetTubeHeight(MEDIUM_GOAL_HEIGHT);
-	}
-	else if (position == 1)
-	{
-		SetTubeHeight(HIGH_GOAL_HEIGHT);
-	}
-	else if (position == 2)
-	{
-		SetTubeHeight(CENTER_GOAL_HEIGHT);
-	}
-	TUBE.position = position;
+	switch (position)
+  {
+  	case 0:
+  	  SetTubeHeight(MEDIUM_GOAL_HEIGHT);
+  	  break;
+
+  	case 1:
+  	  SetTubeHeight(HIGH_GOAL_HEIGHT);
+  	  break;
+
+  	case 2:
+  	  SetTubeHeight(CENTER_GOAL_HEIGHT);
+  	  break;
+
+  	default:
+  	  // Do nothing ...
+  }
+
+  TUBE.position = position;
 }
 
 void LoadPosition_1()

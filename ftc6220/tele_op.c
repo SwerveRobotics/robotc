@@ -64,7 +64,7 @@ task main
 
 		if (PressedOnJoy1(SWEEPER_BTN))
 		{
-			RunSweeperMotor();
+			RunSweeperMotor(); // NOTE: this can run even if the sweeper arm is not dropped into place.
 		}
 		else
 		{
@@ -91,32 +91,22 @@ task main
 			ToggleFan();
 		}
 
+		int newPosition;
 		if (RisingEdgeHat2(TUBE_RAISE_BTN))
 		{
-			TUBE.position += 1;
-			if (TUBE.position > 2)
-			{
-				TUBE.position = 2;
-			}
-			else if (TUBE.position < 0)
-			{
-				TUBE.position = 0;
-			}
-			ExtendTubeToPosition(TUBE.position);
+			// Raising the tube maxes out at 2; so make sure that it stays in range.
+		  newPosition = TUBE.position + 1;
+			TUBE.position = (newPosition > 2)? (2) : (newPosition);
 		}
 		else if (RisingEdgeHat2(TUBE_LOWER_BTN))
 		{
-			TUBE.position -= 1;
-			if (TUBE.position > 2)
-			{
-				TUBE.position = 2;
-			}
-			else if (TUBE.position < 0)
-			{
-				TUBE.position = 0;
-			}
-			ExtendTubeToPosition(TUBE.position);
+			// The tube position needs to always be >= 0.
+		  newPosition = TUBE.position - 1;
+		  TUBE.position = (newPosition < 0)? (0) : (newPosition);
 		}
+
+    ExtendTubeToPosition(TUBE.position);
+
 
 		if (RisingEdgeHat2(TUBE_LOAD_BTN))
 		{
