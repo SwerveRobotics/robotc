@@ -41,7 +41,7 @@
 #include "../includes/read_write.c"
 #include "../JoystickDriver.c"
 #include "../../library/drive_modes/simple_swerve_4m.c"
-#include "../includes/manipulators.c"
+//#include "../includes/manipulators.c"
 //#include "../includes/fir.c"
 
 
@@ -160,12 +160,12 @@ task main()
 			if (fanRunning == false)
 			{
 				fanRunning = true;
-				RunFan(true);
+	//			RunFan(true);
 			}
 			else
 			{
 				fanRunning = false;
-				RunFan(false);
+		//		RunFan(false);
 			}
 		}
 		else if (joystick.joy2_Buttons != 1)
