@@ -18,8 +18,8 @@ void AutoInitialize()
 	ASSUME_CONTROLLER_INPUT = false;
 	RegisterDriveMotors(RightMid, RightSides, LeftMid, LeftSides);
 //	RegisterEncoderMotor(RightMid);
-	WHEEL_DIAMETER = 4;  // 4 what? inches? centimeters?
-	GEAR_RATIO = 1.5;    // describe?
+	WHEEL_DIAMETER = 4; // inches
+	GEAR_RATIO = 1.5;
 	servo[goalGrabber] = 150;
 }
 

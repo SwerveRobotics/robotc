@@ -21,8 +21,8 @@
  - Recommend against using time-based turning as it is error prone. Use Gyro instead.
 */
 
-#include "auto_init.c"
 #include "JoystickDriver.c"
+#include "includes/auto_init.c"
 #include "../library/drive_modes/drive_modes.h"
 
 

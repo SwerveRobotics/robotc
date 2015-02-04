@@ -20,8 +20,8 @@
  - *Clean code looks really good.*
 */
 
-#include "auto_init.c"
 #include "JoystickDriver.c"
+#include "includes/auto_init.c"
 #include "../library/drive_modes/drive_modes.h"
 
 

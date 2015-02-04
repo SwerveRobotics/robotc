@@ -32,7 +32,7 @@
 #define TANK_4M
 #include "../library/drive_modes/drive_modes.h"
 #include "../library/controllers/tank_controller.c"
-#include "init_teleop.c"
+#include "includes/init_teleop.c"
 
 #pragma debuggerWindows("nxtLCDScreen");
 //#pragma debuggerWindows("Servos");
