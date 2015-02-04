@@ -24,12 +24,6 @@
 
 #define TANK_4M
 
-/* Code Review by Darrell
- - servo should be using a function.
- - *Good use of library.*
- - *Clean code looks really good.*
-*/
-
 #include "JoystickDriver.c"
 #include "includes/auto_init.c"
 #include "../library/drive_modes/drive_modes.h"

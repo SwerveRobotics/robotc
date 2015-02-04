@@ -12,6 +12,7 @@
 
 #include "../library/motors/motor_defines.h"
 #include "../library/drive/auto_drive.c"
+#include "includes/servo_417.c"
 
 void AutoInitialize()
 {
@@ -20,7 +21,7 @@ void AutoInitialize()
 //	RegisterEncoderMotor(RightMid);
 	WHEEL_DIAMETER = 4; // inches
 	GEAR_RATIO = 1.5;
-	servo[goalGrabber] = 150;
+	ReleaseGoal();
 }
 
 #endif
