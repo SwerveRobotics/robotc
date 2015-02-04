@@ -1,113 +1,314 @@
-#ifndef MANIPULATORS.C
-#define MANIPULATORS.C
+#ifndef MANIPULATORS_C
+#define MANIPULATORS_C
 
-#include "read_write.c"
-#include "JoystickDriver.c"
+#include "../../Library/motors/servos.c"
+#include "../../Library/motors/motors.c"
 
+// BEGIN FAN //
 
-//either enable or disable the goal grabber by raising and lowering the "hook" servo
-void EnableGoalGrabber(bool state)
+typedef struct
 {
-	if (state == true)
+	tMotor MOTOR_1;
+	tMotor MOTOR_2;
+	bool running;
+}tFan;
+
+tFan FAN;
+
+task RunFan()
+{
+	for (int p = MIN_MOTOR_POWER ; p < MAX_MOTOR_POWER; p++)
 	{
-		SetServo(GRABBER_SERVO, 50);
+		SetMotorPower(FAN.MOTOR_1,      p);
+		SetMotorPower(FAN.MOTOR_2, -1 * p);
+		wait10Msec( 500 - (MAX_MOTOR_POWER - MIN_MOTOR_POWER) );
+	}
+	StopTask(RunFan);
+}
+
+void StopFan()
+{
+	SetMotorPower(FAN.MOTOR_1, 0);
+	SetMotorPower(FAN.MOTOR_2, 0);
+}
+
+void ToggleFan()
+{
+	if (!FAN.running)
+	{
+		StartTask(RunFan);
 	}
 	else
 	{
-		SetServo(GRABBER_SERVO, 8);
+		StopFan();
 	}
+	FAN.running = !FAN.running;
 }
 
+// END FAN //
 
-//raise (disable) or lower (enable) the sweeper mechanism
-void EnableSweeper(bool state)
+
+// BEGIN GOAL GRABBER //
+
+int GRAB_GOAL    = 50;
+int RELEASE_GOAL =  8;
+
+typedef struct
 {
-	if (state == true)
+	TServoIndex SERVO;//this name may need to change based on if robotC confuses it with procedure "servo[]"
+	bool grabbed;
+}tGrabber;
+
+tGrabber GRABBER;
+
+void SetGoalGrabber(int position)
+{
+	SetServoPosition(GRABBER.SERVO, position);
+}
+
+void GrabGoal()
+{
+	SetGoalGrabber(GRAB_GOAL);
+}
+
+void ReleaseGoal()
+{
+	SetGoalGrabber(RELEASE_GOAL);
+}
+
+void ToggleGoalGrabber()
+{
+	if (!GRABBER.grabbed)
 	{
-		SetServo(Sweeper.armServo, 255);
+		GrabGoal();
 	}
 	else
 	{
-		SetServo(Sweeper.armServo, 255);
+		ReleaseGoal();
 	}
+	GRABBER.grabbed = !GRABBER.grabbed;
 }
 
-//begin or stop sweeping up balls
-void RunSweeper(bool state)
+// END GOAL GRABBER //
+
+
+// BEGIN SWEEPER //
+
+int ARM_UP   = 255;
+int ARM_DOWN = 127;
+
+typedef struct
 {
-	if (state == true)
+	tMotor MOTOR;//this name may need to change based on if robotC confuses it with procedure "motor[]"
+	TServoIndex SERVO_1;
+	TServoIndex SERVO_2;
+	TServoIndex ARM_SERVO;
+	bool running;
+	bool raised;
+}tSweeper;
+
+tSweeper SWEEPER;
+
+
+// BEGIN SWEEPER ARM //
+void SetSweeperArm(int position)
+{
+	SetServoPosition(SWEEPER.ARM_SERVO, position);
+}
+
+void LowerSweeperArm()
+{
+	SetSweeperArm(ARM_DOWN);
+}
+
+void RaiseSweeperArm()
+{
+	SetSweeperArm(ARM_UP);
+}
+
+void ToggleSweeperArm()
+{
+	if(SWEEPER.raised) // NOTE: Switched from negative test to positive test.
 	{
-		motor[Sweeper.motor1] = -128;
-		SetServo(Sweeper.servo1, 255);
-		SetServo(Sweeper.servo2, 255);
+		LowerSweeperArm();
 	}
 	else
 	{
-		motor[Sweeper.motor1] = 0;
-		SetServo(Sweeper.servo1, 127);
-		SetServo(Sweeper.servo2, 127);
+		RaiseSweeperArm();
 	}
+	SWEEPER.raised = !SWEEPER.raised;
 }
 
-//activate both fan motors to run the fan
-void RunFan(bool state)
-{
+//END SWEEPER ARM //
 
-	if (state == true)
+void RunSweeperMotor()
+{
+	SetMotorPower(SWEEPER.MOTOR, -1 * MAX_MOTOR_POWER);
+}
+
+void StopSweeperMotor()
+{
+	SetMotorPower(SWEEPER.MOTOR, 0);
+}
+
+void SetSweeperServos(float speed)
+{
+	SetServoSpeed(SWEEPER.SERVO_1, speed, CCW);
+	SetServoSpeed(SWEEPER.SERVO_2, speed, CCW);
+}
+
+void RunSweeperServos()
+{
+	SetSweeperServos(1.0); // 1.0 is max speed. Valid range is 0-1.
+}
+
+void StopSweeperServos()
+{
+	SetSweeperServos(0);
+}
+
+void ToggleSweeperServos()
+{
+	if (!SWEEPER.running)
 	{
-		for (int p = 20; p < 127; p++)
-		{
-			motor[FAN_MOTOR_1] = -1 * p;
-			motor[FAN_MOTOR_2] = -1 * p;
-			wait10Msec(30);
-		}
+		RunSweeperServos();
 	}
 	else
 	{
-		for (int p = 0; p < 100; p++)
-		{
-			SetMotorPower(FAN_MOTOR_1, -128 + p);
-			SetMotorPower(FAN_MOTOR_2, -128 + p);
-			wait10Msec(15);
-		}
+		StopSweeperServos();
 	}
+	SWEEPER.running = !SWEEPER.running;
 }
 
-//rotate the tube loading mechanism. "continous" loading would mean that this fucntion is alternately called with true and false
-void LoadTube(bool state)
+
+// END SWEEPER //
+
+
+// BEGIN TUBE //
+
+const int RETRACTED = 184;
+const int MEDIUM_GOAL_HEIGHT = RETRACTED;
+const int HIGH_GOAL_HEIGHT = 133;
+const int EXTENDED = 54;
+const int CENTER_GOAL_HEIGHT = EXTENDED;
+
+const int LOAD_POSITION_1 =  17;
+const int LOAD_POSITION_2 = 249;
+
+typedef struct
 {
-	if (state == true)
+	TServoIndex SLIDE_SERVO;
+	TServoIndex WINCH_SERVO;
+	TServoIndex LOAD_SERVO;
+	tSensors TOUCH_SENSOR;
+	int position;
+	bool loader;
+}tTube;
+
+tTube TUBE;
+
+bool tubeRaised()
+{
+	bool state;
+	if (SensorValue(TUBE.TOUCH_SENSOR) == 1023)
 	{
-		SetServo(Tube.loaderServo, 17);
+		state = false;
 	}
 	else
 	{
-		SetServo(Tube.loaderServo, 249);
+		state = true;
 	}
+	return state;
 }
 
-void SetTubeHeight(float h)
+void SlideTubeRight()
 {
-	int n = h;//needs to be recongfigured for cm
-	SetServo(Tube.winchServo, n);
+	SetServoSpeed(TUBE.SLIDE_SERVO, 0.2, CCW);
 }
 
-//needs changing to incorporate the exnding tube. also wrong servo.
-void LiftTube()
+void SlideTubeLeft()
 {
-	//verticalize tube
-	wait10Msec(100);
-	SetServo(Tube.liftServo, 0);
-	wait10Msec(100);
-	SetServo(Tube.liftServo, 80);
-	while(SensorValue(Tube.touchSensor) == 1023)//drag the tube to the loader
+	SetServoSpeed(TUBE.SLIDE_SERVO, 0.2, CW);
+}
+
+void StopSlide()
+{
+	SetServoSpeed(TUBE.SLIDE_SERVO, 0.0);
+}
+
+void SetTubeHeight(int height)
+{
+	SetServoPosition(TUBE.WINCH_SERVO, height);
+}
+
+void ExtendTube()
+{
+	SetTubeHeight(EXTENDED);
+}
+
+void RetractTube()
+{
+	SetTubeHeight(RETRACTED);
+}
+
+//raise the tube to be vertical and slide to the loader
+task LiftTube()
+{
+	while(!tubeRaised())//drag the tube to the loader until it is in position
 	{
-		SetServo(Tube.slideServo, 0);
-		wait10Msec(10);
+		SlideTubeRight();
 	}
-	SetServo(Tube.slideServo, 127);
-	SetTubeHeight(HIGH_GOAL_HEIGHT);
-	wait10Msec(300);
+	StopSlide();
+	ExtendTube();//flip up the curvy thing by extending the tube by extending to top position
+	wait10Msec(500);
+	StopTask(LiftTube);
 }
+
+void ExtendTubeToPosition(int position)//alternate tube position setting. takes either 0, 1, or 2 as the three positions
+{
+	switch (position)
+  {
+  	case 0:
+  	  SetTubeHeight(MEDIUM_GOAL_HEIGHT);
+  	  break;
+
+  	case 1:
+  	  SetTubeHeight(HIGH_GOAL_HEIGHT);
+  	  break;
+
+  	case 2:
+  	  SetTubeHeight(CENTER_GOAL_HEIGHT);
+  	  break;
+
+  	default:
+  	  // Do nothing ...
+  }
+
+  TUBE.position = position;
+}
+
+void LoadPosition_1()
+{
+	SetServoPosition(TUBE.LOAD_SERVO, LOAD_POSITION_1);
+}
+
+void LoadPosition_2()
+{
+	SetServoPosition(TUBE.LOAD_SERVO, LOAD_POSITION_2);
+}
+
+void LoadTube()
+{
+	if (!TUBE.loader)
+	{
+		LoadPosition_1();
+	}
+	else
+	{
+		LoadPosition_2();
+	}
+	TUBE.loader = !TUBE.loader;
+}
+// END TUBE //
 
 #endif

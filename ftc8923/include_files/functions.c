@@ -65,13 +65,17 @@ void DumpBalls()
 //Positions of lift
 typedef enum
 {
-	DownPos = 150,
 	LowGoalPos = 3800,
 	MediumGoalPos = 8500,
 	HighGoalPos = 13500,
 	CenterGoalPos = 20000
 }
 LiftPositionsEnum;
+
+bool LiftIsDown()
+{
+	return (TSreadState(touchSensor) ? true : false)
+}
 
 void SetLiftPower(int power)
 {
@@ -94,7 +98,11 @@ void StopLift()
 
 bool LiftAboveDetect(int pos)
 {
-	if(abs(nMotorEncoder[mtrLifterL]) > pos)
+	if(LiftIsDown())
+	{
+		return false;
+	}
+	else if                                                                                                                                       (abs(nMotorEncoder[mtrLifterL]) > pos)
 	{
 		return true;
 	}
@@ -127,5 +135,15 @@ void MoveLifter(int pos)
 		RaiseLift();
 	}
 	StopLift();
+}
+
+void ZeroLift()
+{
+	while(!LiftIsDown())
+	{
+		LowerLift();
+	}
+	StopLift();
+	nMotorEncoder[mtrLifterL] = 0;
 }
 #endif

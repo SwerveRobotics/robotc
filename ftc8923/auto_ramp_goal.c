@@ -2,7 +2,7 @@
 #pragma config(Hubs,  S4, HTMotor,  HTMotor,  none,     none)
 #pragma config(Sensor, S1,     ,               sensorI2CMuxController)
 #pragma config(Sensor, S2,     gyroSensor,     sensorI2CHiTechnicGyro)
-#pragma config(Sensor, S3,     IRSensor,       sensorHiTechnicIRSeeker1200)
+#pragma config(Sensor, S3,     SMUX,           sensorI2CCustom9V)
 #pragma config(Sensor, S4,     ,               sensorI2CMuxController)
 #pragma config(Motor,  mtr_S1_C1_1,     mtrFL,         tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C1_2,     mtrBL,         tmotorTetrix, openLoop)
@@ -11,7 +11,7 @@
 #pragma config(Motor,  mtr_S4_C1_1,     mtrBR,         tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S4_C1_2,     mtrFR,         tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Motor,  mtr_S4_C2_1,     mtrLifterL,    tmotorTetrix, openLoop, reversed, encoder)
-#pragma config(Motor,  mtr_S4_C2_2,     mtrLifterR,    tmotorTetrix, openLoop, reversed)
+#pragma config(Motor,  mtr_S4_C2_2,     mtrLifterR,    tmotorTetrix, openLoop, reversed, encoder)
 #pragma config(Servo,  srvo_S1_C2_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_2,    container,            tServoStandard)
 #pragma config(Servo,  srvo_S1_C2_3,    servo3,               tServoNone)
@@ -31,7 +31,7 @@
 
 #define PARALLEL_PAIRS
 
-#include "include_files/includes.h"
+#include "include_files/auto_includes.c"
 
 task main()
 {
