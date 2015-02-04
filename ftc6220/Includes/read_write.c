@@ -186,17 +186,23 @@ TServoIndex tubeSwinch,  TServoIndex loaderS//manipulator servos
 	SetServo(Assembly[FRONT_RIGHT].driveServo, 127);
 	SetServo(Assembly[BACK_LEFT].driveServo, 127);
 	SetServo(Assembly[BACK_RIGHT].driveServo, 127);
-	servo[GRABBER_SERVO] = 11;
-	SetServo(Sweeper.armServo, 127);
-	SetServo(Sweeper.servo1, 128);
-	SetServo(Sweeper.servo2, 128);
-	SetServo(Tube.liftServo, 80);
-	SetServo(Tube.slideServo, 127);
-	SetServo(Tube.winchServo, 184);
 	SetCRServoEncoder(FRONT_LEFT,  0);
 	SetCRServoEncoder(FRONT_RIGHT, 0);
 	SetCRServoEncoder(BACK_RIGHT,  0);
 	SetCRServoEncoder(BACK_LEFT,   0);
+}
+
+void initialize()
+{
+	servo[servoGrabber] = 11;
+	servo[servoSweepArm] = 0;
+	servo[servoSweep1] = 127;
+	servo[servoSweep2] = 127;
+	servo[servoSweepArm] = 0;
+	servo[servoTubeLift] = 255;
+	servo[servoTubeSlide] = 127;
+	servo[servoTubeWinch] = 184;
+	servo[servoLoader] = 17;
 }
 
 //--------------------------------------//

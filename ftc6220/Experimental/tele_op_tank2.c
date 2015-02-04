@@ -44,24 +44,174 @@
 #include "../includes/manipulators.c"
 //#include "../includes/fir.c"
 
-tSensors touch = (tSensors) S4;
 
 task main()
 {
-	initialize();
-	waitForStart();
-	wait10Msec(100);
-	servo[servoTubeLift] = 255;
-	wait10Msec(100);
-	servo[servoTubeLift] = 135;
-	wait10Msec(100);
-	while(SensorValue(touch) == 1023)//drag the tube to the loader
-	{
-		servo[servoTubeSlide] = 0;
-		wait10Msec(10);
-	}
-	servo[servoTubeSlide] = 127;
-	wait10Msec(100);
-	servo[servoTubeWinch] = 54;
+	RegisterMotors(
+	motorFL,
+	motorFR,
+	motorBL,
+	motorBR,
+	motorSweep,
+	motorFan1,
+	motorFan2
+	);
+	RegisterServos(
+	servoFL,
+	servoBL,
+	servoFR,
+	servoBR,
+	servoGrabber,
+	servoSweepArm,
+	servoTubeWinch,
+	servoTubeLift,
+	servoTubeSlide,
+	servoLoader,
+	servoSweep1,
+	servoSweep2,
+	);
 
+	tSensors touch = (tSensors) S4;
+	initialize();
+
+	float Kp = 0.009;
+	float Ki = 0.008;
+	float Kd = 0.005;
+	float errorPrevSum[4] = {0.0, 0.0, 0.0, 0.0};
+	float errorPrev[4] = {0.0, 0.0, 0.0, 0.0};
+	float error[4];
+	float ang[4] = {0.0, 0.0, 0.0, 0.0};
+	float newAng[4] = {0.0, 0.0, 0.0, 0.0};
+	float n[4] = {0.0, 0.0, 0.0, 0.0};
+	float angPrev[4] = {0.0, 0.0, 0.0, 0.0};
+	float newAngPrev[4] = {0.0, 0.0, 0.0, 0.0};
+	float servoSpeed[4] = {0.0, 0.0, 0.0, 0.0};
+
+	waitForStart();
+	float joyDistance;
+	float joyAngle;
+	int joyX;
+	int joyY;
+	int joyZ;
+	int MOTOR_SPEED = 90;
+	servo[servoSweepArm] = 127;
+	servo[servoTubeWinch] = 133;
+	while(true)
+	{
+		bool fanRunning   = false;
+		bool fanReady     = true;
+		if (joystick.joy1_Buttons == 2)
+		{
+			//RunSweeper(true);
+			motor[motorSweep] = -127;
+			servo[servoSweep1] = 255;
+			servo[servoSweep2] = 255;
+		}
+		else
+		{
+			//RunSweeper(false);
+			servo[servoSweep1] = 127;
+			servo[servoSweep2] = 127;
+			motor[motorSweep] = 0;
+		}
+
+
+		//   !!!   begin goal grabber   !!!   //
+		if (joystick.joy1_Buttons == 5)
+		{
+			servo[servoGrabber]= 50;
+		}
+		else if (joystick.joy1_Buttons == 4)
+		{
+			servo[servoGrabber] = 8;
+		}
+		///   !!!   end goal grabber   !!!   ///
+
+
+
+		///   !!!   begin sweeper   !!!   ///
+
+		///   !!!   end sweeper   !!!   ///
+
+
+		///   !!!   begin tube   !!!   ///
+		if (joystick.joy2_TopHat == 6)
+		{
+			servo[servoLoader] = 25;
+			wait10Msec(25);
+			servo[servoLoader] = 19;
+		}
+		else if (joystick.joy2_TopHat == 2)
+		{
+			servo[servoLoader] = 254;
+			wait10Msec(25);
+			servo[servoLoader] = 249;
+		}
+
+		///   !!!   end tube   !!!   ///
+
+
+		///   !!!   begin fan  !!!   ///
+		if ((joystick.joy2_Buttons == 1) & fanReady == true)
+		{
+			fanReady = false;
+			if (fanRunning == false)
+			{
+				fanRunning = true;
+				RunFan(true);
+			}
+			else
+			{
+				fanRunning = false;
+				RunFan(false);
+			}
+		}
+		else if (joystick.joy2_Buttons != 1)
+		{
+			fanReady = true;
+		}
+
+		if (joystick.joy2_Buttons == 2)
+		{
+			servo[servoTubeWinch] = 54;
+		}
+		else if (joystick.joy2_Buttons == 3)
+		{
+			servo[servoTubeWinch] = 133;
+		}
+
+
+		if (joystick.joy2_Buttons == 11)
+		{
+			wait10Msec(100);
+			servo[servoTubeLift] = 255;
+			wait10Msec(100);
+			servo[servoTubeLift] = 135;
+			wait10Msec(100);
+			while(SensorValue(touch) == 1023)//drag the tube to the loader
+			{
+				servo[servoTubeSlide] = 0;
+				wait10Msec(10);
+			}
+			servo[servoTubeSlide] = 127;
+			wait10Msec(100);
+			servo[servoTubeWinch] = 54;
+		}
+		///   !!!   end fan    !!!   ///
+
+
+		joyX = joystick.joy1_x2;
+		joyY = joystick.joy1_y2;
+		joyZ = joystick.joy1_x1;
+		joyDistance = sqrt( pow(joyX, 2) + pow( joyY, 2) );
+		joyAngle = -57.3 * atan2(joyY, joyX);
+
+		motor[motorFL] = -1 * joystick.joy1_y1;
+		motor[motorFR] = joystick.joy1_y2;
+		motor[motorBL] = -1 * joystick.joy1_y1;
+		motor[motorBR] = joystick.joy1_y2;
+
+		servo[servoSweep1] = 127;
+		servo[servoSweep2] = 127;
+	}
 }

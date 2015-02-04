@@ -22,21 +22,32 @@
 
 #define PARALLEL_PAIRS
 
-#include "include_files/teleop_includes.c"
+#include "../../Library/controllers/tank_controller.c"
+#include "../include_files/functions.c"
+#include "../include_files/init_teleop.c"
 
+#include "../../drivers/hitechnic-sensormux.h"
+#include "../../drivers/lego-touch.h"
+#include "../../drivers/hitechnic-irseeker-v2.h"
 
+const tMUXSensor touchSensor = msensor_S3_1;
+const tMUXSensor irSensor = msensor_S3_2;
 
 task main()
 {
 	InitializeTeleop();
-	waitForStart();
+	//waitForStart();
 
 	StartTask(DriveTank);
 	while(true)
 	{
-		getJoystickSettings(joystick);
+		nxtDisplayTextLine(2, "%d", TSreadState(touchSensor));
+		nxtDisplayTextLine(1, "%d", HTIRS2readDCDir(irSensor));
+		/*
+		getJoystickSettin
+		//Goal grabber cogs(joystick);
+mmands
 
-		//Goal grabber commands
 		if(joy1Btn(8) == 1)
 		{
 			GrabGoal();
@@ -47,6 +58,7 @@ task main()
 		}
 
 		//Collector commands
+
 		if(joy2Btn(8) == 1)
 		{
 			CollectBalls();
@@ -61,6 +73,7 @@ task main()
 		}
 
 		//Container commands
+
 		if(joystick.joy2_TopHat == 0)
 		{
 			HoldBalls();
@@ -86,10 +99,10 @@ task main()
 			StopLift();
 		}
 
-		//This is for using the lift with the encoder/.  bjvu gu v
+		//This is for using the lift with the encoder
 		if(joy2Btn(1) == 1)
 		{
-			ZeroLift();
+			MoveLifter(DownPos);
 		}
 		else if(joy2Btn(2) == 1)
 		{
@@ -107,6 +120,6 @@ task main()
 		{
 			MoveLifter(CenterGoalPos);
 		}
-
+		*/
 	}
 }

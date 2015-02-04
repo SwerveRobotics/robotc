@@ -73,10 +73,10 @@ float JoystickToMagnitude(float joystickXorY) // return a -1 to 1 value for moto
 
 void SimpleWriteToMotors(float cmps)
 {
-	Drive[FRONT_LEFT].motorPower = cmps * reverseMotorFactor[FRONT_LEFT] * MOTOR_POWER_PER_CMPS;
-	Drive[FRONT_RIGHT].motorPower = cmps * reverseMotorFactor[FRONT_RIGHT] * MOTOR_POWER_PER_CMPS;
-	Drive[BACK_LEFT].motorPower = cmps * reverseMotorFactor[BACK_LEFT] * MOTOR_POWER_PER_CMPS;
-	Drive[BACK_RIGHT].motorPower = cmps * reverseMotorFactor[BACK_RIGHT] * MOTOR_POWER_PER_CMPS;
+	Drive[FRONT_LEFT].motorPower = cmps * MOTOR_POWER_PER_CMPS;
+	Drive[FRONT_RIGHT].motorPower = cmps * MOTOR_POWER_PER_CMPS;
+	Drive[BACK_LEFT].motorPower = cmps * MOTOR_POWER_PER_CMPS;
+	Drive[BACK_RIGHT].motorPower = cmps * MOTOR_POWER_PER_CMPS;
 }
 
 void SetServosDirection(float angle)
