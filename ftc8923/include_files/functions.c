@@ -66,9 +66,8 @@ void DumpBalls()
 typedef enum
 {
 	LowGoalPos = 3800,
-	MediumGoalPos = 8500,
+	MediumGoalPos = 8700,
 	HighGoalPos = 13500,
-	CenterGoalPos = 20000
 }
 LiftPositionsEnum;
 
@@ -77,32 +76,45 @@ bool LiftIsDown()
 	return (TSreadState(touchSensor) ? true : false);
 }
 
+int LiftHeight()
+{
+	return abs(nMotorEncoder[mtrLifterL]);
+}
+
+void ResetLiftHeight()
+{
+	nMotorEncoder[mtrLifterL] = 0;
+}
+
 void SetLiftPower(int power)
 {
 	SetMotorPower(mtrLifterL, power);
 	SetMotorPower(mtrLifterR, power);
 }
 
+void StopLift()
+{
+	SetLiftPower(0);
+}
 void LowerLift()
 {
-	SetLiftPower(-100);
+	if(!LiftIsDown())
+	{
+		SetLiftPower(-100);
+	}
+	else
+	{
+		StopLift();
+	}
 }
 void RaiseLift()
 {
 	SetLiftPower(100);
 }
-void StopLift()
-{
-	SetLiftPower(0);
-}
 
 bool LiftAboveDetect(int pos)
 {
-	if(LiftIsDown())
-	{
-		return false;
-	}
-	else if                                                                                                                                       (abs(nMotorEncoder[mtrLifterL]) > pos)
+	if(LiftHeight() > pos)
 	{
 		return true;
 	}
@@ -114,7 +126,7 @@ bool LiftAboveDetect(int pos)
 
 bool LiftBelowDetect(int pos)
 {
-	if(abs(nMotorEncoder[mtrLifterL]) < pos)
+	if(LiftHeight() < pos)
 	{
 		return true;
 	}
@@ -144,6 +156,10 @@ void ZeroLift()
 		LowerLift();
 	}
 	StopLift();
-	nMotorEncoder[mtrLifterL] = 0;
+	wait1Msec(500);
+	ResetLiftHeight();
+
+	//Robot crashes if this line isn't here
+	StopLift();
 }
 #endif
