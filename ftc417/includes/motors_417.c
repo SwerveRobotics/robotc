@@ -4,23 +4,29 @@
 #include "../../library/motors/motors.c"
 
 // Arm Motor
-const int ARM_MOTOR_POWER = 50;
+const int ARM_MOTOR_POWER_DEFAULT = 50;
 void SetArmsMotorPower(int power)
 {
 	SetMotorPower(Arm, power);
 }
 
-void RaiseArm()
+void MoveArmUp(int power = ARM_MOTOR_POWER_DEFAULT)
 {
-	SetArmsMotorPower(ARM_MOTOR_POWER);
+	SetArmsMotorPower(power);
 }
 
-void LowerArm()
+void MoveArmDown(int power = ARM_MOTOR_POWER_DEFAULT)
 {
-	SetArmsMotorPower(-1*ARM_MOTOR_POWER);
+	SetArmsMotorPower(-1*power);
 }
 
-void StopArm()
+// named so that caller controls direction
+void SetArmPower(int power = ARM_MOTOR_POWER_DEFAULT)
+{
+	SetArmsMotorPower(power);
+}
+
+void StopArmMovement()
 {
 	SetArmsMotorPower(0);
 }
