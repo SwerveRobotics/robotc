@@ -74,7 +74,7 @@ LiftPositionsEnum;
 
 bool LiftIsDown()
 {
-	return (TSreadState(touchSensor) ? true : false)
+	return (TSreadState(touchSensor) ? true : false);
 }
 
 void SetLiftPower(int power)

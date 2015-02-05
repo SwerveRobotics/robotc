@@ -1,9 +1,6 @@
 #ifndef INIT_AUTO_C
 #define INIT_AUTO_C
 
-const tMUXSensor touchSensor = msensor_S3_1;
-const tMUXSensor irSensor = msensor_S3_2;
-
 void InitializeAuto()
 {
 	ASSUME_CONTROLLER_INPUT = false;
