@@ -103,10 +103,5 @@ task main()
 		{
 			MoveLifter(HighGoalPos);
 		}
-		else if(joy2Btn(10) == 1)
-		{
-			MoveLifter(CenterGoalPos);
-		}
-
 	}
 }
