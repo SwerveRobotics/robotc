@@ -6,14 +6,8 @@
 //#include "../../Library/controllers/joystickdriver.h"
 
 #include "joystickdriver.c"
-
-//this is used by the FIR filter, but is now maybe redundant
-typedef enumWord
-{
-	JOY_X = 0,
-	JOY_Y,
-	JOY_Z
-}AxisEnum;
+#include "../../Library/motors/motor_defines.h"
+#include "../../Library/controllers/controller_defines.h"
 
 //enum  to identify the buttons on the controller
 typedef enumWord
@@ -55,14 +49,7 @@ typedef struct
 	int button;
 	bool pressed;
 }tHat;
-//axis that controls the robot's movement relative to the robot in the X direction (right/left)
-int X_TRANS_AXIS;
 
-//axis that controls the robot's movement relative to the robot in the Y direction (forward/backward)
-int Y_TRANS_AXIS;
-
-//axis that controls the robot's rotation (CW / CCW)
-int ROT_AXIS;
 //button that runs the sweeper motor while held
 tButton SWEEPER_BTN;
 
@@ -99,14 +86,25 @@ tButton FAN_BTN;
 //button that unwinds and zeros the drive assemblies
 tButton UNWIND_DRIVE_BTN;
 
-//call every drive task cycle; updates the axis
-void UpdateAxis()
+float JoystickToMagnitude(float joyValue) // return a -1 to 1 value for motor power
 {
-	getJoystickSettings(joystick);
-	X_TRANS_AXIS = joystick.joy1_x2;
-	Y_TRANS_AXIS = joystick.joy1_y2;
-	ROT_AXIS     = joystick.joy1_x1;
+
+	//find slope between (ANALOG_DEAD_ZONE, MIN_MOTOR_POWER) and (INPUT RANGE, MAX_MOTOR_POWER)
+	float attenuationSlope = (INPUT_RANGE - ANALOG_DEAD_ZONE) / (MIN_MOTOR_POWER - MAX_MOTOR_POWER);
+
+	//find the intercept
+	float attenuationIntercept = MAX_MOTOR_POWER - (attenuationSlope * INPUT_RANGE);
+
+	if (abs(joyValue) < ANALOG_DEAD_ZONE)
+	{
+		return 0;
+	}
+	else
+	{
+		return (joyValue * attenuationSlope) + attenuationIntercept;
+	}
 }
+
 
 bool PressedOnJoy1(tButton btn)
 {
