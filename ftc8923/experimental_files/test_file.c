@@ -45,7 +45,7 @@ task main()
 
 	//Gyro drive test
 	//wait1Msec(5000);
-	DriveForwardDistanceGyro(110,50);
+	//DriveForwardDistanceGyro(110,50);
 
 	/*
 	//Gyro rotation display
@@ -56,9 +56,9 @@ task main()
 	while(!gyroValid()) {} // @todo should have a timeout here
 	resetGyro();
 	ClearTimer(T4);
-	bool failed = false;
+	bool failed = false;*/
 	while(true)
 	{
-		nxtDisplayTextLine(1, "%d", readGyro());
-	}*/
+		nxtDisplayTextLine(1, "%d", HTIRS2readDCDir(irSensor));
+	}
 }
