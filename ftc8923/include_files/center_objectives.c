@@ -6,7 +6,7 @@ int CENTER_GOAL_POSITION = 0;
 void DectectFloorIR()
 {
 	wait1Msec(500);
-	if(ReadIRSensor(1) == 3)
+	if(HTIRS2readDCDir(irSensor) == 3)
 	{
 		CENTER_GOAL_POSITION = 1;
 	}
