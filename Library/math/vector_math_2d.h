@@ -20,31 +20,27 @@ typedef struct
 	float magnitude;
 }tVector;
 
-typedef struct
+float FindAngle(tTransform A, tTransform B)
 {
-	tTransform finalTransform;
-	tVector finalVelocity;
-	float finalRotationRate;
-}tMovement;
-
-typedef struct
-{
-	tVector velocity;
-	float rotationRate;
-}tDriveArgument;
-
-tTransform Translate(tTransform A, tTransform B)
-{
-	tTransform C;
-	for (AxisEnum axis = X; axis < W; axis++)
-	{
-		C.location[axis] = A.location[axis] + B.location[axis];
-	}
-	return C;
+	float x = A.location[X] - B.location[X];
+	float y = A.location[Y] - B.location[Y];
+	float angle = radiansToDegrees( atan2(y, x) );
+	return angle;
 }
 
-tVector FindRelation(tTransform A, tTransform B)
+float FindDistance(tTransform A, tTransform B)
 {
+	float x = A.location[X] - B.location[X];
+	float y = A.location[Y] - B.location[Y];
+	float dist = sqrt( pow(x, 2) + pow(y, 2) );
+	return dist;
+}
+
+void Transform(tTransform &A, tTransform B)
+{
+	A.location[X] += B.location[X];
+	A.location[Y] += B.location[Y];
+	A.rotation    += B.rotation;
 }
 
 #endif

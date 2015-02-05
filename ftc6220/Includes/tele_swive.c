@@ -1,5 +1,5 @@
-#ifndef SWIVE_C
-#define SWIVE_C
+#ifndef TELE_SWIVE_C
+#define TELE_SWIVE_C
 
 #include "JoystickDriver.c"
 #include "controller.c"
@@ -52,7 +52,6 @@ task DriveTask()
 			drivePower = 100 * joyTranslateMagnitude;
 		}
 
-
 		//PID loop for the drive servos
 		for(int p = 0; p < 4; p++)
 		{
@@ -61,8 +60,6 @@ task DriveTask()
 			newAngPrev[p]    = newAng[p];
 			errorPrev[p]     = error[p];
 			errorPrevSum[p] += error[p];
-
-
 
 			//update current values
 			ang[p] = Drive[p].servoPosition;
@@ -94,8 +91,7 @@ task DriveTask()
 		}
 		SetDriveMotors(drivePowerFiltered);
 		drivePowerFilteredPrev = drivePowerFiltered;
-
-
+		wait1Msec(100);
 	}
 }
 #endif
