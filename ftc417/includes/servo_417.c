@@ -26,44 +26,59 @@ void ReleaseGoal()
 	SetGoalGrabberPosition(RELEASE_GOAL_POS);
 }
 
-// Wrist
-const int RELEASE_BALLS_POS = 0;       //@todo calibrate these servo values
-const int COLLECT_BALLS_POS = 255;
-void SetWristOpenClose(int pos)
-{
-	SetServoPosition(wrist, pos);
-}
-void CollectBalls()
-{
-	SetWristOpenClose(COLLECT_BALLS_POS);
-}
-void ReleaseBalls()
-{
-	SetWristOpenClose(RELEASE_BALLS_POS);
-}
-
 // Ball Collector Angle // @todo needs completed - is ball collector angle servo continuous???
 const int BALL_COLLECTOR_START_VERTICAL = 111;   //@todo calibration needed
-void SetBallCollectorPosition(int pos)
+void SetBallCollectorPosition(int val)
 {
-	SetServoPosition(ballCollecter, pos);
+	SetServoPosition(ballCollecter, val);
 }
 void SetBallCollectorStartPosition()
 {
 	SetBallCollectorPosition(BALL_COLLECTOR_START_VERTICAL);
 }
-void MaintainBallCollectorVertical()
+int GetBallCollectorPosition()
 {
-	// @todo will need to coordinate with the arm functions and angle to the ground in order to determine vertical position
+	return servo[ballCollecter];
+}
+// rotates so top goes TOWARDS ground when arms are at start position
+void LowerBallCollector(int increment = 1)
+{
+	int oldPosition = GetBallCollectorPosition();
+	SetBallcollectorPosition(oldPosition+increment);
+}
+// rotates so top goes AWAY FROM ground when arms are at start position
+void RaiseBallCollector(int increment = -1)
+{
+	int oldPosition = GetBallCollectorPosition();
+	SetBallcollectorPosition(oldPosition+increment);
+}
+
+// Wrist
+const int RELEASE_BALLS_POS = 0;       //@todo calibrate these servo values
+const int COLLECT_BALLS_POS = 255;
+void SetWristPosition(int val)
+{
+	SetServoPosition(wrist, val);
+}
+void CollectBalls()
+{
+	SetWristPosition(COLLECT_BALLS_POS);
+}
+void ReleaseBalls()
+{
+	SetWristPosition(RELEASE_BALLS_POS);
 }
 
 
 // Extender Functions
 const int LEFT_EXTENDER_RAISE_ARM = 0;
 const int LEFT_EXTENDER_LOWER_ARM = 255;    //@todo calibrate these numbers correct for both arms
-const int RIGHT_EXTENDER_RAISE_ARM = 255;
-const int RIGHT_EXTENDER_LOWER_ARM = 0;
-const int EXTENDER_FULL_STOP = 127;
+const int EXTENDER_FULL_STOP = 128;
+// RIGHT_EXTENDER_ARM Positions are calculated based on Left Arm Motor
+int GetRightArmPower(int leftArmPower)
+{
+	return 255-leftArmPower;
+}
 void SetLeftArmServoPower(int power)
 {
 	SetServoSpeed417(leftExtender, power);
@@ -72,20 +87,20 @@ void SetRightArmServoPower(int power)
 {
 	SetServoSpeed417(rightExtender, power);
 }
-void RaiseArm()
+void MoveExtenderOut(int power = LEFT_EXTENDER_RAISE_ARM)
 {
-	SetLeftArmServoPower(LEFT_EXTENDER_RAISE_ARM);
-	SetRightArmServoPower(RIGHT_EXTENDER_RAISE_ARM);
+	SetLeftArmServoPower(power);
+	SetRightArmServoPower(GetRightArmPower(power));
 }
-void StopArm()
+void MoveExtenderIn(int power = LEFT_EXTENDER_LOWER_ARM)
+{
+	SetLeftArmServoPower(power);
+	SetRightArmServoPower(GetRightArmPower(power));
+}
+void StopExtender()
 {
 	SetLeftArmServoPower(EXTENDER_FULL_STOP);
 	SetRightArmServoPower(EXTENDER_FULL_STOP);
-}
-void LowerArm()
-{
-	SetLeftArmServoPower(LEFT_EXTENDER_LOWER_ARM);
-	SetRightArmServoPower(RIGHT_EXTENDER_LOWER_ARM);
 }
 
 
