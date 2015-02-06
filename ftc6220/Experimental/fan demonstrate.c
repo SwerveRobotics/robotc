@@ -86,10 +86,10 @@ task main()
 		bool fanReady     = true;
 
 		///   !!!   begin fan  !!!   ///
-		if ((joystick.joy1_Buttons == 1) & fanReady == true)
+		if (joy2Btn(3) && fanReady)
 		{
 			fanReady = false;
-			if (fanRunning == false)
+			if (fanRunning)
 			{
 				fanRunning = true;
 				RunFan(true);
@@ -100,7 +100,7 @@ task main()
 				RunFan(false);
 			}
 		}
-		else if (joystick.joy1_Buttons != 1)
+		else if (!joy2Btn(3))
 		{
 			fanReady = true;
 		}
