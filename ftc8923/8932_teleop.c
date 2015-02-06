@@ -25,7 +25,6 @@
 #include "include_files/teleop_includes.c"
 
 
-
 task main()
 {
 	InitializeTeleop();
@@ -103,10 +102,5 @@ task main()
 		{
 			MoveLifter(HighGoalPos);
 		}
-		else if(joy2Btn(10) == 1)
-		{
-			MoveLifter(CenterGoalPos);
-		}
-
 	}
 }

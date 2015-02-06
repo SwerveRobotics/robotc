@@ -10,9 +10,8 @@ void InitializeTeleop()
 	nMotorEncoder[mtrLifterR] = 0;
 	RegisterDriveMotorPair(mtrFL, mtrFR, 0);
 	RegisterDriveMotorPair(mtrBL, mtrBR, 1);
-	RegisterSlowModeButton(2);
-	SetSlowModeDivisor(3);
-	RegisterBackwardButton(1);
+	RegisterSlowModeButton(6);
+	SetSlowModeDivisor(5);
 	GrabGoal();
 	HoldBalls();
 }

@@ -8,8 +8,8 @@
 
 typedef struct
 {
-	tMotor MOTOR_1;
-	tMotor MOTOR_2;
+	tMotor pMotor_1;
+	tMotor pMotor_2;
 	bool running;
 }tFan;
 
@@ -19,8 +19,8 @@ task RunFan()
 {
 	for (int p = MIN_MOTOR_POWER ; p < MAX_MOTOR_POWER; p++)
 	{
-		SetMotorPower(FAN.MOTOR_1,      p);
-		SetMotorPower(FAN.MOTOR_2, -1 * p);
+		SetMotorPower(FAN.pMotor_1,      p);
+		SetMotorPower(FAN.pMotor_2, -1 * p);
 		wait10Msec( 500 - (MAX_MOTOR_POWER - MIN_MOTOR_POWER) );
 	}
 	StopTask(RunFan);
@@ -28,8 +28,8 @@ task RunFan()
 
 void StopFan()
 {
-	SetMotorPower(FAN.MOTOR_1, 0);
-	SetMotorPower(FAN.MOTOR_2, 0);
+	SetMotorPower(FAN.pMotor_1, 0);
+	SetMotorPower(FAN.pMotor_2, 0);
 }
 
 void ToggleFan()
@@ -55,7 +55,7 @@ int RELEASE_GOAL =  8;
 
 typedef struct
 {
-	TServoIndex SERVO;//this name may need to change based on if robotC confuses it with procedure "servo[]"
+	TServoIndex pServo;//this name may need to change based on if robotC confuses it with procedure "servo[]"
 	bool grabbed;
 }tGrabber;
 
@@ -63,7 +63,7 @@ tGrabber GRABBER;
 
 void SetGoalGrabber(int position)
 {
-	SetServoPosition(GRABBER.SERVO, position);
+	SetServoPosition(GRABBER.pServo, position);
 }
 
 void GrabGoal()
@@ -99,10 +99,10 @@ int ARM_DOWN = 127;
 
 typedef struct
 {
-	tMotor MOTOR;//this name may need to change based on if robotC confuses it with procedure "motor[]"
-	TServoIndex SERVO_1;
-	TServoIndex SERVO_2;
-	TServoIndex ARM_SERVO;
+	tMotor pMotor;//this name may need to change based on if robotC confuses it with procedure "motor[]"
+	TServoIndex pServo_1;
+	TServoIndex pServo_2;
+	TServoIndex pServoArm;
 	bool running;
 	bool raised;
 }tSweeper;
@@ -113,7 +113,7 @@ tSweeper SWEEPER;
 // BEGIN SWEEPER ARM //
 void SetSweeperArm(int position)
 {
-	SetServoPosition(SWEEPER.ARM_SERVO, position);
+	SetServoPosition(SWEEPER.pServoArm, position);
 }
 
 void LowerSweeperArm()
@@ -143,18 +143,18 @@ void ToggleSweeperArm()
 
 void RunSweeperMotor()
 {
-	SetMotorPower(SWEEPER.MOTOR, -1 * MAX_MOTOR_POWER);
+	SetMotorPower(SWEEPER.pMotor, -1 * MAX_MOTOR_POWER);
 }
 
 void StopSweeperMotor()
 {
-	SetMotorPower(SWEEPER.MOTOR, 0);
+	SetMotorPower(SWEEPER.pMotor, 0);
 }
 
 void SetSweeperServos(float speed)
 {
-	SetServoSpeed(SWEEPER.SERVO_1, speed, CCW);
-	SetServoSpeed(SWEEPER.SERVO_2, speed, CCW);
+	SetServoSpeed(SWEEPER.pServo_1, speed, CCW);
+	SetServoSpeed(SWEEPER.pServo_2, speed, CCW);
 }
 
 void RunSweeperServos()
@@ -197,10 +197,10 @@ const int LOAD_POSITION_2 = 249;
 
 typedef struct
 {
-	TServoIndex SLIDE_SERVO;
-	TServoIndex WINCH_SERVO;
-	TServoIndex LOAD_SERVO;
-	tSensors TOUCH_SENSOR;
+	TServoIndex pServoSlide;
+	TServoIndex pServoWinch;
+	TServoIndex pServoLoad;
+	tSensors pSensorTouch;
 	int position;
 	bool loader;
 }tTube;
@@ -210,7 +210,7 @@ tTube TUBE;
 bool tubeRaised()
 {
 	bool state;
-	if (SensorValue(TUBE.TOUCH_SENSOR) == 1023)
+	if (SensorValue(TUBE.pSensorTouch) == 1023)
 	{
 		state = false;
 	}
@@ -223,22 +223,22 @@ bool tubeRaised()
 
 void SlideTubeRight()
 {
-	SetServoSpeed(TUBE.SLIDE_SERVO, 0.2, CCW);
+	SetServoSpeed(TUBE.pServoSlide, 0.2, CCW);
 }
 
 void SlideTubeLeft()
 {
-	SetServoSpeed(TUBE.SLIDE_SERVO, 0.2, CW);
+	SetServoSpeed(TUBE.pServoSlide, 0.2, CW);
 }
 
 void StopSlide()
 {
-	SetServoSpeed(TUBE.SLIDE_SERVO, 0.0);
+	SetServoSpeed(TUBE.pServoSlide, 0.0);
 }
 
 void SetTubeHeight(int height)
 {
-	SetServoPosition(TUBE.WINCH_SERVO, height);
+	SetServoPosition(TUBE.pServoWinch, height);
 }
 
 void ExtendTube()
@@ -289,12 +289,12 @@ void ExtendTubeToPosition(int position)//alternate tube position setting. takes 
 
 void LoadPosition_1()
 {
-	SetServoPosition(TUBE.LOAD_SERVO, LOAD_POSITION_1);
+	SetServoPosition(TUBE.pServoLoad, LOAD_POSITION_1);
 }
 
 void LoadPosition_2()
 {
-	SetServoPosition(TUBE.LOAD_SERVO, LOAD_POSITION_2);
+	SetServoPosition(TUBE.pServoLoad, LOAD_POSITION_2);
 }
 
 void LoadTube()
