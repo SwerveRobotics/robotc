@@ -45,12 +45,19 @@
 
 task main
 {
-	InitializeAll();
+	ASSUME_CONTROLLER_INPUT = false;
+	RegisterDriveHardware(
+	motorFL, motorFR,
+	motorBL, motorBR,
+	servoFL, servoFR,
+	servoBL, servoBR,
+	);
 
 	waitForStart();
 	StartTask(DriveTask);
 	while (true)
 	{
-		WriteToDrive();
+		wait10Msec(10);
+		//WriteToDrive();
 	}
 }

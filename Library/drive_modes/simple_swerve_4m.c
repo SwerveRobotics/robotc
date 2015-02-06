@@ -82,7 +82,7 @@ float GetDrivePosition(CornerEnum corner)
 //call every main task cycle
 void WriteToDrive()
 {
-	for (int p; p < 4; p++)
+	for (int p = 0; p < 4; p++)
 	{
 		SetServoSpeed(Drive[p].pServo, Drive[p].servoSpeed);
 		SetMotorPower(Drive[p].pMotor, Drive[p].motorPower);
