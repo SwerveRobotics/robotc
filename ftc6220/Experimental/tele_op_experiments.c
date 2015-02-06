@@ -111,7 +111,7 @@ task main()
 		joyDistance = sqrt( pow(joyX, 2) + pow( joyY, 2) );
 		joyAngle = 57.3 * atan2(joyY, joyX);
 
-		for (int p = 0; p < 1; p++)
+		for (int p = 0; p < 4; p++)
 		{
 
 			if (joyDistance > 20)
@@ -154,11 +154,11 @@ task main()
 		}
 		if (abs(joyZ) > 20)
 		{
-			power = joyZ;
+			power = 0.7 * joyZ - 20;
 		}
 		else if (joyDistance > 20)
 		{
-			power = joyDistance;
+			power = joyDistance - 20;
 		}
 		else
 		{
