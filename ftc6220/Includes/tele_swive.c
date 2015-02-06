@@ -63,7 +63,7 @@ task DriveTask()
 
 			//update current values
 			ang[p] = Drive[p].servoPosition;
-			error[p] = ang[p] - GetDrivePosition(p);
+			error[p] = ang[p] + GetDrivePosition(p);//this SHOULD be a sum
 
 			//optimize rotation target such that it is never > 90 degrees away
 			if (error[p] > 90)
@@ -91,6 +91,7 @@ task DriveTask()
 		}
 		SetDriveMotors(drivePowerFiltered);
 		drivePowerFilteredPrev = drivePowerFiltered;
+		WriteToDrive();
 		wait1Msec(100);
 	}
 }

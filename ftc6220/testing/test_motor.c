@@ -8,11 +8,7 @@ task main()
 {
 	while(true)
 	{
-
-		nxtDisplayBigTextLine(2,"%d",nMotorEncoder[motor1]);
-		wait10Msec(50);
-		nxtDisplayBigTextLine(4,"%d",nMotorEncoder[motor2]);
-		/*if (nNxtButtonPressed == 0)
+		if (nNxtButtonPressed == 0)
 		{
 			motor[motor1] = 50;
 		}
@@ -24,7 +20,7 @@ task main()
 		{
 			motor[motor1] = 0;
 			motor[motor2] = 0;
-		}*/
+		}
 		wait10Msec(50);
 	}
 

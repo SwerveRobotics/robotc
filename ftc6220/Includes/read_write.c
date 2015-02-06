@@ -38,15 +38,6 @@ const float CENTER_GOAL_HEIGHT = 54;
 /// -           END OF PARAMETERS           - ///
 
 
-//CornerEnum datatype used to refer to each of the four drive modules
-typedef enumWord
-{
-	FRONT_LEFT,
-	FRONT_RIGHT,
-	BACK_LEFT,
-	BACK_RIGHT,
-}
-CornerEnum;
 
 //structure used to reference servos, sensors, and motors that are accocated with a given drive assembly
 typedef struct
@@ -115,11 +106,6 @@ void CMPSToMotor(tMotor motorName, float cmps)
 	SetMotorPower(Assembly[motorName].driveMotor, MOTOR_POWER_PER_CMPS * MOTOR_GEAR_RATIO * cmps);
 }
 
-//return the position of a drive assembly CR servo in degrees
-float GetCRServoPosition(CornerEnum servoEnc)
-{
-	return (float)nMotorEncoder[Assembly[servoEnc].encoder] * ENCODER_TO_DEG * SERVO_GEAR_RATIO;
-}
 
 //set the position of a drive assembly CR servo in degrees
 void SetCRServoEncoder(CornerEnum servoEnc, int deg)
