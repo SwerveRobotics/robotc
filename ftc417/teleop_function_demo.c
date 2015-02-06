@@ -8,14 +8,14 @@
 #pragma config(Motor,  mtr_S1_C2_2,     LeftSides,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     RightMid,      tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     RightSides,    tmotorTetrix, openLoop, reversed)
-#pragma config(Servo,  srvo_S2_C1_1,    ballCollecter,        tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_2,    servo2,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_1,    goalGrabber,          tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    wrist,                tServoStandard)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
-#pragma config(Servo,  srvo_S2_C1_4,    wrist,                tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_5,    rightExtender,        tServoContinuousRotation)
-#pragma config(Servo,  srvo_S2_C1_6,    leftExtender,         tServoContinuousRotation)
-#pragma config(Servo,  srvo_S2_C2_1,    goalGrabber,          tServoStandard)
-#pragma config(Servo,  srvo_S2_C2_2,    servo8,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_4,    servo4,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_5,    ballCollecter,        tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_6,    servo6,               tServoNone)
+#pragma config(Servo,  srvo_S2_C2_1,    leftExtender,         tServoContinuousRotation)
+#pragma config(Servo,  srvo_S2_C2_2,    rightExtender,        tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C2_3,    servo9,               tServoNone)
 #pragma config(Servo,  srvo_S2_C2_4,    servo10,              tServoNone)
 #pragma config(Servo,  srvo_S2_C2_5,    servo11,              tServoNone)
@@ -27,18 +27,15 @@
 #include "../library/controllers/tank_controller.c"
 #include "includes/init_teleop.c"
 
+// Function Code Includes //
+#include "includes/servo_417.c"
+#include "includes/motors_417.c"
+
 #pragma debuggerWindows("nxtLCDScreen");
 //#pragma debuggerWindows("Servos");
 #pragma debuggerWindows("joystickSimple");
 
 #include "JoystickDriver.c"
-
-void servoPosition()
-{
-	int servoMultiplier = nMotorEncoder[Arm] / ServoValue[wrist];
-
-	servo[wrist] = ServoValue[wrist] * servoMultiplier;
-}
 
 task main()
 {
@@ -52,63 +49,45 @@ task main()
 	{
 		if (joy2Btn(3) == 1)
 		{
-			servo[goalGrabber] = 150;
+			ReleaseGoal();
 		}
 		else if (joy2Btn(2) == 1)
 		{
-			servo[goalGrabber] = 45;
+			GrabGoal();
 		}
 
 		//arm raiser
 		if (abs(joystick.joy2_y1) > 15)
 		{
-			motor[Arm] = -joystick.joy2_y1 / 2;
-			servoPosition();
+			SetArmPower(joystick.joy2_y1); // functions called autoattenuate speed between -100 and +100
 		}
 		else
 		{
-			motor[Arm] = 0;
+			StopArmMovement();
 		}
 
 		//arm extender
-		if (joy2Btn(8) == 1)
+		if (joy2Btn(7) == 1)
 		{
-			servo[leftExtender] = 255;
-			servo[rightExtender] = 0;
+			MoveExtenderOut(); // takes optional power input
 		}
-		else if (joy2Btn(7) == 1)
+		else if (joy2Btn(6) == 1)
 		{
-			servo[leftExtender] = 0;
-			servo[rightExtender] = 255;
+			MoveExtenderIn(); // takes optional power input
 		}
 		else
 		{
-			servo[leftExtender] = 128;
-			servo[rightExtender] = 128;
+			StopExtender();
 		}
 
 		//tube code
 		if (joy2Btn(4) == 1)
 		{
-			servo[ballCollecter] = 150;
+			ReleaseBalls();
 		}
 		else if (joy2Btn(5) == 1)
 		{
-			servo[ballCollecter] = 45;
+			CollectBalls();
 		}
-
-
-		/*while (joy2Btn(7) == 1 && nMotorEncoder[Arm] <= 1110)
-		{
-			motor[Arm] = 50;
-		}
-		nMotorEncoder[Arm] = 0;
-
-		while(joy2Btn(6) == 1 && nMotorEncoder[Arm] >= -1110)
-		{
-			motor[Arm] = -50;
-
-		}
-		nMotorEncoder[Arm] = 0;*/
 	}
 }
