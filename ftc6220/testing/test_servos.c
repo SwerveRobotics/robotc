@@ -43,6 +43,6 @@ task main()
 {
 	while(true)
 	{
-		servo[servoFL] = 120;
+		servo[servoFL] = 0;
 	}
 }
