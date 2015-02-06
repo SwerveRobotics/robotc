@@ -209,27 +209,7 @@ task main()
 
 		for (int p = 0; p < 4; p++)
 		{
-			angPrev[p] = ang[p];
-			newAngPrev[p] = newAng[p];
-			/*if (abs(joystick.joy1_x2) > 20)
-			{
-				if (p == 0)
-				{
-					newAng[p] = -45.0 + n[p];
-				}
-				else if (p == 1)
-				{
-					newAng[p] = 45 + n[p];
-				}
-				else if (p == 2)
-				{
-					newAng[p] = 225 + n[p];
-				}
-				else
-				{
-					newAng[p] = 135 + n[p];
-				}
-			}*/
+
 			if (JoystickToMagnitude(joyDistance) > 0)
 			{
 				ang[p] = joyAngle;
@@ -258,7 +238,6 @@ task main()
 		}
 		if (abs(joystick.joy1_x1) > 20)
 		{
-			//SimpleWriteToMotors(joystick.joy1_x1);
 			SimpleWriteToMotors(JoystickToMagnitude(joyDistance));
 		}
 		else

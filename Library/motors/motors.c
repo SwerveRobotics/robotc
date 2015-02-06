@@ -19,9 +19,12 @@ int AttenuateControllerOutput(int output)
 }
 
 // Set Motor Power
-void SetMotorPower(tMotor motorName, int power)
+// NOTE: ASSUME_CONTROLLER_INPUT defaults to true
+//       If you are calling this function from a non-analog input,
+//       make sure to call it as SetMotorPower(myMotor, myPower, false)
+void SetMotorPower(tMotor motorName, int power, bool useControllerInput = ASSUME_CONTROLLER_INPUT)
 {
-	if(ASSUME_CONTROLLER_INPUT==true)
+	if(useControllerInput==true)
 		motor[motorName] = AttenuateControllerOutput(power);
 	else
 		motor[motorName] = power;
