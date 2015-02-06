@@ -8,12 +8,12 @@
 #pragma config(Motor,  mtr_S1_C2_2,     LeftSides,     tmotorTetrix, openLoop)
 #pragma config(Motor,  mtr_S1_C3_1,     RightMid,      tmotorTetrix, openLoop, reversed)
 #pragma config(Motor,  mtr_S1_C3_2,     RightSides,    tmotorTetrix, openLoop, reversed)
-#pragma config(Servo,  srvo_S2_C1_1,    rightExtender,        tServoContinuousRotation)
-#pragma config(Servo,  srvo_S2_C1_2,    leftExtender,         tServoContinuousRotation)
+#pragma config(Servo,  srvo_S2_C1_1,    ballCollecter,        tServoStandard)
+#pragma config(Servo,  srvo_S2_C1_2,    servo2,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_3,    servo3,               tServoNone)
 #pragma config(Servo,  srvo_S2_C1_4,    wrist,                tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_5,    ballCollecter,        tServoStandard)
-#pragma config(Servo,  srvo_S2_C1_6,    servo6,               tServoNone)
+#pragma config(Servo,  srvo_S2_C1_5,    rightExtender,        tServoContinuousRotation)
+#pragma config(Servo,  srvo_S2_C1_6,    leftExtender,         tServoContinuousRotation)
 #pragma config(Servo,  srvo_S2_C2_1,    goalGrabber,          tServoStandard)
 #pragma config(Servo,  srvo_S2_C2_2,    servo8,               tServoNone)
 #pragma config(Servo,  srvo_S2_C2_3,    servo9,               tServoNone)
@@ -62,7 +62,7 @@ task main()
 		//arm raiser
 		if (abs(joystick.joy2_y1) > 15)
 		{
-			motor[Arm] = joystick.joy2_y1 / 2;
+			motor[Arm] = -joystick.joy2_y1 / 2;
 			servoPosition();
 		}
 		else
@@ -71,20 +71,20 @@ task main()
 		}
 
 		//arm extender
-		if (joy2Btn(7) == 1)
+		if (joy2Btn(8) == 1)
 		{
 			servo[leftExtender] = 255;
 			servo[rightExtender] = 0;
 		}
-		else if (joy2Btn(6) == 1)
+		else if (joy2Btn(7) == 1)
 		{
 			servo[leftExtender] = 0;
 			servo[rightExtender] = 255;
 		}
 		else
 		{
-			servo[leftExtender] = 127.5;
-			servo[rightExtender] = 127.5;
+			servo[leftExtender] = 128;
+			servo[rightExtender] = 128;
 		}
 
 		//tube code
