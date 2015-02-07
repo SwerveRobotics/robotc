@@ -10,11 +10,11 @@ void DectectFloorIR()
 	{
 		CENTER_GOAL_POSITION = 1;
 	}
-	else if(ReadIRSensor(1) == 4)
+	else if(HTIRS2readDCDir(irSensor) == 4)
 	{
 		CENTER_GOAL_POSITION = 2;
 	}
-	else if(ReadIRSensor(1) == 5)
+	else if(HTIRS2readDCDir(irSensor) == 5)
 	{
 		CENTER_GOAL_POSITION = 3;
 	}
@@ -54,7 +54,7 @@ void KnockKickstandPos3()
 
 void CenterGoalScorePos1()
 {
-
+	DriveForwardDistance(10, 50);
 }
 
 void CenterGoalScorePos2()
@@ -70,10 +70,15 @@ void CenterGoalScorePos3()
 	DriveForwardDistanceGyro(32, 30);
 	TurnRightDegrees(66, 50);
 	DriveBackwardDistanceGyro(24, 20);
-	SetLiftPower(50);
-	wait1Msec(8900);
-	SetLiftPower(0);
+	while(LiftHeight() <= 10000)
+	{
+		RaiseLift();
+	}
+	StopLift();
 	DriveBackwardDistanceGyro(4, 20);
+	DumpBalls();
+	DriveForwardDistanceGyro(10, 20);
+	ZeroLift();
 }
 
 #endif
