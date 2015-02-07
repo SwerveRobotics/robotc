@@ -260,6 +260,7 @@ task LiftTube()
 	}
 	StopSlide();
 	ExtendTube();//flip up the curvy thing by extending the tube by extending to top position
+
 	wait10Msec(500);
 	StopTask(LiftTube);
 }

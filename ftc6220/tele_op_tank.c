@@ -52,13 +52,18 @@ task main()
 	servo[servoSweeper2] = 128;
 	servo[servoSweeperArm] = 0;
 	servo[servoGrabber] = 50;
-
+	servo[servoTubeWinch] = 184;
 
 	bool sweepers = false;
 	bool ready = true;
 
 	bool fanRunning   = false;
 	bool fanReady     = true;
+	float fanPower = 0.0;
+
+	bool loader   = false;
+	bool loaderReady     = true;
+	int loaderPos = 17;
 
 	waitForStart();
 	while(true)
@@ -132,10 +137,8 @@ task main()
 			ready = true;
 		}
 
-
-
 		/*
-		if (joy2Btn(3) && fanReady)
+		if ((joy2Btn(3) == true) && fanReady)
 		{
 			fanReady = false;
 			if (fanRunning)
@@ -149,11 +152,53 @@ task main()
 				StopFan();
 			}
 		}
-		else if (!joy2Btn(3))
+		else if (joy2Btn(3) == false)
 		{
 			fanReady = true;
 		}
 		*/
+		if (joy2Btn(3) == true)
+		{
+			fanPower = 0.0;
+		}
+
+		if (joystick.joy2_y1 > 20)
+		{
+			fanPower += 0.02;
+		}
+		motor[motorFan1] = fanPower;
+		motor[motorFan2] = -1 * fanPower;
+
+
+		if (( (joy2Btn(1) == true) || (joystick.joy1_TopHat == 2) )&& loaderReady)
+		{
+			loaderReady = false;
+			loaderPos = (loader)? 249 : 17;
+		}
+		else if (joy2Btn(1) == false)
+		{
+			loaderReady = true;
+		}
+
+		if(joystick.joy2_x2 > 20)
+		{
+			loaderPos = 255 - 0.2 * joystick.joy2_x2;
+		}
+		else if(joystick.joy2_x2 < 20)
+		{
+			loaderPos = 0 - 0.2 * joystick.joy2_x2;
+		}
+
+		servo[servoLoader] = loaderPos;
+
+		if ((joy2Btn(2) == true) || (joystick.joy1_TopHat == 4))
+		{
+			servo[servoTubeWinch] = 133;
+		}
+		else if ((joy2Btn(4) == true) || (joystick.joy1_TopHat == 4))
+		{
+			servo[servoTubeWinch] = 54;
+		}
 
 
 	}

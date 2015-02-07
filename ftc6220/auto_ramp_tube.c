@@ -48,7 +48,6 @@ task main()
 {
 	InitializeAll();
 	StartTask(LiftTube);
-	Play2001();
 	DriveForTime(3.5);
 	wait10Msec(1200);
 }

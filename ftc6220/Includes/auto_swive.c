@@ -61,10 +61,10 @@ float GetRobotOrientation()
 //and it will go there
 void DriveForTime(float time)
 {
-	SetMotorPower(Drive[FRONT_LEFT].pMotor,  80);
-	SetMotorPower(Drive[FRONT_RIGHT].pMotor, -80);
-	SetMotorPower(Drive[BACK_LEFT].pMotor,   80);
-	SetMotorPower(Drive[BACK_RIGHT].pMotor,  -80);
+	SetMotorPower(Drive[FRONT_LEFT].pMotor,  -80);
+	SetMotorPower(Drive[FRONT_RIGHT].pMotor, 80);
+	SetMotorPower(Drive[BACK_LEFT].pMotor,   -80);
+	SetMotorPower(Drive[BACK_RIGHT].pMotor,  80);
 	wait10Msec(100 * time);
 	SetMotorPower(Drive[FRONT_LEFT].pMotor,  0);
 	SetMotorPower(Drive[FRONT_RIGHT].pMotor, 0);
