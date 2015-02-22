@@ -1,6 +1,10 @@
 #ifndef SWERVE_4M_C
 #define SWERVE_4M_C
 
+///////////// CODE REVIEW BY DRYW ///////////////////
+// File name is too simialr to simpleswerve_4m.c and swerve_4m.c
+// Some functions below need comments to describe what they do
+
 #include "../math/vector_math_2d.h"
 #include "../motors/encoders.h"
 #include "../motors/servos.c"

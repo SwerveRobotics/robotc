@@ -1,6 +1,9 @@
 #ifndef VECTOR_MATH_2D_H
 #define VECTOR_MATH_2D_H
 
+///////////// CODE REVIEW BY DRYW ///////////////////
+// Functions below need comments to describe what they do
+
 typedef enumWord
 {
 	X = 0,
