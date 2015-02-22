@@ -1,6 +1,10 @@
 #ifndef SERVO_DEFINES_H
 #define SERVO_DEFINES_H
 
+///////////// CODE REVIEW BY DRYW ///////////////////
+// This file should probably go into a servos folder
+// The variables CW and CWW are redundant
+
 const int SERVO_RANGE = 255;
 const int CR_SERVO_ZERO = 128;//value at which CR servos should not move
 

@@ -1,6 +1,11 @@
 #ifndef SWERVE_4M_C
 #define SWERVE_4M_C
 
+///////////// CODE REVIEW BY DRYW ///////////////////
+// File name is too simialr to simpleswerve_4m.c and simple_swerve_4m.c
+// Some functions below need comments to describe what they do
+// File doesn't comile
+
 #include "../controllers/controller_defines.h"
 #include "../motors/motors.c"
 #include "../../ftc6220/includes/writing.c"

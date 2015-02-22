@@ -1,6 +1,9 @@
 #ifndef SERVOS_C
 #define SERVOS_C
 
+///////////// CODE REVIEW BY DRYW ///////////////////
+// This file should probably go into a servos folder
+
 #include "servo_defines.h"
 
 void SetServoPosition(TServoIndex servoName, int position)
