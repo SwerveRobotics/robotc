@@ -62,7 +62,7 @@ void FollowRightWallDistance(int distanceFromWall, int driveDistance, int power,
 	StopTask(MonitorEncoder);
 }
 
-void FollowLeftWall(int distanceFromWall, int driveDistance, int power, int sonarNum)
+void FollowLeftWallDistance(int distanceFromWall, int driveDistance, int power, int sonarNum)
 {
 	while(EncoderDistance(abs(ReadEncoderValue())) < driveDistance)
 	{
