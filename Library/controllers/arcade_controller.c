@@ -23,7 +23,9 @@ task DriveArcade()
 		// Arcade Drive Uses Only Left Analog Stick //
 		if(abs(x1) > ANALOG_DEAD_ZONE || abs(y1) > ANALOG_DEAD_ZONE)
 		{
+			//Makes driving strait easier
 			x1 = x1*0.5;
+
 			DriveLeftMotors(x1+y1);
 			DriveRightMotors(-x1+y1);
 		}
