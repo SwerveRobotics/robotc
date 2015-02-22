@@ -3,9 +3,6 @@
 
 #include "../../drivers/hitechnic-gyro.h"
 
-// ATTENTION!
-// Calibration of these will be necessary to perfect your turns
-// Calibration should be handled within your team's code
 int LEFT_TURN_GYRO_OVERRUN = 5;
 int RIGHT_TURN_GYRO_OVERRUN = 5;
 

@@ -3,13 +3,9 @@
 
 #include "../drive_modes/drive_modes.h"
 
-int WHEEL_DIAMETER = 4;
-float GEAR_RATIO = 1.0;
-
-const float TICKS_PER_REVOLUTION = 1440.0;
-
 tMotor ENCODER_MOTOR;
 
+//Only 1 encoder is used for distance detection
 void RegisterEncoderMotor(tMotor motorName)
 {
 	ENCODER_MOTOR = motorName;
@@ -25,12 +21,17 @@ void ResetEncoderValue()
 	nMotorEncoder[ENCODER_MOTOR] = 0;
 }
 
+//These are used to give distance values instead of using encoder ticks
+int WHEEL_DIAMETER = 4;
+float GEAR_RATIO = 1.0;
+const float TICKS_PER_REVOLUTION = 1440.0;
+
 //Takes an input of encoder ticks and converts to inches
 float EncoderDistance(float ticks)
 {
 	float circumference = PI * WHEEL_DIAMETER; // in inches
-	float revolutions = (ticks / TICKS_PER_REVOLUTION) * GEAR_RATIO; // revolutions
-	return revolutions * circumference; // (inches/revolutions)*revolutions = inches
+	float revolutions = (ticks / TICKS_PER_REVOLUTION) * GEAR_RATIO;
+	return revolutions * circumference;
 }
 
 //Drives forward at given power until the distance has been reached
@@ -50,6 +51,7 @@ void DriveBackwardDistance(int inches, int power)
 	DriveForwardDistance(inches, -1*power);
 }
 
+//Drives forward at given power until the time has been reached
 void DriveForwardTime(int time, int power)
 {
 	DriveForward(power);

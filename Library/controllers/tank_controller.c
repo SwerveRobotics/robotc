@@ -15,13 +15,16 @@ task DriveTank()
 	{
 		getJoystickSettings(joystick);
 
-		ReverseDriveMotors(ReverseDrive());
+		//@todo - make this work
+		//ReverseDriveMotors(ReverseDrive());
 
+		//Control for left side
 		if(abs(joystick.joy1_y1)>ANALOG_DEAD_ZONE)
 			DriveLeftMotors(joystick.joy1_y1 / SlowModeDivisor());
 		else
 			StopLeftDriveMotors();
 
+			//Control for right side
 		if(abs(joystick.joy1_y2)>ANALOG_DEAD_ZONE)
 			DriveRightMotors(joystick.joy1_y2 / SlowModeDivisor());
 		else

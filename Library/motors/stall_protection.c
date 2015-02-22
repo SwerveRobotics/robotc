@@ -10,6 +10,8 @@
 
 // detect your speed
 
+//@todo - Add in motor registration for every motor that should be moitored
+
 int LAST_ENCODER_VALUE = 0;
 int CURRENT_ENCODER_VALUE = 0;
 
@@ -18,11 +20,13 @@ task MonitorEncoder()
 	while(true)
 	{
 		LAST_ENCODER_VALUE = CURRENT_ENCODER_VALUE;
+		//@todo - Use motor names from registration above
 		CURRENT_ENCODER_VALUE = ReadEncoderValue();
 		wait1Msec(100);
 	}
 }
 
+//Requires MonitorEncoder to be running to get correct values
 int CurrentSpeed() // ticks per second
 {
 	return (CURRENT_ENCODER_VALUE - LAST_ENCODER_VALUE) * 10;
