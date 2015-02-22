@@ -6,11 +6,7 @@
 // tank drive mode option from those shown in drive_modes.h
 
 #include "../drive/auto_drive.c"
-#include "../drive_modes/drive_modes.h"
 #include "../sensors/gyro.c"
-
-// May need to calibrate to specific robots
-int MOTOR_POWER_SHAVE = 3;
 
 typedef enum
 {
@@ -22,7 +18,7 @@ typedef enum
 	DriveActionTurnRight
 } DriveActionEnum;
 
-///@todo: write a time protection so that we don't turn longer than some given time
+///@todo: write a time protection so that we don't turn or drive for longer than some given time
 // Depending on driveAction, this will turn driveArg degrees or drive forward or backward driveArg inches at
 // a power of drivePower
 void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
@@ -32,29 +28,14 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 
 	ResetEncoderValue();
 	startGyro();
-	while(!gyroValid()) {} // @todo should have a timeout here
 
 	resetGyro();
-	bool failed = false;
 	bool stopAction = false;
-
 
 	//Makes robot go in opposite direction to avoid rewriting code
 	if(driveAction == DriveActionBackward || driveAction == DriveActionTurnLeft)
 	{
 		drivePower *= -1;
-	}
-
-	//Gets robot going so it doesn't stop instantly if the robot isn't moving
-	if(driveAction == DriveActionBackward || driveAction == DriveActionForward)
-	{
-		DriveForward(drivePower);
-		wait1Msec(100);
-	}
-	if(driveAction == DriveActionTurnLeft || driveAction == DriveActionTurnRight)
-	{
-		TurnRight(drivePower);
-		wait1Msec(100);
 	}
 
 	// Action loop
@@ -65,7 +46,6 @@ void GyroDrive(DriveActionEnum driveAction, int driveArg, int drivePower)
 		// Stop if the gyro reading is invalid
 		if (!gyroValid())
 		{
-			failed = true;
 			break;
 		}
 		switch(driveAction)
@@ -128,7 +108,10 @@ void DriveBackwardDistanceGyro(int distance, int power)
 
 
 
+//////////////////// DO WE STILL NEED THIS? /////////////////////////
 
+// May need to calibrate to specific robots
+int MOTOR_POWER_SHAVE = 3;
 
 bool wasTurningRight = false;
 bool wasTurningLeft = false;
