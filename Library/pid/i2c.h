@@ -18,11 +18,6 @@ B. Standard method argument order is:
 
 */
 
-///////////// CODE REVIEW BY DRYW ///////////////////
-// Should have #ifndef wrapping
-// Comments need to be added for clarity
-
-
 #include "drivers\common.h"
 
 void I2C_WritePMW(tSensors port, int DaisyChainLevel, byte Status)

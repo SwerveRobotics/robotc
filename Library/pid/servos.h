@@ -1,7 +1,4 @@
-///////////// CODE REVIEW BY DRYW ///////////////////
-// Should have #ifndef wrapping
-// Comments need to be added for clarity#include "drivers/common.h"
-
+#include "drivers/common.h"
 #include "I2C.h"
 
 void Servos_SetPosition(tSensors Port, int DaisyChainLevel, int ServoNumber, int Position)
