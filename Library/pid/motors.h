@@ -1,7 +1,3 @@
-///////////// CODE REVIEW BY DRYW ///////////////////
-// Should have #ifndef wrapping
-// Comments need to be added for clarity
-
 #include "I2C.h"
 
 int Motors_Length = 0;
