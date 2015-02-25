@@ -33,15 +33,15 @@ task main()
 {
 	waitForStart();
 
-	while(nMotorEncoder[Right] < 2880)
+	while(nMotorEncoder[RightMid] < 2880)
 	{
-		motor[Right] = 50;
-		motor[Right2] = 50;
-		motor[Left] = 50;
-		motor[Left2] = 50;
+		motor[RightMid] = 50;
+		motor[RightSides] = 50;
+		motor[LeftMid] = 50;
+		motor[LeftSides] = 50;
 	}
-	motor[Right] = 0;
-	motor[Right2] = 0;
-	motor[Left] = 0;
-	motor[Left2] = 0;
+	motor[RightMid] = 0;
+	motor[RightSides] = 0;
+	motor[LeftMid] = 0;
+	motor[LeftSides] = 0;
 	}
