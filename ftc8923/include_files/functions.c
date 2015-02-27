@@ -157,21 +157,13 @@ bool LiftBelowDetect(int pos)
 
 void MoveLifter(int pos)
 {
-	while(!LiftIsDown() && LiftAboveDetect(pos))
+	while(LiftAboveDetect(pos))
 	{
 		LowerLift();
-		if(joy2Btn(10) == 1)
-		{
-			break;
-		}
 	}
 	while(LiftBelowDetect(pos))
 	{
 		RaiseLift();
-		if(joy2Btn(10) == 1)
-		{
-			break;
-		}
 	}
 	StopLift();
 }
